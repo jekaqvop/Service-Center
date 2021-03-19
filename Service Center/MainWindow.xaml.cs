@@ -23,6 +23,7 @@ namespace Service_Center
         public MainWindow()
         {
             InitializeComponent();
+
         }
     }
 }

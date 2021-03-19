@@ -94,5 +94,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Sourse\Images\For CheckBox.png" />
+    <Resource Include="Sourse\Images\PhotoAuth.png" />
+    <Resource Include="Sourse\Images\x-1727490_1280.png" />
+    <Resource Include="Sourse\Images\Галочка.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
