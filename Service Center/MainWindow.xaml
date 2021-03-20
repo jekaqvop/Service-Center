@@ -242,5 +242,6 @@
                 </Button.CommandBindings>
             </Button>
         </Grid>
+        <Label Content="тест"/>
     </Grid>
 </Window>
