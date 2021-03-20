@@ -8,45 +8,58 @@
         xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material"
         mc:Ignorable="d"
         Title="MainWindow" Height="505" Width="365" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF22385D" Offset="0"/>
             <GradientStop Color="#FF223A6A" Offset="0.509"/>
-            <GradientStop Color="#FF1C315B" Offset="1"/>            
+            <GradientStop Color="#FF1C315B" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Grid>        
+    <Window.Resources>
+
+    </Window.Resources>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" ></RowDefinition>
-            <RowDefinition Height="100" ></RowDefinition>   
+            <RowDefinition Height="100" ></RowDefinition>
             <RowDefinition Height="300" ></RowDefinition>
-            <RowDefinition Height="80" ></RowDefinition>                        
+            <RowDefinition Height="80" ></RowDefinition>
         </Grid.RowDefinitions>
+
         <Grid Grid.Row="0" Background="Transparent" MouseDown="ToolBar_MouseDown">
-            <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>             
-                <StackPanel Name="CloseButton">
-                <Image HorizontalAlignment="Right"  Height="13" Width="13" Source="Sourse\Images\x-1727490_1280.png" Margin="2,5,4,0" MouseDown="ButtonClose">
+            <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
+            <StackPanel >
+                <Image  Name="CloseButton" HorizontalAlignment="Right"  
+                       Height="13" Width="13" 
+                       Source="Sourse\Images\x-1727490_1280.png" 
+                       Margin="2,5,4,0" 
+                       MouseDown="ButtonClose">
                     <Image.Style>
                         <Style TargetType="{x:Type Image}">
-                            <Setter Property="Opacity" Value="0.9"/>
+                            <Setter Property="Opacity" Value="0.7"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=CloseButton}">
+                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=CloseButton}" 
+                                             Value="True">
                                     <Setter Property="Opacity" Value="1"/>
                                 </DataTrigger>
                             </Style.Triggers>
+
                         </Style>
                     </Image.Style>
                 </Image>
             </StackPanel>
-            
-            <StackPanel Name="MinButton" Height="13" Width="13" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,2,26,0" MouseDown="MinButton_MouseDown">
+
+            <StackPanel Name="MinButton" Height="13" Width="13" Orientation="Horizontal" 
+                        HorizontalAlignment="Right" Margin="0,2,26,0" MouseDown="MinButton_MouseDown"
+                        Background="Transparent">
                 <Polygon Fill="White" Height="13" Width="13" VerticalAlignment="Bottom" Points="0,11,13,11,13,7,0,7">
                     <Polygon.Style>
                         <Style TargetType="{x:Type Polygon}">
-                            <Setter Property="Opacity" Value="0.6"/>
+                            <Setter Property="Opacity" Value="0.5"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsMouseOver, ElementName=MinButton}" Value="True">
-                                    <Setter Property="Opacity" Value="0.73"/>
+                                    <Setter Property="Opacity" Value="0.7"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -54,93 +67,174 @@
                 </Polygon>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="2">           
-                <StackPanel Margin="20">
-                    <Label Content="Вход" FontSize="25" Foreground="White"   HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="Account"
+        <Grid Grid.Row="2">
+            <StackPanel Margin="20">
+                <Label Content="Вход" FontSize="25" Foreground="White"   HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Account"
                                                VerticalAlignment="Bottom"
                                                HorizontalAlignment="Center"
                                                Foreground="{Binding ElementName=UsernameBox, Path=BorderBrush}"
                                                 Margin="40,0,5,8"/>
-                        <TextBox HorizontalAlignment="Center" x:Name="UsernameBox" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
+                    <TextBox HorizontalAlignment="Center" x:Name="UsernameBox" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="Имя пользователя"
                              materialDesign:HintAssist.Foreground="White"
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <iconPacks:PackIconMaterial Kind="Lock"
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <iconPacks:PackIconMaterial Kind="Lock"
                                                VerticalAlignment="Bottom"
                                                HorizontalAlignment="Center"
                                                Foreground="{Binding ElementName=PasswordBox, Path=BorderBrush}"
                                                 Margin="40,0,5,8"/>
-                        <PasswordBox x:Name="PasswordBox" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"
+                    <PasswordBox x:Name="PasswordBox" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"
                                  materialDesign:HintAssist.Hint="Пароль"
                                  materialDesign:HintAssist.Foreground="White"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
                                  Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
-                    </StackPanel>
-                <Button Content="Забыли пароль?"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        Command="ApplicationCommands.New"
+                </StackPanel>
+                <Button 
+                        Name="Bt1" Content="Забыли пароль?"
+                        BorderBrush="Transparent"
                         FontSize="13"
-                        Opacity="0.7"
-                        Foreground="White"
-                        Margin="110,0,0,0">
-                        <Button.CommandBindings>
-                            <!--<CommandBinding Command="New" Executed="RestorePass" />-->
-                        </Button.CommandBindings>
-                        
-                    </Button>
-                    <Button Command="ApplicationCommands.Open" CommandParameter="{Binding ElementName=PasswordBox}" Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                                        Height="40"
-                                        BorderBrush="#FF027FCF"
-                                        Background="#FF027FCF"
-                                        materialDesign:ButtonAssist.CornerRadius="5"
-                                        Width="140" Foreground="White"
-                                        Opacity="1"
-                                        Content="Войти"
-                                        FontSize="20"
-                                        Margin="0,30,0,0">
+                        Foreground="White"                        
+                        Margin="110,0,0,0"
+                        >
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="FontFamily" Value="Helvetica"/>
+                            <Setter Property="FontWeight" Value="Light"/>
+                            <Setter Property="Opacity" Value="0.7"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="15" BorderThickness="2" BorderBrush="Transparent">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                    <Setter Property="Opacity" Value="1"/>
+                                </Trigger>
+
+                            </Style.Triggers>
+
+                        </Style>
+                    </Button.Style>
                     <Button.CommandBindings>
-                         <!-- <CommandBinding Command="Open" Executed="Login" />-->   
-                        </Button.CommandBindings>
-                    </Button>
-                
+                        <!--<CommandBinding Command="New" Executed="RestorePass" />-->
+                    </Button.CommandBindings>
+
+                </Button>
+                <Button Height="40"                           
+                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                            BorderBrush="Black"
+                            Background="#FF027FCF"
+                            materialDesign:ButtonAssist.CornerRadius="7"
+                            Width="140" Foreground="White"
+                            Opacity="1"
+                            Content="Войти"
+                            FontSize="20"
+                            Margin="0,30,0,0">
+
+                    <Button.CommandBindings>
+                        <!-- <CommandBinding Command="Open" Executed="Login" />-->
+                    </Button.CommandBindings>
+                </Button>
+
             </StackPanel>
             <StackPanel>
                 <Polygon Opacity="0.5" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Fill="White"  
-                         Points="30,300,
-                         335,300,
-                         335,299,
-                         30,299" />
+                         Points="60,280,
+                         305,280,
+                         305,279,
+                         60,279" />
             </StackPanel>
         </Grid>
         <Grid Grid.Row="3">
-            <Button Content="Не можете войти?"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        Command="ApplicationCommands.New"
-                        FontSize="13"
-                        Opacity="0.7"
-                        Foreground="White"
-                        VerticalAlignment="Top"
-                        Margin="0,2,0,0"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="282*"/>
+                <ColumnDefinition Width="83*"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="RegButton"
+                    Content="Не можете войти?"                    
+                    Background="Transparent"  
+                    Foreground="White"
+                    FontFamily="Times New Romas"
+                    FontSize="15"
+                    VerticalAlignment="Top"
+                    Margin="0,2,0,0" Grid.ColumnSpan="2"
                         >
-                
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" >
+                        <Setter Property="FontFamily" Value="Helvetica"/>
+                        <Setter Property="FontWeight" Value="Light"/>
+                        <Setter Property="Opacity" Value="0.8"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template">
+
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="15" BorderThickness="2" BorderBrush="Transparent">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Opacity" Value="0.8"/>
+                                <Setter Property="Opacity" Value="1"/>
+                            </Trigger>
+
+                        </Style.Triggers>
+
+                    </Style>
+                </Button.Style>
                 <Button.CommandBindings>
                     <!--<CommandBinding Command="New" Executed="RestorePass" />-->
-                </Button.CommandBindings>              
+                </Button.CommandBindings>
             </Button>
-            <Button Content="Создайте учётную запись!"
-                        Style="{StaticResource MaterialDesignFlatButton}"
-                        Command="ApplicationCommands.New"
-                        FontSize="13"
-                        Opacity="0.7"
+            <Button Content="Создайте учётную запись!"                        
+                        FontSize="15"                        
                         Foreground="White"
-                        VerticalAlignment="Bottom"
-                        Margin="0,0,0,15"
+                        Margin="0,43,0,15" Grid.ColumnSpan="2"
                         >
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" >
+                        <Setter Property="FontFamily" Value="Helvetica"/>
+                        <Setter Property="FontWeight" Value="Light"/>
+                        <Setter Property="Opacity" Value="0.8"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template">
+
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="15" BorderThickness="2" BorderBrush="Transparent">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Opacity" Value="0.8"/>
+                                <Setter Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
                 <Button.CommandBindings>
                     <!--<CommandBinding Command="New" Executed="RestorePass" />-->
                 </Button.CommandBindings>
