@@ -10,7 +10,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Service_Center.Views
@@ -18,11 +17,26 @@ namespace Service_Center.Views
     /// <summary>
     /// Логика взаимодействия для RegistrationWindow.xaml
     /// </summary>
-    public partial class RegistrationWindow : Page
+    public partial class RegistrationWindow : Window
     {
         public RegistrationWindow()
         {
             InitializeComponent();
+        }
+        private void ButtonClose(object sender, MouseButtonEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void MinButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void ToolBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }
