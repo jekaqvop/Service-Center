@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\LoginFormVM.cs" />
     <Compile Include="ViewModels\RegFormVM.cs" />
     <Compile Include="Views\RegistrationWindow.xaml.cs">
