@@ -14,6 +14,7 @@ namespace Service_Center.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         private RegistrationWindow _registration_form;
         private MainWindow _main_window;
+        
         public RegFormVM(RegistrationWindow regform, MainWindow mainWindow)
         {
             _registration_form = regform;
@@ -24,5 +25,6 @@ namespace Service_Center.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

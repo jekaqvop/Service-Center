@@ -156,7 +156,8 @@
                     Content="Создайте учётную запись!"                        
                     FontSize="15"                        
                     Foreground="White"
-                    Margin="0,43,0,15" Grid.ColumnSpan="2">
+                    Margin="0,43,0,15" Grid.ColumnSpan="2"
+                    Command="{Binding OpenRegform}">
             </Button>
         </Grid>
     </Grid>
