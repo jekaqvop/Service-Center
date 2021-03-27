@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Service_Center.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,17 +23,13 @@ namespace Service_Center.Views
         public RegistrationWindow()
         {
             InitializeComponent();
-        }
-        private void ButtonClose(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void MinButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
+            DataContext = new RegFormVM(this);
+        }      
+        /// <summary>
+        /// Перемещение окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ToolBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Service_Center.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,25 +19,18 @@ namespace Service_Center
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LoginWindow : Window
     {
-        public MainWindow()
+        public LoginWindow()
         {
             InitializeComponent();
-
+            DataContext = new LoginFormVM(this);
         }
-
-        
-        private void ButtonClose(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void MinButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
-        }
-
+        /// <summary>
+        /// Перемещение окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ToolBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if(e.ChangedButton == MouseButton.Left)

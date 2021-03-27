@@ -69,7 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="ViewModels\LoginFormVM.cs" />
     <Compile Include="ViewModels\RegFormVM.cs" />
     <Compile Include="Views\RegistrationWindow.xaml.cs">
@@ -128,7 +128,9 @@
     <Resource Include="Sourse\Images\PhotoAuth.png" />
     <Resource Include="Sourse\Images\x-1727490_1280.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

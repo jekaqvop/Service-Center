@@ -29,36 +29,58 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent" MouseDown="ToolBar_MouseDown">
             <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
-            <StackPanel >
-                <Image Name="CloseButton" HorizontalAlignment="Right"  
-                       Height="13" Width="13" 
-                       Source="..\Sourse\Images\x-1727490_1280.png" 
-                       Margin="2,5,4,0" 
-                       MouseDown="ButtonClose">
-                    <Image.Style>
-                        <Style TargetType="{x:Type Image}">
-                            <Setter Property="HorizontalAlignment" Value="Right"/>
-                            <Setter Property="Height" Value="13"/>
-                            <Setter Property="Source" Value="..\Sourse\Images\x-1727490_1280.png"/>
-                            <Setter Property="Margin" Value="2,5,4,0"/>
-                            <Setter Property="Opacity" Value="0.7"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=CloseButton}" 
+            <StackPanel Margin="5,1,1,0">
+                <Button HorizontalAlignment="Right"
+                        Height="20"
+                        Width="20"
+                        Margin="0"
+                        Command="{Binding CloseForm}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Image Name="CloseButton" HorizontalAlignment="Right"  
+                        Height="13" Width="13" 
+                        Source="..\Sourse\Images\x-1727490_1280.png" 
+                        Margin="0,0,3,0">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                                        <Setter Property="Height" Value="13"/>
+                                        <Setter Property="Source" Value="..\Sourse\Images\x-1727490_1280.png"/>
+                                        <Setter Property="Margin" Value="2,5,4,0"/>
+                                        <Setter Property="Opacity" Value="0.7"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=CloseButton}" 
                                              Value="True">
-                                    <Setter Property="Opacity" Value="1"/>
-                                </DataTrigger>
-                            </Style.Triggers>
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CloseReForm}"
+                                             Value="True"/>
 
-                        </Style>
-                    </Image.Style>
-                </Image>
+
+                                        </Style.Triggers>
+
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
             </StackPanel>
 
-            <StackPanel Name="MinButton" Height="13" Width="13" Orientation="Horizontal" 
-                        HorizontalAlignment="Right" Margin="0,2,26,0" MouseDown="MinButton_MouseDown"
-                        Background="Transparent">
-                <Polygon Style="{DynamicResource MinButton}"></Polygon>
+            <StackPanel Background="Transparent"
+                        Margin="0,0,20,0">
+                <Button HorizontalAlignment="Right"
+                        Height="20"
+                        Width="20"
+                        Margin="0"
+                        Command="{Binding MinForm}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Polygon Name="MinButton" Style="{DynamicResource MinButton}"></Polygon>
+                        </ControlTemplate>
+                    </Button.Template>
 
+                </Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2">
@@ -71,7 +93,7 @@
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="40,0,5,8"/>
                     <TextBox x:Name="RUsername" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
-                                 materialDesign:HintAssist.Hint="Имя пользователя"
+                                 materialDesign:HintAssist.Hint="ФОИ пользователя"
                                  materialDesign:HintAssist.Foreground="White"
                                  
                                  materialDesign:HintAssist.IsFloating="True"

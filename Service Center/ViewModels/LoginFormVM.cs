@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Service_Center.ViewModels
@@ -13,24 +14,21 @@ namespace Service_Center.ViewModels
     class LoginFormVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        MainWindow _registration_form;
-        MainWindow _main_window;
-        RegistrationWindow registration;
+        LoginWindow logWin;
         public LoginFormVM() { }
-
+        public LoginFormVM(LoginWindow logWin)
+        {
+            this.logWin = logWin;
+        }
         public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public LoginFormVM(MainWindow regform, MainWindow mainWindow)
-        {
-            _registration_form = regform;
-            _main_window = mainWindow;
-        }
+        
         public RegistrationWindow Registration
         {
-            get { return registration; }
-            set { registration = value; }
+            get;
+            set;
         }
         /// <summary>
         /// Открытие формы регистрации
@@ -39,10 +37,47 @@ namespace Service_Center.ViewModels
         {
             get
             {
-                return new RelayCommand((obj) =>
+                return new DelegateCommand((obj) =>
                 {
                     Registration = new RegistrationWindow();
                     Registration.Show();
+                    //logWin.Visibility = Visibility.Hidden;
+                });
+            }
+        }
+        /// <summary>
+        /// Закрытие формы LoginWindow
+        /// </summary>
+        public ICommand CloseForm
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    logWin.Close();
+                });
+            }
+        }
+        /// <summary>
+        /// Сворачивание окна LoginWindow
+        /// </summary>
+        public ICommand MinForm
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    logWin.WindowState = WindowState.Minimized;
+                });
+            }
+        }
+        public ICommand LogInToAccount
+        {
+            get
+            {
+                return new DelegateCommand((obj)=>
+                {
+
                 });
             }
         }

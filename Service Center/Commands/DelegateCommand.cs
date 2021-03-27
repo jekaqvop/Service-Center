@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Service_Center.Commands
 {
-    class RelayCommand : ICommand
+    class DelegateCommand : ICommand
     {
         private Action<object> execute;
         private Func<object, bool> canExecute;
@@ -18,7 +18,7 @@ namespace Service_Center.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        public DelegateCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute;
