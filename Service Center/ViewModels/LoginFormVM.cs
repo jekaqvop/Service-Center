@@ -1,9 +1,13 @@
 ﻿using Service_Center.Commands;
+using Service_Center.Contexts;
+using Service_Center.Models;
 using Service_Center.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,21 +19,63 @@ namespace Service_Center.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         LoginWindow logWin;
-        public LoginFormVM() { }
-        public LoginFormVM(LoginWindow logWin)
-        {
-            this.logWin = logWin;
-        }
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        
+        string login;
+        bool role;
+        string hashPassword;
         public RegistrationWindow Registration
         {
             get;
             set;
         }
+        public AdminWindow AdminWindow
+        {
+            get;
+            set;
+        }
+        bool loginTrue = false;
+        public string Login 
+        { 
+            get => login; 
+            set
+            {
+                using (Context context = new Context())
+                {
+                    IQueryable<User> users = from User in context.Users
+                                             where User.Login == value
+                                             select User;                    
+                    int io = users.Count();
+                    login = value;
+                    if (io == 1)
+                    {
+                        foreach (User us in users)
+                        {
+                            loginTrue = true;
+                            hashPassword = us.Password;
+                            role = us.Role;
+                            break;
+                        }
+                        logWin.LoginBox.BorderBrush = System.Windows.Media.Brushes.White;
+                    }
+                    else
+                    {
+                        loginTrue = false;
+                        logWin.LoginBox.BorderBrush = System.Windows.Media.Brushes.Red;
+                        
+                    }
+                }
+            } 
+        }
+        public LoginFormVM() { }
+        public LoginFormVM(LoginWindow logWin)
+        {
+            this.logWin = logWin;
+            
+           
+        }
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }              
         /// <summary>
         /// Открытие формы регистрации
         /// </summary>
@@ -39,9 +85,10 @@ namespace Service_Center.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {
-                    Registration = new RegistrationWindow();
-                    Registration.Show();
-                    //logWin.Visibility = Visibility.Hidden;
+                    if(Registration == null)
+                        Registration = new RegistrationWindow();
+                    Registration.ShowDialog();
+                    Registration = null;                  
                 });
             }
         }
@@ -54,7 +101,7 @@ namespace Service_Center.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {
-                    logWin.Close();
+                    Application.Current.Shutdown();
                 });
             }
         }
@@ -71,16 +118,47 @@ namespace Service_Center.ViewModels
                 });
             }
         }
-        public ICommand LogInToAccount
+        /// <summary>
+        /// Хеширование входной строки
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        string GetHash(string input)
         {
-            get
-            {
-                return new DelegateCommand((obj)=>
-                {
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
 
-                });
-            }
+            return Convert.ToBase64String(hash);
         }
+
+        public ICommand LogInToAccount => new DelegateCommand((obj) =>
+        {    
+            if (loginTrue)
+                using (Context context = new Context())
+                {
+                    string HashPassword = GetHash(logWin.PasswordBox.Password);
+                    if (hashPassword == HashPassword)
+                    {
+                        switch (role)
+                        {
+                            case true:
+                                if (AdminWindow == null)
+                                    AdminWindow = new AdminWindow();
+                                logWin.Close();
+                                logWin = null;
+                                break;
+                            case false:
+
+                                break;
+                            default:
+
+                                break;
+                        }
+                    }
+                }
+            else;
+        });
+        
          
     }
 }

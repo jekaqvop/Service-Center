@@ -23,9 +23,8 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" ></RowDefinition>
-            <RowDefinition Height="80" ></RowDefinition>
-            <RowDefinition Height="400" ></RowDefinition>            
+            <RowDefinition Height="25" ></RowDefinition>            
+            <RowDefinition Height="480" ></RowDefinition>            
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent" MouseDown="ToolBar_MouseDown">
             <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
@@ -83,29 +82,41 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="2">
-            <StackPanel Margin="20">
+        <Grid Grid.Row="1">
+            <StackPanel Margin="40">
                 <Label Content="Регистрация" FontSize="25" Foreground="White"  HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="Account"
+                    <iconPacks:PackIconMaterial Kind="Account" 
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
-                                                Margin="40,0,5,8"/>
+                                                Margin="23,0,5,8"/>
                     <TextBox x:Name="RUsername" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
-                                 materialDesign:HintAssist.Hint="ФОИ пользователя"
+                             materialDesign:HintAssist.Hint="Логин"
+                             materialDesign:HintAssist.Foreground="White"
+                             
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <iconPacks:PackIconMaterial Kind="Face" 
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"                                             
+                                                Margin="23,0,5,8"/>
+                    <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
+                                 materialDesign:HintAssist.Hint="ФИО пользователя"
                                  materialDesign:HintAssist.Foreground="White"
                                  
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"/>
                 </StackPanel>
-
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <iconPacks:PackIconMaterial Kind="Email"
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
-                                                Margin="40,0,5,8"/>
+                                                Margin="23,0,5,8"/>
                     <TextBox x:Name="Email" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
                                  
                                  materialDesign:HintAssist.Hint="Электронная почта"
@@ -118,7 +129,7 @@
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
-                                                Margin="40,0,5,8"/>
+                                                Margin="23,0,5,8"/>
                     <PasswordBox x:Name="RPassword" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"
                                     
                                      materialDesign:HintAssist.Hint="Пароль"
@@ -131,7 +142,7 @@
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
-                                                Margin="40,0,5,8"/>
+                                                Margin="23,0,5,8"/>
                     <PasswordBox x:Name="ConfirmPassword" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"
                                      materialDesign:HintAssist.Hint="Повторите пароль"
                                      materialDesign:HintAssist.Foreground="White"
