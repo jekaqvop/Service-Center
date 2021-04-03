@@ -104,13 +104,13 @@
                              materialDesign:HintAssist.Foreground="White"
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             Text="{Binding Login}"/>
+                             Text="{Binding Login}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <iconPacks:PackIconMaterial Kind="Lock"
-                                               VerticalAlignment="Bottom"
-                                               HorizontalAlignment="Center"
-                                               Foreground="{Binding ElementName=PasswordBox, Path=BorderBrush}"
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"                                               
                                                 Margin="40,0,5,8"/>
                     <PasswordBox x:Name="PasswordBox"                                 
                                  Width="210" 
@@ -135,24 +135,25 @@
                     <Button.CommandBindings>
                         <!--<CommandBinding Command="New" Executed="RestorePass" />-->
                     </Button.CommandBindings>
-
                 </Button>
+                <TextBox x:Name="TextBadPassword" 
+                         HorizontalAlignment="Center"
+                         FontSize="12"
+                         Text="Неверный логин или пароль"
+                         BorderBrush="#FF223A6A" 
+                         Foreground="red"
+                         Opacity="{Binding OpacityBadPassword}">
+                         
+                </TextBox>
                 <Button Height="40"  Width="140"                          
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            BorderThickness="2"
-                            BorderBrush="#FF11379C"
-                            Background="#FF027FCF"
-                            materialDesign:ButtonAssist.CornerRadius="7"
-                            Foreground="White"
-                            Opacity="1"
-                            Content="Войти"
-                            FontSize="20"
-                            Margin="0,30,0,0"
-                            Command="{Binding LogInToAccount}">
-
-                    <Button.CommandBindings>
-                        <!-- <CommandBinding Command="Open" Executed="Login" />-->
-                    </Button.CommandBindings>
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        BorderThickness="2"
+                        BorderBrush="#FF11379C"                            
+                        materialDesign:ButtonAssist.CornerRadius="7"
+                        Content="Войти"
+                        FontSize="20"
+                        Margin="0,5,0,0"
+                        Command="{Binding LogInToAccount}">
                 </Button>
 
             </StackPanel>
