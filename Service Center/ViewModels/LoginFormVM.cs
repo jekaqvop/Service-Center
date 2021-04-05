@@ -35,7 +35,6 @@ namespace Service_Center.ViewModels
         {
             get;
             set;
-
         }
         public string Login
         {
@@ -115,7 +114,7 @@ namespace Service_Center.ViewModels
                         using (Context context = new Context())
                         {
                             User user = null;
-
+                          
                             IQueryable<User> users = from User in context.Users
                                                      where User.Login == login
                                                      select User;
@@ -147,10 +146,16 @@ namespace Service_Center.ViewModels
                                             break;
                                     }
                                 }
+                                else 
+                                {
+                                    OpacityBadPassword = 1;
+                                    OnPropertyChanged("OpacityBadPassword");
+                                }
                             }
                             else
                             {
-
+                                OpacityBadPassword = 1;
+                                OnPropertyChanged("OpacityBadPassword");
                             }
                         }
                     });

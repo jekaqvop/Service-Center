@@ -11,20 +11,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Service_Center.Views
 {
     /// <summary>
-    /// Логика взаимодействия для AdminWindow.xaml
+    /// Логика взаимодействия для TableRapair.xaml
     /// </summary>
-    public partial class AdminWindow : Window
+    public partial class TableRapair : UserControl
     {
-        public AdminWindow()
+        public TableRapair()
         {
             InitializeComponent();
-            DataContext = new AdmFormVM(this);
-        }       
-       
+            DataContext = new TableRapairVM(this);
+        }
     }
 }

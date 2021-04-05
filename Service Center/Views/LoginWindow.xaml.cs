@@ -36,10 +36,5 @@ namespace Service_Center
             if(e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
-
-        private void Button_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
-        {
-
-        }
     }
 }

@@ -83,7 +83,7 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
-            <StackPanel Margin="40">
+            <StackPanel Margin="40,30,30,40">
                 <Label Content="Регистрация" FontSize="25" Foreground="White"  HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="Account" 
@@ -91,27 +91,39 @@
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                    <TextBox x:Name="RUsername" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
+                    <TextBox x:Name="RUsername" Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
                              materialDesign:HintAssist.Hint="Логин"
-                             materialDesign:HintAssist.Foreground="White"
-                             
+                             materialDesign:HintAssist.Foreground="White"                             
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Face" 
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                             
                                                 Margin="23,0,5,8"/>
                     <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
-                                 materialDesign:HintAssist.Hint="ФИО пользователя"
+                                 materialDesign:HintAssist.Hint="ФИО"
                                  materialDesign:HintAssist.Foreground="White"
                                  
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0">
+                    <iconPacks:PackIconMaterial Kind="Phone" 
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"                                             
+                                                Margin="23,0,5,8"/>
+                    <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
+                                 materialDesign:HintAssist.Hint="Номер телефона"
+                                 materialDesign:HintAssist.Foreground="White"
+                                 
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Email"
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
@@ -124,7 +136,7 @@
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Lock"                                                  
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"
@@ -137,7 +149,7 @@
                                      materialDesign:TextFieldAssist.UnderlineBrush="White"
                                      Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="LockCheck"                                                 
                                                 Foreground="White"
                                                 VerticalAlignment="Bottom"

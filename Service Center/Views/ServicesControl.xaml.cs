@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Service_Center.Views.UserControls
+namespace Service_Center.Views
 {
     /// <summary>
-    /// Логика взаимодействия для MenuControl.xaml
+    /// Логика взаимодействия для ServicesControl.xaml
     /// </summary>
-    public partial class MenuControl : UserControl
+    public partial class ServicesControl : UserControl
     {
-        public MenuControl()
+        public ServicesControl()
         {
             InitializeComponent();
         }
