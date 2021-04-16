@@ -13,5 +13,6 @@ namespace Service_Center.Contexts
         public Context() : base("DBConnection") { }
         public DbSet<User> Users { get; set; }
         public DbSet<Rapair> Rapairs { get; set; }
+        public DbSet<Service> Services { get; set; }
     }
 }

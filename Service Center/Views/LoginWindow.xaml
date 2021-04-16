@@ -121,7 +121,8 @@
                                  materialDesign:HintAssist.Hint="Пароль"
                                  materialDesign:HintAssist.Foreground="White"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                 Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                                 Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                 />
                 </StackPanel>
                 <Button Style="{DynamicResource ButtonStyle1}"
                         Name="Bt1" Content="Забыли пароль?"

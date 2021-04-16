@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:Service_Center.ViewModels" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        xmlns:local="clr-namespace:Service_Center.Views"
         Title="AdminWindow" Height="800" Width="1500" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:AdmFormVM/>
@@ -17,60 +18,143 @@
         </LinearGradientBrush>
     </Window.Background>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0" Background="#FF222222"> 
-            <materialDesign:TransitioningContent x:Name="TrainsitionigContentSlide" OpeningEffect="{materialDesign:TransitionEffect SlideInFromLeft, Duration=0:0:0.2}">
-                <Grid x:Name="GridCursor" Margin="{Binding GridCursorMargin}" Background="#FF0069C0" Width="10" HorizontalAlignment="Left" Height="60" VerticalAlignment="Top"/>
-            </materialDesign:TransitioningContent>
-            <ListView x:Name="ListViewMenu" Margin="0 100" Foreground="LightGray" FontFamily="Champagne &amp; Limousines" FontSize="18"  
-                       SelectedIndex="{Binding SelectedPage, Mode=TwoWay}">
-                <ListViewItem Height="60">
+        <TabControl Margin="10" BorderBrush="Transparent" Background="Transparent">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="Gainsboro" CornerRadius="4,4,4,4" Margin="10,0,10,20">
+                                    <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2" 
+                                        Height="60"
+                                        Width="140"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="LightSkyBlue" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem>
+                <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Build" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock Text="Ремонты" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                        <materialDesign:PackIcon Kind="Build" 
+                                                 Foreground="Black"
+                                                 Width="30" 
+                                                 Height="30" 
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Center"
+                                                 Margin="0"/>
+                        <TextBlock Text="Ремонты" 
+                                   FontSize="17" 
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Margin="9 0"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem Height="60">
+                </TabItem.Header>
+                <local:TableRapair></local:TableRapair>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
+                        <materialDesign:PackIcon Kind="Cart" 
+                                                 Width="30" 
+                                                 Height="30" 
+                                                 VerticalAlignment="Center" 
+                                                 Margin="5"/>
+                        <TextBlock Text="Услуги" 
+                                   FontSize="17" 
+                                   VerticalAlignment="Center" 
+                                   Margin="15 0" 
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <local:ServicesControl/>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Cart" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock Text="Услуги" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                        <materialDesign:PackIcon Kind="Users" 
+                                                 Width="30" 
+                                                 Height="30" 
+                                                 VerticalAlignment="Center" 
+                                                 Margin="5"/>
+                        <TextBlock Text="Клиенты" 
+                                   FontSize="17" 
+                                   VerticalAlignment="Center" 
+                                   Margin="7 0"
+                                   HorizontalAlignment="Center"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem Height="60">
+                </TabItem.Header>
+                <local:UsersControl/>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Users" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock Text="Клиенты" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                        <materialDesign:PackIcon Kind="BarChart" 
+                                                 Width="30" 
+                                                 Height="30" 
+                                                 VerticalAlignment="Center" 
+                                                 Margin="5"/>
+                        <TextBlock Text="Отчёты" 
+                                   FontSize="17" 
+                                   VerticalAlignment="Center" 
+                                   Margin="10 0"
+                                   HorizontalAlignment="Center"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem Height="60">
+                </TabItem.Header>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="BarChart" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock Text="Отчёты" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                        <materialDesign:PackIcon Kind="Search" 
+                                                 Width="30" 
+                                                 Height="30" 
+                                                 VerticalAlignment="Center" 
+                                                 Margin="5"/>
+                        <TextBlock Text="Поиск" 
+                                   FontSize="17" 
+                                   VerticalAlignment="Center" 
+                                   Margin="10 0"
+                                   HorizontalAlignment="Center"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem Height="60">
+                </TabItem.Header>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Search" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock Text="Поиск" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
+                        <materialDesign:PackIcon Kind="Settings" 
+                                                 Width="30" 
+                                                 Height="30" 
+                                                 VerticalAlignment="Center" 
+                                                 Margin="5"/>
+                        <TextBlock Text="Настройки" 
+                                   FontSize="17" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0 0"
+                                   HorizontalAlignment="Center"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem Height="60">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Settings" Width="30" Height="30" VerticalAlignment="Center" Margin="5"/>
-                        <TextBlock Text="Настройки" FontSize="17" VerticalAlignment="Center" Margin="20 0"/>
-                    </StackPanel>
-                </ListViewItem>
-            </ListView>
-        </Grid>
-        <Grid x:Name="GridPrincipal" Grid.Column="1">
-            
-                <ContentControl Content="{Binding MainUserControl}"/>
-            <StackPanel Width="400" Height="300" Margin="100,100,0,0" HorizontalAlignment="Left" VerticalAlignment="top"
-                        Background="Purple"></StackPanel>
-        </Grid>
+                </TabItem.Header>              
+                
+                <Button Width="100"
+                        x:Name="Lang"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        Content="Lang/Язык"
+                        Command="{Binding ChangeLang}"/>
+            </TabItem>           
+        </TabControl>            
+        
     </Grid>
 </Window>

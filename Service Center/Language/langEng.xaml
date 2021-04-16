@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:System;assembly=mscorlib">
+    <v:String x:Key="m_AddService">Add Service</v:String>
+    <v:String x:Key="m_EditDel">Delete element</v:String>
+    <v:String x:Key="m_Search">Search...</v:String>
+    <v:String x:Key="m_Price">Price</v:String>
+    <v:String x:Key="m_from">from</v:String>
+    <v:String x:Key="m_Ascending">ascend</v:String>
+    <v:String x:Key="m_Descending">descend</v:String>
+    <v:String x:Key="m_SortedBy">Sort</v:String>
+    <v:String x:Key="m_until">Before</v:String>
+    <v:String x:Key="m_Title">Title</v:String>
+    <v:String x:Key="m_Info">Info</v:String>
+    <v:String x:Key="m_waytopic">Select an image</v:String>
+    <v:String x:Key="m_NoSort">No sort</v:String>
+    <v:String x:Key="m_Update">Update</v:String>
+    <v:String x:Key="m_Save">Save changes</v:String>
+</ResourceDictionary>

@@ -95,7 +95,8 @@
                              materialDesign:HintAssist.Hint="Логин"
                              materialDesign:HintAssist.Foreground="White"                             
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"/>
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Face" 
@@ -105,10 +106,10 @@
                                                 Margin="23,0,5,8"/>
                     <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
                                  materialDesign:HintAssist.Hint="ФИО"
-                                 materialDesign:HintAssist.Foreground="White"
-                                 
+                                 materialDesign:HintAssist.Foreground="White"                                 
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"/>
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Text="{Binding FullName}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Phone" 
@@ -118,10 +119,10 @@
                                                 Margin="23,0,5,8"/>
                     <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
                                  materialDesign:HintAssist.Hint="Номер телефона"
-                                 materialDesign:HintAssist.Foreground="White"
-                                 
+                                 materialDesign:HintAssist.Foreground="White"                                 
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"/>
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Text="{Binding Phone}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Email"
@@ -134,7 +135,8 @@
                                  materialDesign:HintAssist.Hint="Электронная почта"
                                  materialDesign:HintAssist.Foreground="White"
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"/>
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Text="{Binding Email}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Lock"                                                  
@@ -143,7 +145,7 @@
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
                     <PasswordBox x:Name="RPassword" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"
-                                    
+                                      
                                      materialDesign:HintAssist.Hint="Пароль"
                                      materialDesign:HintAssist.Foreground="White"
                                      materialDesign:TextFieldAssist.UnderlineBrush="White"

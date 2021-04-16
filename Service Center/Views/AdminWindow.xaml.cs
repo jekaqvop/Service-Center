@@ -22,8 +22,7 @@ namespace Service_Center.Views
     {
         public AdminWindow()
         {
-            InitializeComponent();
-            DataContext = new AdmFormVM(this);
+            InitializeComponent();            
         }       
        
     }

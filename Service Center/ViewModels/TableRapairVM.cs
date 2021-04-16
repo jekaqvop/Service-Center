@@ -1,6 +1,7 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.Resources;
 using Service_Center.Views;
 using System;
 using System.Collections.Generic;
@@ -15,38 +16,28 @@ using System.Windows.Input;
 
 namespace Service_Center.ViewModels
 {
-    class TableRapairVM : INotifyPropertyChanged
+    class TableRapairVM : PropertysChanged
     {
-        public List<string> Status { get; set; }
-        #region OnpropertyChanget
-        Context context = new Context();
-        public event PropertyChangedEventHandler PropertyChanged;
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
-        public TableRapairVM() 
-        {
-                
-        }
+        public List<string> Status { get; set; }       
+        Context context = new Context();        
+        public TableRapairVM() { }
         TableRapair TableRapairs { get; set; }
         public TableRapairVM(TableRapair TableRapairs)
         {
             this.TableRapairs = TableRapairs; 
             context.Rapairs.Load();
-            TableRapairs.RapairGrid.ItemsSource = context.Rapairs.Local.ToBindingList();
+            Rapairs = context.Rapairs.Local;
             this.Status = new List<string>();
             this.Status.Add("Ожидание диагностики");
+            this.Status.Add("Выполняется диагностика");
             this.Status.Add("На согласовании с клиентом");
-            this.Status.Add("Производится ремонт");
+            this.Status.Add("Выполняется ремонт");
             this.Status.Add("Ожидание оплаты");            
             TableRapairs.Status.ItemsSource = this.Status;
             //Rapairs = context.Rapairs.Local;      
         }
-        Rapair rapair;
-        public User Rapair { get; set; }
-        ObservableCollection<Rapair> rapairs;
+
+        public User Rapair { get; set; }     
         public ObservableCollection<Rapair> Rapairs { get; set; } = new ObservableCollection<Rapair>();
         #region Command
         public ICommand SaveChanges

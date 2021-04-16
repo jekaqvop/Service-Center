@@ -58,9 +58,13 @@
         </Grid>
         <Grid Grid.Column="0" Grid.Row="1" Width="auto" Height="auto">
             <DataGrid x:Name="RapairGrid" 
+                      ItemsSource="{Binding Rapairs}"
                   SelectedItem="{Binding Rapair}" 
                   AutoGenerateColumns="False" 
-                  >
+                  BorderBrush="Black"
+                      materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                      
+                        >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID заказа" Binding="{Binding RapairID}"/>
                     <DataGridTextColumn Header="Устойство" Binding="{Binding Device}"/>
@@ -68,7 +72,9 @@
                     <DataGridTextColumn Header="Неисправность" Binding="{Binding Malfunction}"/>
                     <DataGridComboBoxColumn Width="200" x:Name="Status" Header="Статус"
                                             SelectedValueBinding="{Binding Status, Mode=TwoWay}"  
-                                            DisplayMemberPath="{Binding Status}" />
+                                            DisplayMemberPath="{Binding Status}" > 
+                      
+                    </DataGridComboBoxColumn>
                     <DataGridTextColumn Header="Сумма" Binding="{Binding SumMoney}"/>
 
                 </DataGrid.Columns>
@@ -85,38 +91,41 @@
             <StackPanel Margin="30">
                 <StackPanel Orientation="Horizontal" Margin="0,40,0,0" Width="300"
                         Height="50"
-                        VerticalAlignment="Top">
+                        VerticalAlignment="Bottom">
                     <iconPacks:PackIconMaterial Kind="Face" Width="30"
                                             Height="30"
-                                            Foreground="White"                                            
+                                            Foreground="White"       
+                                            VerticalAlignment="Bottom"
                                             HorizontalAlignment="Center"                                             
-                                            Margin="23,10,5,8"/>
-                    <TextBox  Width="210" Height="40" Foreground="White" FontSize="18" BorderBrush="White" 
-                          HorizontalAlignment="Center"
-                          Padding="0,0,20,0"
-                          VerticalAlignment="Top"
-                          materialDesign:HintAssist.Hint="ФИО пользователя"
-                          materialDesign:HintAssist.Foreground="White"                                
-                          materialDesign:HintAssist.IsFloating="True"
-                          materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                            Margin="23,10,5,0"/>
+                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                             materialDesign:HintAssist.Hint="ФИО клиета"
+                             BorderBrush="White" 
+                             Foreground="White" 
+                             materialDesign:HintAssist.Foreground="White"
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           />
                 </StackPanel>
+               
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
                         Height="50"
                         VerticalAlignment="Top">
                     <iconPacks:PackIconMaterial Kind="Phone" Width="30"
                                             Height="30"
                                             Foreground="White"                                            
-                                            HorizontalAlignment="Center"                                             
-                                            Margin="23,10,5,8"/>
-                    <TextBox  Width="210" Height="40" Foreground="White" FontSize="18" BorderBrush="White" 
-                          HorizontalAlignment="Center"
-                          Padding="0,0,20,0"
-                          VerticalAlignment="Top"
-                          materialDesign:HintAssist.Hint="Номер телефона"
-                          materialDesign:HintAssist.Foreground="White"                                
-                          materialDesign:HintAssist.IsFloating="True"
-                          materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                            HorizontalAlignment="Center"     
+                                            VerticalAlignment="Bottom"
+                                            Margin="23,10,5,0"/>
+                    <TextBox  HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                             materialDesign:HintAssist.Hint="Номер телефона"
+                             BorderBrush="White" 
+                             Foreground="White" 
+                             materialDesign:HintAssist.Foreground="White"
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                           />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
@@ -125,34 +134,35 @@
                     <iconPacks:PackIconMaterial Kind="Laptop" Width="30"
                                             Height="30"
                                             Foreground="White"                                            
-                                            HorizontalAlignment="Center"                                             
-                                            Margin="23,10,5,8"/>
-                    <TextBox  Width="210" Height="40" Foreground="White" FontSize="18" BorderBrush="White" 
-                          HorizontalAlignment="Center"
-                          Padding="0,0,20,0"
-                          VerticalAlignment="Top"
-                          materialDesign:HintAssist.Hint="Устройство"
-                          materialDesign:HintAssist.Foreground="White"                                
-                          materialDesign:HintAssist.IsFloating="True"
-                          materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                            HorizontalAlignment="Center"    
+                                                VerticalAlignment="Bottom"
+                                            Margin="23,10,5,0"/>
+                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                             materialDesign:HintAssist.Hint="Устройство"
+                             BorderBrush="White" 
+                             Foreground="White" 
+                             materialDesign:HintAssist.Foreground="White"
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                
                           />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
-                        Height="50"
-                        VerticalAlignment="Top">
+                        Height="50">
                     <iconPacks:PackIconMaterial Kind="Numeric" Width="30"
                                                 Height="30"
+                                                VerticalAlignment="Bottom"
                                                 Foreground="White"                                            
                                                 HorizontalAlignment="Center"                                             
-                                                Margin="23,10,5,8"/>
-                    <TextBox  Width="210" Height="40" Foreground="White" FontSize="18" BorderBrush="White" 
-                          HorizontalAlignment="Center"
-                          Padding="0,0,20,0"
-                          VerticalAlignment="Top"
-                          materialDesign:HintAssist.Hint="Серийный номер"
-                          materialDesign:HintAssist.Foreground="White"                                
-                          materialDesign:HintAssist.IsFloating="True"
-                          materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                                Margin="23,10,5,0"/>
+                    <TextBox  HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                             materialDesign:HintAssist.Hint="Серийный номер"
+                             BorderBrush="White" 
+                             Foreground="White" 
+                             materialDesign:HintAssist.Foreground="White"
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             
                           />
                 </StackPanel>
             </StackPanel>

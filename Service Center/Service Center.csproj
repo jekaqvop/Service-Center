@@ -96,11 +96,16 @@
     </ApplicationDefinition>
     <Compile Include="Commands\DelegateCommand.cs" />
     <Compile Include="Contexts\Context.cs" />
+    <Compile Include="Converters\PriceConvertor.cs" />
+    <Compile Include="Converters\SortConvertor.cs" />
     <Compile Include="Models\Rapairs.cs" />
+    <Compile Include="Models\Service.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Resources\PropertysChanged.cs" />
     <Compile Include="ViewModels\AdmFormVM.cs" />
     <Compile Include="ViewModels\LoginFormVM.cs" />
     <Compile Include="ViewModels\RegFormVM.cs" />
+    <Compile Include="ViewModels\ServicesControlVM.cs" />
     <Compile Include="ViewModels\TableRapairVM.cs" />
     <Compile Include="ViewModels\UsersControl.cs" />
     <Compile Include="Views\AdminWindow.xaml.cs">
@@ -118,13 +123,17 @@
     <Compile Include="Views\UsersControl.xaml.cs">
       <DependentUpon>UsersControl.xaml</DependentUpon>
     </Compile>
-    <Page Include="Language\lang.en-EN.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Language\langEng.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Language\lang.ru-RU.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Language\langRu2.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ServiceTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AdminWindow.xaml">
       <SubType>Designer</SubType>
@@ -197,7 +206,13 @@
     <Resource Include="Sourse\Images\x-1727490_1280.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModels\UserConsrols\" />
+    <Folder Include="Sourse\Images\ImagesServices\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursor1.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Cursor2.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Service_Center.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,31 @@ namespace Service_Center.Views
     {
         public ServicesControl()
         {
-            InitializeComponent();
+            InitializeComponent();            
+        }     
+
+        private void TitleBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SeviceList.Items.Refresh();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {            
+            SeviceList.Items.Refresh();
+        }
+        bool checklanguage = false;
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (checklanguage == false)
+            {
+                this.Resources.Source = new Uri("pack://application:,,,/Language/langRu2.xaml");
+                checklanguage = true;
+            }
+            else if (checklanguage == true)
+            {
+                this.Resources.Source = new Uri("pack://application:,,,/Language/langEng.xaml");
+                checklanguage = false;              
+            }
         }
     }
 }

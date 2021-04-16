@@ -1,6 +1,7 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.Resources;
 using Service_Center.Views;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,8 @@ using System.Windows.Input;
 
 namespace Service_Center.ViewModels
 {
-    class LoginFormVM : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+    class LoginFormVM : PropertysChanged
+    {        
         LoginWindow logWin;
         string login;
         public RegistrationWindow Registration
@@ -46,10 +46,7 @@ namespace Service_Center.ViewModels
         {
             this.logWin = logWin;
         }
-        public virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
         /// <summary>
         /// Открытие формы регистрации
         /// </summary>
@@ -114,7 +111,7 @@ namespace Service_Center.ViewModels
                         using (Context context = new Context())
                         {
                             User user = null;
-                          
+                            
                             IQueryable<User> users = from User in context.Users
                                                      where User.Login == login
                                                      select User;
