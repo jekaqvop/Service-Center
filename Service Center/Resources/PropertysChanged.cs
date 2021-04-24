@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -8,9 +9,11 @@ using System.Threading.Tasks;
 
 namespace Service_Center.Resources
 {
-    internal abstract class PropertysChanged : INotifyPropertyChanged
+    internal abstract class PropertysChanged : INotifyPropertyChanged, INotifyCollectionChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             if (PropertyChanged != null)

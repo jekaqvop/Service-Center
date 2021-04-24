@@ -36,14 +36,13 @@ namespace Service_Center.ViewModels
             TableRapairs.Status.ItemsSource = this.Status;
             //Rapairs = context.Rapairs.Local;      
         }
-
         public User Rapair { get; set; }     
         public ObservableCollection<Rapair> Rapairs { get; set; } = new ObservableCollection<Rapair>();
         #region Command
         public ICommand SaveChanges
         {
             get => new DelegateCommand((obj) =>
-            {
+            {               
                 context.SaveChanges();
             });
         }

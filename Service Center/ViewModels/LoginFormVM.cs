@@ -18,34 +18,19 @@ namespace Service_Center.ViewModels
 {
     class LoginFormVM : PropertysChanged
     {        
-        LoginWindow logWin;
-        string login;
-        public RegistrationWindow Registration
-        {
-            get;
-            set;
-        }
-
-        public AdminWindow AdminWindow
-        {
-            get;
-            set;
-        }
+        string login;       
         public double OpacityBadPassword
         {
             get;
             set;
         }
+        public double OpasityProgressBar { get; set; }
         public string Login
         {
             get => login;
             set => login = value;
         }
-        public LoginFormVM() { }
-        public LoginFormVM(LoginWindow logWin)
-        {
-            this.logWin = logWin;
-        }
+        public LoginFormVM() { }      
         
         /// <summary>
         /// Открытие формы регистрации
@@ -56,10 +41,8 @@ namespace Service_Center.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {
-                    if (Registration == null)
-                        Registration = new RegistrationWindow();
-                    Registration.ShowDialog();
-                    Registration = null;
+                    ViewController view = ViewController.GetInstance;
+                    view.CloseAndShow(new RegistrationWindow());
                 });
             }
         }
@@ -76,19 +59,7 @@ namespace Service_Center.ViewModels
                 });
             }
         }
-        /// <summary>
-        /// Сворачивание окна LoginWindow
-        /// </summary>
-        public ICommand MinForm
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    logWin.WindowState = WindowState.Minimized;
-                });
-            }
-        }
+        public string Password { get; set; }
         /// <summary>
         /// Хеширование входной строки
         /// </summary>
@@ -102,59 +73,70 @@ namespace Service_Center.ViewModels
             return Convert.ToBase64String(hash);
         }    
         
-
+        /// <summary>
+        /// Проверка логина и пароля
+        /// </summary>
         public ICommand LogInToAccount             
         {
             get{
                     return new DelegateCommand((obj) =>
                     {
-                        using (Context context = new Context())
+                        try
                         {
-                            User user = null;
-                            
-                            IQueryable<User> users = from User in context.Users
-                                                     where User.Login == login
-                                                     select User;
-                            int io = users.Count();
-                            if (io == 1)
+                            OpasityProgressBar = 1;
+                            using (Context context = new Context())
                             {
-                                foreach (User us in users)
+                                User user = null;
+
+                                IQueryable<User> users = from User in context.Users
+                                                         where User.Login == login
+                                                         select User;
+                                int io = users.Count();
+                                if (io == 1)
                                 {
-                                    user = us;
-                                    break;
-                                }
-                                string HashPassword = GetHash(logWin.PasswordBox.Password);
-                                if (user.Password == HashPassword)
-                                {
-                                    switch (user.Role)
+                                    foreach (User us in users)
                                     {
-                                        case true:
-                                            if (AdminWindow == null)
-                                                AdminWindow = new AdminWindow();
-                                            AdminWindow.Show();
-                                            logWin.Close();
-                                            logWin = null;
-                                            break;
-                                        case false:
+                                        user = us;
+                                        break;
+                                    }
+                                    string HashPassword = GetHash(Password);
+                                    if (user.Password == HashPassword)
+                                    {
+                                        switch (user.Role)
+                                        {
+                                            case true:                                                
+                                                ViewController view = ViewController.GetInstance;
+                                                view.CloseAndShow(new AdminWindow());                                                                                         
+                                                break;
+                                            case false:
 
-                                            break;
-                                        default:
+                                                break;
+                                            default:
 
-                                            break;
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        OpasityProgressBar = 0;
+                                        OpacityBadPassword = 1;
+                                        OnPropertyChanged("OpasityProgressBar");
+                                        OnPropertyChanged("OpacityBadPassword");
                                     }
                                 }
-                                else 
+                                else
                                 {
+                                    OpasityProgressBar = 0;
                                     OpacityBadPassword = 1;
+                                    OnPropertyChanged("OpasityProgressBar");
                                     OnPropertyChanged("OpacityBadPassword");
                                 }
                             }
-                            else
-                            {
-                                OpacityBadPassword = 1;
-                                OnPropertyChanged("OpacityBadPassword");
-                            }
                         }
+                        catch
+                        {
+                            MessageBox.Show("Ошибка подключения или неполадки сервера");
+                        }                       
                     });
             }
             

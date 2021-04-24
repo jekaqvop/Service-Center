@@ -22,8 +22,7 @@ namespace Service_Center.Views
     {
         public RegistrationWindow()
         {
-            InitializeComponent();
-            DataContext = new RegFormVM(this);
+            InitializeComponent();           
         }      
         /// <summary>
         /// Перемещение окна
@@ -34,6 +33,10 @@ namespace Service_Center.Views
         {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
+        }        
+        private void Min_button(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
         }
     }
 }

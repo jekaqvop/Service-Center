@@ -21,7 +21,7 @@ namespace Service_Center.Views
     public partial class AdminWindow : Window
     {
         public AdminWindow()
-        {
+        {            
             InitializeComponent();            
         }       
        

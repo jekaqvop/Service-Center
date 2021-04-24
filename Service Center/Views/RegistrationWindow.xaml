@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Service_Center.Views"
+        xmlns:ff="clr-namespace:Service_Center.Commands"
         xmlns:vm="clr-namespace:Service_Center.ViewModels"
 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -32,8 +33,8 @@
                 <Button HorizontalAlignment="Right"
                         Height="20"
                         Width="20"
-                        Margin="0"
-                        Command="{Binding CloseForm}">
+                        Margin="0" 
+                        Command="{Binding ShowLoginWindow}">
                     <Button.Template>
                         <ControlTemplate>
                             <Image Name="CloseButton" HorizontalAlignment="Right"  
@@ -54,10 +55,7 @@
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding CloseReForm}"
                                              Value="True"/>
-
-
                                         </Style.Triggers>
-
                                     </Style>
                                 </Image.Style>
                             </Image>
@@ -71,8 +69,8 @@
                 <Button HorizontalAlignment="Right"
                         Height="20"
                         Width="20"
-                        Margin="0"
-                        Command="{Binding MinForm}">
+                        Margin="0" Click="Min_button"
+                        >
                     <Button.Template>
                         <ControlTemplate>
                             <Polygon Name="MinButton" Style="{DynamicResource MinButton}"></Polygon>
@@ -96,7 +94,7 @@
                              materialDesign:HintAssist.Foreground="White"                             
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             />
+                             Text="{Binding Login}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Face" 
@@ -144,12 +142,13 @@
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                    <PasswordBox x:Name="RPassword" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"
-                                      
-                                     materialDesign:HintAssist.Hint="Пароль"
-                                     materialDesign:HintAssist.Foreground="White"
-                                     materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                    <PasswordBox x:Name="RPassword" Width="210" BorderBrush="White" Foreground="White" FontSize="18" Margin="0,0,0,0"                                      
+                                 materialDesign:HintAssist.Hint="Пароль"
+                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                 ff:PasswordBoxAssistant.BindPassword="true"  
+                                 ff:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="LockCheck"                                                 
@@ -161,19 +160,21 @@
                                      materialDesign:HintAssist.Hint="Повторите пароль"
                                      materialDesign:HintAssist.Foreground="White"
                                      materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                     ff:PasswordBoxAssistant.BindPassword="true"  
+                                     ff:PasswordBoxAssistant.BoundPassword="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
-                <Button Command="ApplicationCommands.Open"
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            Height="40" Width="220"
-                            BorderThickness="2"
-                            BorderBrush="#FF11379C"                            
-                            materialDesign:ButtonAssist.CornerRadius="7"                            
-                            Opacity="1"                                                        
-                            Content="Зарегестрироваться" FontSize="20" 
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Center"
-                            Margin="0,20,0,0">                   
+                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                        Height="40" Width="220"
+                        BorderThickness="2"
+                        BorderBrush="#FF11379C"                            
+                        materialDesign:ButtonAssist.CornerRadius="7"                            
+                        Opacity="1"                                                        
+                        Content="Зарегестрироваться" FontSize="20" 
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center"
+                        Margin="0,20,0,0"
+                        Command="{Binding Registration}">                   
                 </Button>
                 <StackPanel Margin="10,0,0,0" Orientation="Horizontal" x:Name="regErr"  Visibility="Hidden">
                     <iconPacks:PackIconMaterial Kind="Alert"

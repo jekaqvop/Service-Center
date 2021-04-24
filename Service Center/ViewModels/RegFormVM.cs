@@ -1,4 +1,5 @@
 ﻿using Service_Center.Commands;
+using Service_Center.Contexts;
 using Service_Center.Models;
 using Service_Center.Resources;
 using Service_Center.Views;
@@ -18,41 +19,24 @@ namespace Service_Center.ViewModels
 {
     class RegFormVM : PropertysChanged
     {       
-        RegistrationWindow regWin;
         User user;
         public RegFormVM() 
         {
             user = new User();
         }
-        public RegFormVM(RegistrationWindow regWin)
+       
+        string patternLog = @"([A-Za-z1-9]{4,25})";
+        [Required(ErrorMessage = "Login is required")]
+        public string Login
         {
-            this.regWin = regWin;
-            user = new User();
-        }
-        /// <summary>
-        /// Закрытие формы LoginWindow
-        /// </summary>
-        public ICommand CloseForm
-        {
-            get
+            get => user.Login;
+            set
             {
-                return new DelegateCommand((obj) =>
-                {
-                    regWin.Close();
-                });
-            }
-        }
-        /// <summary>
-        /// Сворачивание окна LoginWindow
-        /// </summary>
-        public ICommand MinForm
-        {
-            get
-            {
-                return new DelegateCommand((obj) =>
-                {
-                    regWin.WindowState = WindowState.Minimized;
-                });
+                if (Regex.IsMatch(value, patternLog, RegexOptions.IgnoreCase))
+                    user.Login = value;
+                else
+                    MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
+                OnPropertyChanged("Password");
             }
         }
         string patternPass = @"^[0-9a-zA-Zа-яА-Я]{8,20}$";
@@ -62,11 +46,18 @@ namespace Service_Center.ViewModels
             get { return user.Password; }
             set
             {
-                if (Regex.IsMatch(value, patternPass, RegexOptions.IgnoreCase))
-                    user.Password = value;
-                else
-                    MessageBox.Show("Пароль должен содержать минимум 8 символов, 1 верхний, 1 нижний, 1 цифру и максимум 20 / Must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and max 20");
+                user.Password = value;
                 OnPropertyChanged("Password");
+            }
+        }
+        string repeatPassword;
+        public string RepeatPassword
+        {
+            get { return repeatPassword; }
+            set
+            {               
+                repeatPassword = value;                
+                OnPropertyChanged("RepeatPassword");
             }
         }
         string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
@@ -86,14 +77,14 @@ namespace Service_Center.ViewModels
             }
         }
 
-        string patternName = @"/^([А-ЯA-Z]|[А-ЯA-Z][\x27а-яa-z]{1,}|[А-ЯA-Z][\x27а-яa-z]{1,}\-([А-ЯA-Z][\x27а-яa-z]{1,}|(оглы)|(кызы)))\040[А-ЯA-Z][\x27а-яa-z]{1,}(\040[А-ЯA-Z][\x27а-яa-z]{1,})?$/";
+        string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName
         {
             get { return user.FullName; }
             set
             {
-                if (Regex.IsMatch(value, patternName, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(value, patternName, RegexOptions.None))
                     user.FullName = value;
                 else
                     MessageBox.Show("Используйте русский или английский алфавит для ввода ФИО / Use the Russian or English alphabet to enter a Full name");
@@ -102,7 +93,7 @@ namespace Service_Center.ViewModels
             }
         }
 
-        public string patternPhone = @"^\+[0-9]\d{2}-\d{2}-\d{3}-\d{2}-\d{2}$";
+        public string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
         {
@@ -115,6 +106,57 @@ namespace Service_Center.ViewModels
                     MessageBox.Show("Введен неверный формат телефона / The number must be in the format +xxx-xx-xxx-xx-xx");
                 OnPropertyChanged("Phone");
             }
+        }
+        public ICommand Registration
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null && RepeatPassword != null)
+                {
+                    if (Regex.IsMatch(user.Password, patternPass, RegexOptions.IgnoreCase))
+                    {
+                        if(user.Password == repeatPassword)
+                        {
+                            using (Context context = new Context())
+                            {
+                                context.Users.Add(user);
+                                context.SaveChanges();
+                                switch (user.Role)
+                                {
+                                    case true:
+                                        ViewController view = ViewController.GetInstance;
+                                        view.CloseAndShow(new AdminWindow());
+                                        break;
+                                    case false:
+
+                                        break;
+                                    default:
+
+                                        break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Пароли не совпадают / Passwords don't match ");
+                        }
+                    }
+                    else
+                        MessageBox.Show("Пароль должен содержать минимум 8 символов, 1 верхний, 1 нижний, 1 цифру и максимум 20 / Must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and max 20");
+                }
+                else
+                {
+                    MessageBox.Show("Одно из полей не заполнено!");
+                }   
+            });
+        }
+        public ICommand ShowLoginWindow
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                ViewController view = ViewController.GetInstance;
+                view.CloseAndShow(new LoginWindow());
+            });
         }
     }
 }

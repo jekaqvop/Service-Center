@@ -4,15 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Service_Center"
+        xmlns:ff="clr-namespace:Service_Center.Commands"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material" xmlns:vm="clr-namespace:Service_Center.ViewModels"
+        xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material" 
+        xmlns:vm="clr-namespace:Service_Center.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" 
         Height="505" Width="365" 
         WindowStyle="None" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
-        Visibility="{Binding Path=Visibility, UpdateSourceTrigger=PropertyChanged}">
+        >
 
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -23,15 +25,15 @@
     </Window.Background>
     <Window.DataContext>
         <vm:LoginFormVM/>
-    </Window.DataContext>
+    </Window.DataContext>   
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="25" ></RowDefinition>
             <RowDefinition Height="100" ></RowDefinition>
             <RowDefinition Height="300" ></RowDefinition>
             <RowDefinition Height="80" ></RowDefinition>
         </Grid.RowDefinitions>
-
         <Grid Grid.Row="0" Background="Transparent" MouseDown="ToolBar_MouseDown">
             <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
             <StackPanel Margin="5,1,1,0">
@@ -122,7 +124,8 @@
                                  materialDesign:HintAssist.Foreground="White"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
                                  Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
-                                 />
+                                 ff:PasswordBoxAssistant.BindPassword="true"                                 
+                                 ff:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <Button Style="{DynamicResource ButtonStyle1}"
                         Name="Bt1" Content="Забыли пароль?"
@@ -165,6 +168,11 @@
                          305,279,
                          60,279" />
             </StackPanel>
+            <materialDesign:DialogHost VerticalAlignment="Bottom" Margin="65,20,65,20"
+                                       >
+                <ProgressBar IsIndeterminate="True"
+                             Opacity="{Binding OpasityProgressBar}"></ProgressBar>
+            </materialDesign:DialogHost>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -172,7 +180,7 @@
                 <ColumnDefinition Width="83*"/>
             </Grid.ColumnDefinitions>
             <Button Name="RegButton"
-                    Style="{DynamicResource ButtonStyle1}"
+                    Style="{StaticResource ButtonStyle1}"
                     Content="Не можете войти?"                    
                     Background="Transparent"  
                     Foreground="White"
@@ -185,7 +193,7 @@
                     <!--<CommandBinding Command="New" Executed="RestorePass" />-->
                 </Button.CommandBindings>
             </Button>
-            <Button Style="{DynamicResource ButtonStyle1}"
+            <Button Style="{StaticResource ButtonStyle1}"
                     Content="Создайте учётную запись!"                        
                     FontSize="15"                        
                     Foreground="White"

@@ -18,7 +18,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="350"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>      
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="341*"/>
@@ -59,12 +59,12 @@
         <Grid Grid.Column="0" Grid.Row="1" Width="auto" Height="auto">
             <DataGrid x:Name="RapairGrid" 
                       ItemsSource="{Binding Rapairs}"
-                  SelectedItem="{Binding Rapair}" 
-                  AutoGenerateColumns="False" 
-                  BorderBrush="Black"
+                      SelectedItem="{Binding Rapair}" 
+                      AutoGenerateColumns="False" 
+                      BorderBrush="Black"
                       materialDesign:ComboBoxAssist.ShowSelectedItem="True"
-                      
-                        >
+                      CanUserAddRows="False"
+                      >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID заказа" Binding="{Binding RapairID}"/>
                     <DataGridTextColumn Header="Устойство" Binding="{Binding Device}"/>
@@ -155,16 +155,50 @@
                                                 Foreground="White"                                            
                                                 HorizontalAlignment="Center"                                             
                                                 Margin="23,10,5,0"/>
-                    <TextBox  HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="Серийный номер"
                              BorderBrush="White" 
                              Foreground="White" 
                              materialDesign:HintAssist.Foreground="White"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"                             
                           />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                        Height="50">
+                    <materialDesign:PackIcon Kind="Build" Width="30"
+                                                Height="30"
+                                                VerticalAlignment="Bottom"
+                                                Foreground="White"                                            
+                                                HorizontalAlignment="Center"                                             
+                                                Margin="23,10,5,0"/>
+                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                             materialDesign:HintAssist.Hint="Неисправность"
+                             BorderBrush="White" 
+                             Foreground="White" 
+                             materialDesign:HintAssist.Foreground="White"
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"                             
+                          />
+                </StackPanel>
+               
+                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                        Height="50">
+                    <materialDesign:PackIcon Kind="ListStatus" Width="30"
+                                                Height="30"
+                                                VerticalAlignment="Bottom"
+                                                Foreground="White"                                            
+                                                HorizontalAlignment="Center"                                             
+                                                Margin="23,10,5,0"/>
+                    <ComboBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                              materialDesign:HintAssist.Hint="Статус"
+                              BorderBrush="White" 
+                              Foreground="White" 
+                              materialDesign:HintAssist.Foreground="White"
+                              materialDesign:HintAssist.IsFloating="True"
+                              materialDesign:TextFieldAssist.UnderlineBrush="White"
+                              DisplayMemberPath="{Binding Status}" VerticalAlignment="Bottom"/>
+                </StackPanel>             
             </StackPanel>
            
         </Grid>
