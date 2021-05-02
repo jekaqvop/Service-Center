@@ -4,203 +4,274 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:vm="clr-namespace:Service_Center.ViewModels" xmlns:col="clr-namespace:System.Collections;assembly=System.Collections.NonGeneric"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:Service_Center.ViewModels" 
+             xmlns:convertors="clr-namespace:Service_Center.Converters" 
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1250">
     <UserControl.DataContext >
         <vm:TableRapairVM/>
     </UserControl.DataContext>
+    
+    <UserControl.Resources>
+     
+        <ResourceDictionary>
+            <ObjectDataProvider x:Key="myEnum" MethodName="GetValues" ObjectType="{x:Type convertors:StatusEnum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="convertors:StatusEnum"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>            
+            <convertors:StatusRapair x:Key="StatusRapair"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="350"></ColumnDefinition>
-        </Grid.ColumnDefinitions>      
+        </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="341*"/>
                 <ColumnDefinition Width="109*"/>
             </Grid.ColumnDefinitions>
-            <Button Width="40" Padding="0"
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    Command="{Binding UpdateDataGrid}" Margin="0,4">
-                <Button.Content>
-                    <iconPacks:PackIconMaterial Kind="Update" 
-                                                Foreground="White"
-                                                VerticalAlignment="Bottom"
-                                                HorizontalAlignment="Center"  
-                                                Height="30"
-                                                 Width="30"
-                                                />
-                </Button.Content>
-            </Button>
-            <Button Width="40" Padding="0"
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    Margin="40,4,0,4"
-                    Command="{Binding SaveChanges}">
-                <Button.Content>
-                    <iconPacks:PackIconMaterial Kind="ContentSave" 
-                                                Foreground="White"
-                                                VerticalAlignment="Bottom"
-                                                HorizontalAlignment="Center"  
-                                                Height="30"
-                                                Width="30"
-                                                />
-                </Button.Content>
-            </Button>
+           
         </Grid>
-        <Grid Grid.Column="0" Grid.Row="1" Width="auto" Height="auto">
+        <Grid Grid.Column="0" Grid.Row="0" Width="auto" Height="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="29*"/>
+                <ColumnDefinition Width="419*"/>
+            </Grid.ColumnDefinitions>
             <DataGrid x:Name="RapairGrid" 
                       ItemsSource="{Binding Rapairs}"
-                      SelectedItem="{Binding Rapair}" 
                       AutoGenerateColumns="False" 
                       BorderBrush="Black"
-                      materialDesign:ComboBoxAssist.ShowSelectedItem="True"
-                      CanUserAddRows="False"
+                      materialDesign:ComboBoxAssist.ShowSelectedItem="True"                      
+                      CanUserAddRows="False" Grid.ColumnSpan="3"
+                      ColumnWidth="*"                     
                       >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID заказа" Binding="{Binding RapairID}"/>
+                    <DataGridTextColumn Header="ID заказа" Binding="{Binding RapairID}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Устойство" Binding="{Binding Device}"/>
                     <DataGridTextColumn Header="Серийный номер" Binding="{Binding SerialNumber}"/>
                     <DataGridTextColumn Header="Неисправность" Binding="{Binding Malfunction}"/>
-                    <DataGridComboBoxColumn Width="200" x:Name="Status" Header="Статус"
-                                            SelectedValueBinding="{Binding Status, Mode=TwoWay}"  
-                                            DisplayMemberPath="{Binding Status}" > 
-                      
-                    </DataGridComboBoxColumn>
+                    <DataGridComboBoxColumn Header="Статус" 
+                                            SelectedValueBinding="{Binding Status, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                            ItemsSource="{Binding Source={StaticResource myEnum}}" />
                     <DataGridTextColumn Header="Сумма" Binding="{Binding SumMoney}"/>
-
+                    <DataGridTextColumn Header="Дата приёма" Binding="{Binding DateOfRaceipt}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0" Background="Transparent">
-            <TextBlock Text="Добавление заказа"
-                       Foreground="White"
-                       FontSize="30"
-                       HorizontalAlignment="Center">               
-            </TextBlock>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="1">   
-            <StackPanel Margin="30">
-                <StackPanel Orientation="Horizontal" Margin="0,40,0,0" Width="300"
-                        Height="50"
-                        VerticalAlignment="Bottom">
-                    <iconPacks:PackIconMaterial Kind="Face" Width="30"
-                                            Height="30"
-                                            Foreground="White"       
-                                            VerticalAlignment="Bottom"
-                                            HorizontalAlignment="Center"                                             
-                                            Margin="23,10,5,0"/>
-                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                             materialDesign:HintAssist.Hint="ФИО клиета"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          />
-                </StackPanel>
-               
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
-                        Height="50"
-                        VerticalAlignment="Top">
-                    <iconPacks:PackIconMaterial Kind="Phone" Width="30"
-                                            Height="30"
-                                            Foreground="White"                                            
-                                            HorizontalAlignment="Center"     
-                                            VerticalAlignment="Bottom"
-                                            Margin="23,10,5,0"/>
-                    <TextBox  HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                             materialDesign:HintAssist.Hint="Номер телефона"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                          />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
-                        Height="50"
-                        VerticalAlignment="Top">
-                    <iconPacks:PackIconMaterial Kind="Laptop" Width="30"
-                                            Height="30"
-                                            Foreground="White"                                            
-                                            HorizontalAlignment="Center"    
-                                                VerticalAlignment="Bottom"
-                                            Margin="23,10,5,0"/>
-                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                             materialDesign:HintAssist.Hint="Устройство"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                
-                          />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
-                        Height="50">
-                    <iconPacks:PackIconMaterial Kind="Numeric" Width="30"
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="30">
+                    <TextBlock Text="Добавление заказа"
+                           Foreground="White"
+                           FontSize="30"
+                           HorizontalAlignment="Center">
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="0,40,0,0" Width="300"
+                            Height="50"
+                            VerticalAlignment="Bottom">
+                        <iconPacks:PackIconMaterial Kind="Face" Width="30"
                                                 Height="30"
+                                                Foreground="White"       
                                                 VerticalAlignment="Bottom"
-                                                Foreground="White"                                            
                                                 HorizontalAlignment="Center"                                             
                                                 Margin="23,10,5,0"/>
-                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                             materialDesign:HintAssist.Hint="Серийный номер"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"                             
-                          />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
-                        Height="50">
-                    <materialDesign:PackIcon Kind="Build" Width="30"
+                        <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                 materialDesign:HintAssist.Hint="ФИО клиета"
+                                 BorderBrush="White" 
+                                 Foreground="White" 
+                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Text="{Binding Path=FullName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                            Height="50"
+                            VerticalAlignment="Top">
+                        <iconPacks:PackIconMaterial Kind="Phone" Width="30"
                                                 Height="30"
-                                                VerticalAlignment="Bottom"
                                                 Foreground="White"                                            
-                                                HorizontalAlignment="Center"                                             
+                                                HorizontalAlignment="Center"     
+                                                VerticalAlignment="Bottom"
                                                 Margin="23,10,5,0"/>
-                    <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                             materialDesign:HintAssist.Hint="Неисправность"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"                             
-                          />
-                </StackPanel>
-               
-                <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
-                        Height="50">
-                    <materialDesign:PackIcon Kind="ListStatus" Width="30"
+                        <TextBox  HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                 materialDesign:HintAssist.Hint="Номер телефона"
+                                 BorderBrush="White" 
+                                 Foreground="White" 
+                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Text="{Binding Path=PhoneNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                            Height="50"
+                            VerticalAlignment="Top">
+                        <iconPacks:PackIconMaterial Kind="Laptop" Width="30"
                                                 Height="30"
-                                                VerticalAlignment="Bottom"
                                                 Foreground="White"                                            
-                                                HorizontalAlignment="Center"                                             
+                                                HorizontalAlignment="Center"    
+                                                    VerticalAlignment="Bottom"
                                                 Margin="23,10,5,0"/>
-                    <ComboBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                              materialDesign:HintAssist.Hint="Статус"
-                              BorderBrush="White" 
-                              Foreground="White" 
-                              materialDesign:HintAssist.Foreground="White"
-                              materialDesign:HintAssist.IsFloating="True"
-                              materialDesign:TextFieldAssist.UnderlineBrush="White"
-                              DisplayMemberPath="{Binding Status}" VerticalAlignment="Bottom"/>
-                </StackPanel>             
+                        <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                 materialDesign:HintAssist.Hint="Устройство"
+                                 BorderBrush="White" 
+                                 Foreground="White" 
+                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 Text="{Binding Device}"   
+                              />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                            Height="50">
+                        <iconPacks:PackIconMaterial Kind="Numeric" Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Bottom"
+                                                    Foreground="White"                                            
+                                                    HorizontalAlignment="Center"                                             
+                                                    Margin="23,10,5,0"/>
+                        <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                 materialDesign:HintAssist.Hint="Серийный номер"
+                                 BorderBrush="White" 
+                                 Foreground="White" 
+                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"                             
+                                 Text="{Binding SerialNumber}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                            Height="50">
+                        <materialDesign:PackIcon Kind="Build" Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Bottom"
+                                                    Foreground="White"                                            
+                                                    HorizontalAlignment="Center"                                             
+                                                    Margin="23,10,5,0"/>
+                        <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                 materialDesign:HintAssist.Hint="Неисправность"
+                                 BorderBrush="White" 
+                                 Foreground="White" 
+                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="White"                             
+                                 Text="{Binding Malfunction}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                            Height="50">
+                        <materialDesign:PackIcon Kind="ListStatus" Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Bottom"
+                                                    Foreground="White"                                            
+                                                    HorizontalAlignment="Center"                                             
+                                                    Margin="23,10,5,0"/>
+                        <ComboBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                  materialDesign:HintAssist.Hint="Статус"
+                                  BorderBrush="White" 
+                                  Foreground="White" 
+                                  materialDesign:HintAssist.Foreground="White"
+                                  materialDesign:HintAssist.IsFloating="True"
+                                  materialDesign:TextFieldAssist.UnderlineBrush="White"                                  
+                                  SelectedItem="{Binding StatusNewRapair, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  ItemsSource="{Binding Source={StaticResource myEnum}}"
+                                  VerticalAlignment="Bottom"/>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>      
+        <Grid Grid.Row="1" Grid.Column="0">
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">               
+                <Button Width="90" Height="90"
+                        Padding="0"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Margin="0,4,0,4"
+                    Command="{Binding SaveChanges}">
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="ContentSave" 
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"  
+                                                Height="90"
+                                                Width="60"
+                                                />
+                    </Button.Content>
+                </Button>
+                <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding UpdateDataGrid}" >
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Update" 
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"  
+                                                Height="90"
+                                                 Width="60"
+                                                />
+                    </Button.Content>
+                </Button>
+                <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding DeleteRows}" 
+                        CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Delete" 
+                                                    Foreground="White"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"  
+                                                    Height="90"
+                                                    Width="60"/>
+                    </Button.Content>
+                </Button>
+                <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding ShowFullInfo}" 
+                        >
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Information" 
+                                                    Foreground="White"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"  
+                                                    Height="90"
+                                                    Width="60"/>
+                    </Button.Content>
+                </Button>
             </StackPanel>
-           
         </Grid>
-    </Grid>    
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                        Height="60" Width="300"
+                        BorderThickness="2"
+                        BorderBrush="#FF11379C"                            
+                        materialDesign:ButtonAssist.CornerRadius="7"                            
+                        Opacity="1"                                                        
+                        Content="Добавить элемент" FontSize="25"                         
+                        HorizontalAlignment="Center"                        
+                Command="{Binding CreateNewElement}"/>
+        </Grid>
+    </Grid>
 </UserControl>

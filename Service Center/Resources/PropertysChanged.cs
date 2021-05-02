@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 
 namespace Service_Center.Resources
 {
-    internal abstract class PropertysChanged : INotifyPropertyChanged, INotifyCollectionChanged
+    internal abstract class PropertysChanged : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             if (PropertyChanged != null)

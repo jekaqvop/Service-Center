@@ -23,14 +23,14 @@ namespace Service_Center.Commands
         {
             PasswordBox box = d as PasswordBox;
 
-            // only handle this event when the property is attached to a PasswordBox
-            // and when the BindPassword attached property has been set to true
+            // обрабатывает это событие только тогда, когда свойство прикреплено к PasswordBox
+            // // и когда свойство Bind Password attached было установлено в true   
             if (d == null || !GetBindPassword(d))
             {
                 return;
             }
 
-            // avoid recursive updating by ignoring the box's changed event
+            // избегайте рекурсивного обновления, игнорируя событие изменения поля
             box.PasswordChanged -= HandlePasswordChanged;
 
             string newPassword = (string)e.NewValue;
@@ -45,8 +45,8 @@ namespace Service_Center.Commands
 
         private static void OnBindPasswordChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
         {
-            // when the BindPassword attached property is set on a PasswordBox,
-            // start listening to its PasswordChanged event
+            // когда свойство Bind Password attached установлено в поле Password,
+            // начинаем прослушивать событие изменения пароля
 
             PasswordBox box = dp as PasswordBox;
 
@@ -73,9 +73,9 @@ namespace Service_Center.Commands
         {
             PasswordBox box = sender as PasswordBox;
 
-            // set a flag to indicate that we're updating the password
+            // установить флаг, указывающий на то, что мы обновляем пароль
             SetUpdatingPassword(box, true);
-            // push the new password into the BoundPassword property
+           // вставить новый пароль в свойство Bound Password
             SetBoundPassword(box, box.Password);
             SetUpdatingPassword(box, false);
         }

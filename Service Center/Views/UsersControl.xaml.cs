@@ -24,7 +24,6 @@ namespace Service_Center.Views
         public UsersControl()
         {
             InitializeComponent();
-            DataContext = new UsersControlVM(this);
         }
     }
 }

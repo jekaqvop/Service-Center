@@ -23,10 +23,14 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                ResourceDictionary windowStyle = new ResourceDictionary();
-                windowStyle.Source = new Uri(@"Style\WindowStyle.xaml", UriKind.Relative);
-                ResourceDictionary windowStyleLight = new ResourceDictionary();
-                windowStyleLight.Source = new Uri(@"Style\WindowStyleLight.xaml", UriKind.Relative);
+                ResourceDictionary windowStyle = new ResourceDictionary
+                {
+                    Source = new Uri(@"Style\WindowStyle.xaml", UriKind.Relative)
+                };
+                ResourceDictionary windowStyleLight = new ResourceDictionary
+                {
+                    Source = new Uri(@"Style\WindowStyleLight.xaml", UriKind.Relative)
+                };
                 switch (style)
                 {
                     case true:

@@ -18,14 +18,8 @@ namespace Service_Center.ViewModels
         {
             
         }
-        UsersControl usersControl;
-        Context context = new Context();       
-        public UsersControlVM(UsersControl usersControl) 
-        {
-            this.usersControl = usersControl;
-            context.Users.Load();
-            usersControl.UsersGrid.ItemsSource = context.Rapairs.Local.ToBindingList();
-        }
+        
+
         public User User { get; set; }
         
     }

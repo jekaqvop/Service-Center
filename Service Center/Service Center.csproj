@@ -127,9 +127,15 @@
     <Compile Include="Contexts\Context.cs" />
     <Compile Include="Converters\BytesToImage.cs" />
     <Compile Include="Converters\SortConvertor.cs" />
+    <Compile Include="Converters\StatusRapair.cs" />
     <Compile Include="Models\Rapairs.cs" />
     <Compile Include="Models\Service.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\RapairsRepository.cs" />
+    <Compile Include="Repository\ServiceRepository.cs" />
+    <Compile Include="Repository\UnitOfWork.cs" />
+    <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Resources\PropertysChanged.cs" />
     <Compile Include="ViewModels\AdmFormVM.cs" />
     <Compile Include="ViewModels\LoginFormVM.cs" />

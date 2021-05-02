@@ -8,16 +8,12 @@ using System.Threading.Tasks;
 
 namespace Service_Center.Contexts
 {
-    class Context:DbContext
+    class Context :DbContext
     {
         public Context() : base("DBConnection") { }
         public DbSet<User> Users { get; set; }
         public DbSet<Rapair> Rapairs { get; set; }
         public DbSet<Service> Services { get; set; }
-        public object GetServices()
-        {
-            Services.Load();
-            return Services.Local;
-        }      
+        
     }
 }

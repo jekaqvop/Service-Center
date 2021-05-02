@@ -23,8 +23,7 @@ namespace Service_Center.Views
     {
         public TableRapair()
         {
-            InitializeComponent();
-            DataContext = new TableRapairVM(this);
+            InitializeComponent();        
         }
     }
 }

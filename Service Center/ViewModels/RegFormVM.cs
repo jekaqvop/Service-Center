@@ -24,7 +24,6 @@ namespace Service_Center.ViewModels
         {
             user = new User();
         }
-       
         string patternLog = @"([A-Za-z1-9]{4,25})";
         [Required(ErrorMessage = "Login is required")]
         public string Login
@@ -150,12 +149,26 @@ namespace Service_Center.ViewModels
                 }   
             });
         }
+        /// <summary>
+        /// Возвращение окна регистрации
+        /// </summary>
         public ICommand ShowLoginWindow
         {
             get => new DelegateCommand((obj) =>
             {
                 ViewController view = ViewController.GetInstance;
                 view.CloseAndShow(new LoginWindow());
+            });
+        }
+        /// <summary>
+        /// Сворачивание окна
+        /// </summary>
+        public ICommand MinForm
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                ViewController view = ViewController.GetInstance;
+                view.MinWindow();
             });
         }
     }

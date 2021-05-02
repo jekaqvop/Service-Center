@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Service_Center.ViewModels
 {
@@ -11,7 +12,8 @@ namespace Service_Center.ViewModels
     {
         private static ViewController instance;
         public static ViewController GetInstance { get => instance; }
-        public Window window { get; private set; }
+        Window window { get; set; }
+        Window miniWindow { get; set; }
         private static object syncRoot = new Object();
         protected ViewController(Window window)
         {
@@ -35,5 +37,14 @@ namespace Service_Center.ViewModels
             this.window = window;
             this.window.Show();
         }
+        public void OpenMiniWindow(Window miniWindow)
+        {
+            this.miniWindow = miniWindow;
+            miniWindow.Show();
+        }
+        public void MinWindow()
+        {
+            this.window.WindowState = WindowState.Minimized;
+        }       
     }
 }

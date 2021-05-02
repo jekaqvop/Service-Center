@@ -1,51 +1,37 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Models;
-using Service_Center.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using System.Drawing;
-using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows;
 using Service_Center.Contexts;
 using System.Data.Entity;
-using Service_Center.Converters;
 using Service_Center.Resources;
-using System.Windows.Media.Imaging;
+using Service_Center.Repository;
+using System.Collections.Generic;
 
 namespace Service_Center.ViewModels
-{    
+{
     class ServicesControlVM : PropertysChanged
     {
        
         public ServicesControlVM()
         {            
-            sortServicesList();
+            sortServicesList();            
         }
-        Context context;
+        UnitOfWork unitOfWork = new UnitOfWork();
         public ObservableCollection<Service> servicesList = new ObservableCollection<Service>();    
-        public ObservableCollection<Service> ServicesList { get => servicesList; set { servicesList = value; } }        
-        public string UpdateLang { get; set; }
-        public ICommand UpdateLangSourse
-        {
-            get => new DelegateCommand((obj) =>
-            {
-                //UpdateLang = @" ..\Language\langEng.xaml";
-            });
-        }
-
-           
+        public ObservableCollection<Service> ServicesList 
+        { 
+            get => servicesList; 
+            set
+            { 
+                servicesList = value;
+            } 
+        }        
         #region selectingByPrice
         decimal price0 = 0;
         decimal price1 = 9999999;
@@ -53,10 +39,9 @@ namespace Service_Center.ViewModels
         {
             get
             {
-                using(this.context= new Context())
-                {
+                
                     sortServicesList();
-                }               
+                            
                 return price0;
             }
             set => price0 = value;            
@@ -65,10 +50,9 @@ namespace Service_Center.ViewModels
         {
             get
             {
-                using (this.context= new Context())
-                {
+               
                     sortServicesList();
-                }
+               
                 return price1;
             }
             set => price1 = value;
@@ -77,12 +61,12 @@ namespace Service_Center.ViewModels
         #endregion
         #region ChangeSelectService
         public int SelectIndex { get; set; }
-        Service selectService = new Service();
+        Service selectService;
         public Service SelectService
         {
             get
             {
-                return selectService == null ? selectService = new Service() : selectService;
+                return selectService ?? unitOfWork.Services.GetFirstItem();
             }
             set
             {
@@ -136,13 +120,15 @@ namespace Service_Center.ViewModels
         
         public string OpenFileDialog()
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter =
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter =
                 "JPEG File(*.jpg)|*.jpg|" +
                 "GIF File(*.gif)|*.gif|" +
                 "Bitmap File(*.bmp)|*.bmp|" +
                 "TIF File(*.tif)|*.tif|" +
-                "PNG File(*.png)|*.png|All files (*.*)|*.*";
+                "PNG File(*.png)|*.png|All files (*.*)|*.*"
+            };
             if (openFileDialog.ShowDialog() == true)
             {
                 return openFileDialog.FileName;               
@@ -162,7 +148,7 @@ namespace Service_Center.ViewModels
                         Image image = Image.FromFile(pathImage);
                         MemoryStream ms = new MemoryStream();
                         image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-                        //PathImage = ms.ToArray();                        
+                        PathImage = ms.ToArray();                        
                         OnPropertyChanged("SelectService");
                     }
                     catch
@@ -178,8 +164,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                    context.SaveChanges();                
-                    MessageBox.Show("Успешно");                
+                unitOfWork.Save();   
             });
         }
         public ICommand Update
@@ -191,30 +176,49 @@ namespace Service_Center.ViewModels
         }
         #endregion
         #region AddDelUpdateElement
+        
         public ICommand CreateNewAlement
         {
             get => new DelegateCommand((obj) =>
-            {  
-                context.Services.Add(new Service { Title = "title", Info = "Info", Price = 0});
+            {
+                Image image = Image.FromFile(@"D:\Курсач\Service Center\Service Center\Sourse\Images\ImagesServices\DefaultImages.png");
+                MemoryStream ms = new MemoryStream();
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+                byte[] bytes = ms.ToArray();
+                unitOfWork.Services.AddElemet(new Service { ImageSourse = bytes ?? null, Title = "title", Info = "Info", Price = 0 });                
                 sortServicesList();
                 OnPropertyChanged("ServicesList");                
             });
         }
         public ICommand DelElement
         {
+             
             get => new DelegateCommand((obj) =>
             {
-                context.Services.Local.Remove(selectService);
-                sortServicesList();
-                OnPropertyChanged("SelectService");
+                if (((Collection<object>)obj).Count > 0)
+                {
+                    Collection<object> objects = (Collection<object>)obj;
+                    List<Service> list = objects.Cast<Service>().ToList();
+                    list.ForEach(service =>
+                    {
+                        unitOfWork.Services.Delete(service.ServiceId);
+                        ServicesList.Remove(service);
+                    });
+                }
+                else
+                    MessageBox.Show("Не выбраны элементы для удаления");
             });
         }
+
         #endregion
-        #region Sort    
+            #region SortAndSearch
+
+            #region Properties
         string sortAsc;
         string sortDesc;
         string sortTitle;
         string sortPrice;
+        string searchTitle = "";
         public string SortAsc 
         {
             get
@@ -251,40 +255,43 @@ namespace Service_Center.ViewModels
             }
             set => sortPrice = value;
         }
+        public string SearchTitle
+        {
+            get
+            {
+                sortServicesList();
+                return searchTitle;
+            }
+            set => searchTitle = value;
+        }
+        #endregion
         string getSortParam()
         {
             string getNotNull(string str)
             {
-                return str != null ? str : "";
+                return str ?? "";
             }
             return getNotNull(sortTitle) + getNotNull(sortPrice) + getNotNull(sortAsc) + getNotNull(sortDesc);
-        }
+        }        
         void sortServicesList()
-        {     
-            if(context != null)
-                context.SaveChanges();
-                this.context = new Context();
+        {
+            unitOfWork.Save();
                 switch (getSortParam())
                 {
                     case "TASC":
-                        context.Services.Where(p => p.Price >= price0 && p.Price <= price1).OrderBy(p => p.Title).Load();
-                        ServicesList = context.Services.Local;
+                    ServicesList  = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Title));                       
                         break;
                     case "PASC":
-                        context.Services.Where(p => p.Price >= price0 && p.Price <= price1).OrderBy(p => p.Price).Load();
-                        ServicesList = context.Services.Local;
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Price));
                         break;
                     case "TDESC":
-                        context.Services.Where(p => p.Price >= price0 && p.Price <= price1).OrderByDescending(p => p.Title).Load();
-                        ServicesList = context.Services.Local;
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderByDescending(p => p.Title));
                         break;
                     case "PDESC":
-                        context.Services.Where(p => p.Price >= price0 && p.Price <= price1).OrderByDescending(p => p.Price).Load();
-                        ServicesList = context.Services.Local;
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderByDescending(p => p.Price));
                         break;
                     default:
-                        context.Services.Load();
-                        ServicesList = context.Services.Local;
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)));        
                         break;
                 }
                 OnPropertyChanged("ServicesList");                      

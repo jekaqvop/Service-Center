@@ -1,6 +1,7 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.Repository;
 using Service_Center.Resources;
 using Service_Center.Views;
 using System;
@@ -12,67 +13,136 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Service_Center.ViewModels
 {
+    
     class TableRapairVM : PropertysChanged
     {
-        public List<string> Status { get; set; }       
-        Context context = new Context();        
-        public TableRapairVM() { }
-        TableRapair TableRapairs { get; set; }
-        public TableRapairVM(TableRapair TableRapairs)
+        public List<string> StatusEnum { get; set; }
+        UnitOfWork unitOfWork = new UnitOfWork();
+        //Rapair selectRapair;
+        public Rapair SelectRapair { get; set; }
+
+        public TableRapairVM()
         {
-            this.TableRapairs = TableRapairs; 
-            context.Rapairs.Load();
-            Rapairs = context.Rapairs.Local;
-            this.Status = new List<string>();
-            this.Status.Add("Ожидание диагностики");
-            this.Status.Add("Выполняется диагностика");
-            this.Status.Add("На согласовании с клиентом");
-            this.Status.Add("Выполняется ремонт");
-            this.Status.Add("Ожидание оплаты");            
-            TableRapairs.Status.ItemsSource = this.Status;
-            //Rapairs = context.Rapairs.Local;      
-        }
-        public User Rapair { get; set; }     
+            Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());    
+            SelectRapair = unitOfWork.Repairs.GetFirstItem();
+        }        
+        public User Rapair { get; set; }
+        public string StatusNewRapair { get; set; } = "WaitingDiagnosis";
+        public string FullName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Device { get; set; }
+        public string Malfunction { get; set; }
+        public string SerialNumber { get; set; }
         public ObservableCollection<Rapair> Rapairs { get; set; } = new ObservableCollection<Rapair>();
         #region Command
         public ICommand SaveChanges
         {
             get => new DelegateCommand((obj) =>
-            {               
-                context.SaveChanges();
+            {
+                unitOfWork.Save();
             });
         }
         #endregion
-        public ICommand DeleteRow
+        public ICommand DeleteRows
         {
             get => new DelegateCommand((obj) =>
             {
-                if (TableRapairs.RapairGrid.SelectedItems.Count > 0)
+                if (((Collection<object>)obj).Count > 0)
                 {
-                    for (int i = 0; i < TableRapairs.RapairGrid.SelectedItems.Count; i++)
+                    Collection<object> objects = (Collection<object>)obj;
+                    List<Rapair> list = objects.Cast<Rapair>().ToList();
+                    list.ForEach(rapair =>
                     {
-                        Rapair rapair = TableRapairs.RapairGrid.SelectedItems[i] as Rapair;
-                        if (rapair != null)
-                        {
-                            context.Rapairs.Remove(rapair);
-                        }
-                    }
+                        unitOfWork.Repairs.Delete(rapair.RapairID);
+                        Rapairs.Remove(rapair);
+                    });
                 }
-                context.SaveChanges();
+                else
+                    MessageBox.Show("Не выбраны элементы для удаления");
             });
         }
         public ICommand UpdateDataGrid
         {
             get => new DelegateCommand((obj) =>
             {
-                this.TableRapairs = TableRapairs;
-                context.Rapairs.Load();
-                TableRapairs.RapairGrid.ItemsSource = context.Rapairs.Local.ToBindingList();
+                Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
             });        
+        }
+        public ICommand CreateNewElement
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                if(checkNotNull(FullName, StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
+                {
+                    IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(p => p.PhoneNumber == PhoneNumber);
+                    if (users.Count() == 0)
+                    {
+                        DialogResult result = MessageBox.Show("Пользователя с таким номером телефона не существует!\n" +
+                            "Вы хотите его добавить?",
+                                        "Нужный пользователь отсутствует",
+                                        MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            User user = new User { PhoneNumber = this.PhoneNumber };
+                            //добавить окно добавления нового пользователя или сделать переключение на другую страницу
+                        }
+                        else
+                        {
+                            MessageBox.Show("В этом случае вы не сможете добавить заказ для несуществующего пользователя!\n" +
+                                            "Если пользователь уже зарегестрировался, то проверьте корректность номера телефона!");
+                        }
+                    }
+                    else if (users.Count() == 1)
+                    {
+                        addRapair(users.First());
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Заполните все поля!");
+                }
+               
+            });
+        }
+        public ICommand ShowFullInfo
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                User user = unitOfWork.Users.GetItem(SelectRapair.UserID);
+                MessageBox.Show($"Номер заказа: {SelectRapair.RapairID}\n" +
+                                $"Устройство: {SelectRapair.Device}\n" +
+                                $"Несправность: {SelectRapair.Malfunction}\n" +
+                                $"ФИО клиента: {user.FullName}\n" +
+                                $"Email: {user.Email}\n" +
+                                $"Номер телефона: {user.PhoneNumber}");
+            });
+        }
+        bool checkNotNull(params object[] objects)
+        {
+            foreach(object obj in objects)
+            {
+                if (obj == null)
+                    return false;
+            }
+            return true;
+        }
+        void addRapair(User user)
+        {
+            Rapair rapair = new Rapair();
+            rapair.Status = this.StatusNewRapair;
+            rapair.Device = this.Device;
+            rapair.Malfunction = this.Malfunction;
+            rapair.SerialNumber = this.SerialNumber;
+            rapair.DateOfRaceipt = DateTime.Now;
+            rapair.SumMoney = 0;
+            rapair.UserID = user.UserId;
+            unitOfWork.Repairs.AddElemet(rapair);
+            Rapairs.Add(rapair);
         }
     }
 

@@ -69,7 +69,8 @@
                 <Button HorizontalAlignment="Right"
                         Height="20"
                         Width="20"
-                        Margin="0" Click="Min_button"
+                        Margin="0" 
+                        Command="{Binding Minform}"
                         >
                     <Button.Template>
                         <ControlTemplate>

@@ -109,16 +109,15 @@
                         Command="{Binding CreateNewAlement}">                    
                 </Button>
                 <Button Content="Удалить элемент"
-                        Command="{Binding DelElement}">
+                        Command="{Binding DelElement}"
+                        CommandParameter="{Binding SelectedItems, ElementName=SeviceList}">
                 </Button>
                 <Button Content="{DynamicResource m_waytopic}"
                          Margin="45,30,45,10"
                          Command="{Binding OpenImage}" 
                          Click="Button_Click"
-                         >  
+                         >
                 </Button>
-                <Button Content="lang/язык" Click="Button_Click_1"
-                        />
                 <TextBox HorizontalAlignment="Center" x:Name="TitleBox" Width="210"  FontSize="18" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="{DynamicResource m_Title}"
                              BorderBrush="White" 
@@ -210,7 +209,7 @@
                              FontSize="15"
                              TextChanged="TitleBox_TextChanged"/>
                 </StackPanel>
-                <!--<TextBox Margin="40,0,0,0"
+                <TextBox Margin="40,0,0,0"
                              Width="150"                             
                              VerticalAlignment="Center"
                              materialDesign:HintAssist.Hint="{DynamicResource m_Search}"
@@ -220,7 +219,7 @@
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
                              FontSize="20"
-                             TextChanged="TitleBox_TextChanged"/>-->                
+                             Text="{Binding SearchTitle}"/>                
             </StackPanel>    
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">
