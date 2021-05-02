@@ -1,5 +1,4 @@
-﻿using Service_Center.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,24 +15,18 @@ using System.Windows.Shapes;
 namespace Service_Center.Views
 {
     /// <summary>
-    /// Логика взаимодействия для RegistrationWindow.xaml
+    /// Логика взаимодействия для RegNewUserWind.xaml
     /// </summary>
-    public partial class RegistrationWindow : Window
+    public partial class RegNewUserWind : Window
     {
-        public RegistrationWindow()
+        public RegNewUserWind()
         {
-            InitializeComponent();           
-        }      
-        /// <summary>
-        /// Перемещение окна
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+            InitializeComponent();
+        }
         private void ToolBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
-        }        
-       
+        }
     }
 }

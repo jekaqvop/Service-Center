@@ -40,7 +40,11 @@ namespace Service_Center.ViewModels
         public void OpenMiniWindow(Window miniWindow)
         {
             this.miniWindow = miniWindow;
-            miniWindow.Show();
+            miniWindow.ShowDialog();
+        }
+        public void CloseMiniWindow()
+        {
+            this.miniWindow.Close();
         }
         public void MinWindow()
         {

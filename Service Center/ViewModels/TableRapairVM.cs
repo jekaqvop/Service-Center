@@ -77,7 +77,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                if(checkNotNull(FullName, StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
+                if(checkNotNull(typeof(string), FullName, StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
                 {
                     IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(p => p.PhoneNumber == PhoneNumber);
                     if (users.Count() == 0)
@@ -89,7 +89,8 @@ namespace Service_Center.ViewModels
                         if (result == DialogResult.Yes)
                         {
                             User user = new User { PhoneNumber = this.PhoneNumber };
-                            //добавить окно добавления нового пользователя или сделать переключение на другую страницу
+                            ViewController view = ViewController.GetInstance;
+                            view.OpenMiniWindow(new RegNewUserWind());
                         }
                         else
                         {
@@ -122,28 +123,38 @@ namespace Service_Center.ViewModels
                                 $"Номер телефона: {user.PhoneNumber}");
             });
         }
-        bool checkNotNull(params object[] objects)
+        bool checkNotNull(Type type, params object[] objects)
         {
-            foreach(object obj in objects)
+            if(type == typeof(string))
             {
-                if (obj == null)
-                    return false;
+                foreach (string obj in objects)
+                {
+                    if (obj == null || obj == "")
+                        return false;
+                }
             }
+            else
+                foreach(object obj in objects)
+                {
+                    if (obj == null)
+                        return false;
+                }
             return true;
         }
         void addRapair(User user)
         {
-            Rapair rapair = new Rapair();
-            rapair.Status = this.StatusNewRapair;
-            rapair.Device = this.Device;
-            rapair.Malfunction = this.Malfunction;
-            rapair.SerialNumber = this.SerialNumber;
-            rapair.DateOfRaceipt = DateTime.Now;
-            rapair.SumMoney = 0;
-            rapair.UserID = user.UserId;
+            Rapair rapair = new Rapair
+            {
+                Status = this.StatusNewRapair,
+                Device = this.Device,
+                Malfunction = this.Malfunction,
+                SerialNumber = this.SerialNumber,
+                DateOfRaceipt = DateTime.Now,
+                SumMoney = 0,
+                UserID = user.UserId
+            };
             unitOfWork.Repairs.AddElemet(rapair);
             Rapairs.Add(rapair);
         }
     }
-
 }

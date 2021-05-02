@@ -75,6 +75,14 @@ namespace Service_Center.ViewModels
                 view.MinWindow();
             });
         }
+        public ICommand ShowForgotPassword
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                ViewController view = ViewController.GetInstance;
+                view.OpenMiniWindow(new ForgetPasswordWind());
+            });
+        }
         public string Password { get; set; }
         /// <summary>
         /// Хеширование входной строки

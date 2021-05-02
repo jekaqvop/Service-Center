@@ -1,6 +1,7 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.Repository;
 using Service_Center.Resources;
 using Service_Center.Views;
 using System;
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,10 +21,10 @@ using System.Windows.Input;
 
 namespace Service_Center.ViewModels
 {
-    class RegFormVM : PropertysChanged
-    {       
+    class RegNewUserVM : PropertysChanged
+    {
         User user;
-        public RegFormVM() 
+        public RegNewUserVM()
         {
             user = new User();
         }
@@ -38,28 +41,7 @@ namespace Service_Center.ViewModels
                     MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
                 OnPropertyChanged("Password");
             }
-        }
-        string patternPass = @"^[0-9a-zA-Zа-яА-Я]{8,20}$";
-        [Required(ErrorMessage = "Password is required")]
-        public string Password
-        {
-            get { return user.Password; }
-            set
-            {
-                user.Password = GetHash(value);
-                OnPropertyChanged("Password");
-            }
-        }
-        string repeatPassword;
-        public string RepeatPassword
-        {
-            get { return repeatPassword; }
-            set
-            {               
-                repeatPassword = GetHash(value);                
-                OnPropertyChanged("RepeatPassword");
-            }
-        }
+        }        
         string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
         [Required(ErrorMessage = "Email is required")]
@@ -107,70 +89,81 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("Phone");
             }
         }
-        string GetHash(string input)
+        string GetHash()
         {
+            string newPassword = "12345678";
+            SendEmail("Пароль и логин от аккаунта Service Center\n" +
+                           $"Ваш логин: {user.Login}\n" +
+                           $"Ваш пароль: {newPassword}", 
+                           user.Email);
             var md5 = MD5.Create();
-            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(newPassword));
             return Convert.ToBase64String(hash);
+        }
+        void SendEmail(string body, string email)
+        {
+            MailAddress from = new MailAddress("ivanivanoki@mail.ru", "AutoService");
+            MailAddress to = new MailAddress(email);
+            MailMessage m = new MailMessage(from, to);
+            m.Subject = "Service Center";
+            m.Body = body;
+            m.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587);
+            smtp.Credentials = new NetworkCredential("ivanivanoki@mail.ru", "oop2020SEM");
+            smtp.EnableSsl = true;
+            smtp.Send(m);
         }
         public ICommand Registration
         {
             get => new DelegateCommand((obj) =>
             {
-                if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null && RepeatPassword != null)
-                {
-                    if (Regex.IsMatch(user.Password, patternPass, RegexOptions.IgnoreCase))
+                //тут должен автоматом генерироваться пароль
+                user.Password = GetHash();
+                if (checkNotNull(typeof(string), user.Login, user.FullName, user.PhoneNumber, user.Email, user.Password))
+                {                    
+                    using (UnitOfWork unitOfWork = new UnitOfWork())
                     {
-                        if(user.Password == repeatPassword)
-                        {
-                            using (Context context = new Context())
-                            {
-                                context.Users.Add(user);
-                                context.SaveChanges();
-                                switch (user.Role)
-                                {
-                                    case true:
-                                        ViewController view = ViewController.GetInstance;
-                                        view.CloseAndShow(new AdminWindow());
-                                        break;
-                                    case false:
-
-                                        break;
-                                    default:
-
-                                        break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Пароли не совпадают / Passwords don't match ");
-                        }
+                        unitOfWork.Users.AddElemet(user);
+                        unitOfWork.Save();                       
                     }
-                    else
-                        MessageBox.Show("Пароль должен содержать минимум 8 символов, 1 верхний, 1 нижний, 1 цифру и максимум 20 / Must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and max 20");
-                }
+                    ICommand command = Close;
+                } 
                 else
                 {
                     MessageBox.Show("Одно из полей не заполнено!");
-                }   
+                }
             });
         }
-        /// <summary>
-        /// Возвращение окна FАвторизации
-        /// </summary>
-        public ICommand ShowLoginWindow
+        bool checkNotNull(Type type, params object[] objects)
+        {
+            if (type == typeof(string))
+            {
+                foreach (string obj in objects)
+                {
+                    if (obj == null || obj == "")
+                        return false;
+                }
+            }
+            else
+                foreach (object obj in objects)
+                {
+                    if (obj == null)
+                        return false;
+                }
+            return true;
+        }
+        public ICommand Close
         {
             get => new DelegateCommand((obj) =>
             {
                 ViewController view = ViewController.GetInstance;
-                view.CloseAndShow(new LoginWindow());
+                view.CloseMiniWindow();
             });
         }
         /// <summary>
         /// Сворачивание окна
         /// </summary>
-        public ICommand MinForm
+        public ICommand Minform
         {
             get => new DelegateCommand((obj) =>
             {

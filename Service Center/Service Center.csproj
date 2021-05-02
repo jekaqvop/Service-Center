@@ -138,8 +138,10 @@
     <Compile Include="Repository\UserRepository.cs" />
     <Compile Include="Resources\PropertysChanged.cs" />
     <Compile Include="ViewModels\AdmFormVM.cs" />
+    <Compile Include="ViewModels\ForgetPasswordWM.cs" />
     <Compile Include="ViewModels\LoginFormVM.cs" />
     <Compile Include="ViewModels\RegFormVM.cs" />
+    <Compile Include="ViewModels\RegNewUserVM.cs" />
     <Compile Include="ViewModels\ServicesControlVM.cs" />
     <Compile Include="ViewModels\TableRapairVM.cs" />
     <Compile Include="ViewModels\UsersControl.cs" />
@@ -147,8 +149,14 @@
     <Compile Include="Views\AdminWindow.xaml.cs">
       <DependentUpon>AdminWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ForgetPasswordWind.xaml.cs">
+      <DependentUpon>ForgetPasswordWind.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RegistrationWindow.xaml.cs">
       <DependentUpon>RegistrationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RegNewUserWind.xaml.cs">
+      <DependentUpon>RegNewUserWind.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServicesControl.xaml.cs">
       <DependentUpon>ServicesControl.xaml</DependentUpon>
@@ -183,6 +191,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ForgetPasswordWind.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -201,6 +213,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\RegistrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RegNewUserWind.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

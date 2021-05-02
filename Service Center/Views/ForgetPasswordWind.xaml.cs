@@ -1,5 +1,4 @@
-﻿using Service_Center.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,15 +15,13 @@ using System.Windows.Shapes;
 namespace Service_Center.Views
 {
     /// <summary>
-    /// Логика взаимодействия для AdminWindow.xaml
+    /// Логика взаимодействия для ForgetPasswordWind.xaml
     /// </summary>
-    public partial class AdminWindow : Window
+    public partial class ForgetPasswordWind : Window
     {
-        public AdminWindow()
+        public ForgetPasswordWind()
         {
-            ViewController view = ViewController.InitializeComponent(this);
-            InitializeComponent();            
-        }       
-       
+            InitializeComponent();
+        }
     }
 }
