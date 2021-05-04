@@ -148,7 +148,6 @@
                         Content="Lang/Язык"
                         Command="{Binding ChangeLang}"/>
             </TabItem>           
-        </TabControl>            
-        
+        </TabControl>  
     </Grid>
 </Window>

@@ -141,10 +141,11 @@
                         BorderBrush="#FF11379C"                            
                         materialDesign:ButtonAssist.CornerRadius="7"                            
                         Opacity="1"                                                        
-                        Content="Зарегестрироваться" FontSize="20" 
+                        Content="Зарегестрировать" FontSize="20" 
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center"
                         Margin="0,20,0,0"
+                        IsEnabled="{Binding IsButtonEnabled}"
                         Command="{Binding Registration}">
                 </Button>
                 <StackPanel Margin="10,0,0,0" Orientation="Horizontal" x:Name="regErr"  Visibility="Hidden">

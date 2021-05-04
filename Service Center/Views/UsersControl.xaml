@@ -5,53 +5,139 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Service_Center.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:vm="clr-namespace:Service_Center.ViewModels">
+             d:DesignHeight="800" d:DesignWidth="1250"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:vm="clr-namespace:Service_Center.ViewModels" xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <UserControl.DataContext >
         <vm:UsersControlVM/>
     </UserControl.DataContext>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="350"></ColumnDefinition>
+            <ColumnDefinition Width="360"></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="341*"/>
+                <ColumnDefinition Width="109*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
         <Grid Grid.Column="0">
             <DataGrid x:Name="UsersGrid" 
                       SelectedItem="{Binding User}" 
                       AutoGenerateColumns="False"                   
                       Height="auto" Width="auto"
-                      >
+                      ColumnWidth="*"
+                      materialDesign:ComboBoxAssist.ShowSelectedItem="True"                      
+                      CanUserAddRows="False"
+                      ItemsSource="{Binding ListUsers}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID заказа" Binding="{Binding UserID}"/>
-                    <DataGridTextColumn Header="Устойство" Binding="{Binding Login}"/>
-                    <DataGridTextColumn Header="Неисправность" Binding="{Binding FullName}"/>
-                    <DataGridTextColumn Header="Статус" Binding="{Binding Email}"/>
-                    <DataGridTextColumn Header="Сумма" Binding="{Binding PhoneNumber}"/>
-                    <DataGridTextColumn Header="Дата поступления" Binding="{Binding Role}"/>
+                    <DataGridTextColumn Header="ID пользователя" Binding="{Binding UserId}" />
+                    <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
+                    <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}"/>
+                    <DataGridTextColumn Header="Электронная почта" Binding="{Binding Email}"/>
+                    <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}"/>
+                    <DataGridTextColumn Header="Роль" Binding="{Binding Role}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
 
-        <Grid Grid.Column="1">
-            <Button VerticalAlignment="Bottom" 
-                    HorizontalAlignment="Left"
-                    Margin="20,0,0,30"
+        <Grid Grid.Column="1" Grid.Row="1">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button VerticalAlignment="Center"
                     Height="50"
                     Width="150"
                     Content="Сохранить изменения"
                     FontSize="20"
+                    Margin="10"
                     materialDesign:ButtonAssist.CornerRadius="7"
                     Command="{Binding }"/>
-            <Button VerticalAlignment="Bottom" 
-                    HorizontalAlignment="Right"
-                    Margin="0,0,20,30"
+                <Button VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    Margin="10"
                     Height="50"
                     Width="150"
                     Content="Сохранить изменения"
                     FontSize="20"
                     materialDesign:ButtonAssist.CornerRadius="7"
                     Command="{Binding }"></Button>
+            </StackPanel>         
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="0">
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+                <Button Width="90" Height="90"
+                        Padding="0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Margin="0,4,0,4"
+                        Command="{Binding SaveChanges}">
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="ContentSave" 
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"  
+                                                Height="90"
+                                                Width="60"
+                                                />
+                    </Button.Content>
+                </Button>
+                <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding UpdateDataGrid}" >
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Update" 
+                                                Foreground="White"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"  
+                                                Height="90"
+                                                 Width="60"
+                                                />
+                    </Button.Content>
+                </Button>
+                <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding DeleteRows}" 
+                        CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Delete" 
+                                                    Foreground="White"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"  
+                                                    Height="90"
+                                                    Width="60"/>
+                    </Button.Content>
+                </Button>
+                <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding ShowFullInfo}" 
+                        >
+                    <Button.Content>
+                        <iconPacks:PackIconMaterial Kind="Information" 
+                                                    Foreground="White"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"  
+                                                    Height="90"
+                                                    Width="60"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

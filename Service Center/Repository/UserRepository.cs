@@ -43,7 +43,7 @@ namespace Service_Center.Repository
             return context.Users.Find(id);
         }
         /// <summary>
-        /// Получить весь список
+        /// Получить весь список элементов
         /// </summary>
         /// <returns></returns>
         public IEnumerable<User> GetItemList()
@@ -58,6 +58,10 @@ namespace Service_Center.Repository
         {
             context.Entry(item).State = System.Data.Entity.EntityState.Modified;
         }
+        /// <summary>
+        /// Возвращает первый элемент коллекции
+        /// </summary>
+        /// <returns></returns>
         public User GetFirstItem()
         {
             return context.Users.First();

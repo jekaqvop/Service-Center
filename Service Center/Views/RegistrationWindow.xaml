@@ -70,7 +70,7 @@
                         Height="20"
                         Width="20"
                         Margin="0" 
-                        Command="{Binding Minform}"
+                        Command="{Binding MinForm}"
                         >
                     <Button.Template>
                         <ControlTemplate>
@@ -166,6 +166,7 @@
                                      ff:PasswordBoxAssistant.BoundPassword="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                        IsEnabled="{Binding IsButtonEnabled}"
                         Height="40" Width="220"
                         BorderThickness="2"
                         BorderBrush="#FF11379C"                            

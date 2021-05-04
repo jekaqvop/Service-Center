@@ -16,8 +16,10 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Security;
 using System.Windows;
 using System.Windows.Input;
+
 
 namespace Service_Center.ViewModels
 {
@@ -28,6 +30,7 @@ namespace Service_Center.ViewModels
         {
             user = new User();
         }
+        public bool IsButtonEnabled { get; set; }
         string patternLog = @"([A-Za-z1-9]{4,25})";
         [Required(ErrorMessage = "Login is required")]
         public string Login
@@ -36,14 +39,35 @@ namespace Service_Center.ViewModels
             set
             {
                 if (Regex.IsMatch(value, patternLog, RegexOptions.IgnoreCase))
+                {
                     user.Login = value;
+                    if (!CheckedLogin(value))
+                    {
+                        MessageBox.Show("Такой Login уже зарегестрирован!");
+                        IsButtonEnabled = false;
+                    }
+                    else
+                        IsButtonEnabled = true;
+                }
                 else
                     MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
+                OnPropertyChanged("IsButtonEnabled");
                 OnPropertyChanged("Password");
             }
-        }        
+        }
+        bool CheckedLogin(string login)
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            IEnumerable<User> users = unitOfWork.Users.GetItemList();
+            foreach (User user in users)
+            {
+                if (user.Login == login)
+                    return false;
+            }
+            return true;
+        }
         string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-               @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
+       @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email
@@ -52,11 +76,32 @@ namespace Service_Center.ViewModels
             set
             {
                 if (Regex.IsMatch(value, patternEmail, RegexOptions.IgnoreCase))
+                {
                     user.Email = value;
+                    if (!CheckedEmail(value))
+                    {
+                        MessageBox.Show("Такой email уже зарегестрирован!");
+                        IsButtonEnabled = false;
+                    }
+                    else
+                        IsButtonEnabled = true;
+                }
                 else
                     MessageBox.Show("Проверьте правильнность ввода email / Check the input format email");
                 OnPropertyChanged("Email");
+                OnPropertyChanged("IsButtonEnabled");
             }
+        }
+        bool CheckedEmail(string email)
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            IEnumerable<User> users = unitOfWork.Users.GetItemList();
+            foreach (User user in users)
+            {
+                if (user.Email == email)
+                    return false;
+            }
+            return true;
         }
 
         string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
@@ -90,8 +135,10 @@ namespace Service_Center.ViewModels
             }
         }
         string GetHash()
-        {
-            string newPassword = "12345678";
+        {            
+            Random rnd = new Random();           
+            int value = rnd.Next(8, 12);
+            string newPassword = Membership.GeneratePassword(value, 1);            
             SendEmail("Пароль и логин от аккаунта Service Center\n" +
                            $"Ваш логин: {user.Login}\n" +
                            $"Ваш пароль: {newPassword}", 
@@ -102,14 +149,14 @@ namespace Service_Center.ViewModels
         }
         void SendEmail(string body, string email)
         {
-            MailAddress from = new MailAddress("ivanivanoki@mail.ru", "AutoService");
+            MailAddress from = new MailAddress("ServiceCenterLaptop0@gmail.com", "ServiceCenterLaptop0");
             MailAddress to = new MailAddress(email);
             MailMessage m = new MailMessage(from, to);
             m.Subject = "Service Center";
             m.Body = body;
             m.IsBodyHtml = true;
-            SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587);
-            smtp.Credentials = new NetworkCredential("ivanivanoki@mail.ru", "oop2020SEM");
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 465);
+            smtp.Credentials = new NetworkCredential("ServiceCenterLaptop0", "Laptop123");
             smtp.EnableSsl = true;
             smtp.Send(m);
         }
@@ -171,5 +218,6 @@ namespace Service_Center.ViewModels
                 view.MinWindow();
             });
         }
+      
     }
 }

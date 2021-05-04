@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Security;
 using System.Windows;
 using System.Windows.Input;
 
@@ -36,23 +37,38 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("Email");
             }
         }
-        void SendEmail(string body, string email)
+        async void SendEmail(string body, string email)
         {
-            MailAddress from = new MailAddress("eavhcev@gmail.com", "Service Center");
-            MailAddress to = new MailAddress(email);
-            MailMessage m = new MailMessage(from, to);
-            m.Subject = "Service Center";
-            m.Body = body;
-            m.IsBodyHtml = true;
-            SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587);
-            smtp.Credentials = new NetworkCredential("eavhcev@gmail.com", "oop2020SEM");
-            smtp.EnableSsl = true;
-            smtp.Send(m);
+            try
+            {
+                MailAddress from = new MailAddress("ServiceCenterLaptop0@mail.ru", "ServiceCenterLaptop0");
+                MailAddress to = new MailAddress(email);
+                MailMessage m = new MailMessage(from, to);
+                m.Subject = "Service Center";
+                m.Body = body;
+                m.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587);
+                smtp.UseDefaultCredentials = false;
+
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.EnableSsl = true;
+                smtp.Credentials = new NetworkCredential("ServiceCenterLaptop0@mail.ru", "Laptop123");
+                await smtp.SendMailAsync(m);
+                MessageBox.Show("Новый пароль отправлен вам на email.\nДля безопасности рекомендуется сменить " +
+                    "этот пароль на новый!");
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при отправке сообщения!");
+            }
         }
-        string GetHash()
+        string GetHash(User user)
         {
-            string newPassword = "12345678";
+            Random rnd = new Random();
+            int value = rnd.Next(8, 12);
+            string newPassword = Membership.GeneratePassword(value, 1);
             SendEmail("Пароль и логин от аккаунта Service Center\n" +                           
+                           $"Ваш логин: {user.Login}\n" +
                            $"Ваш пароль: {newPassword}",
                            email);
             var md5 = MD5.Create();
@@ -67,7 +83,9 @@ namespace Service_Center.ViewModels
                 {
                     UnitOfWork unitOfWork = new UnitOfWork();
                     User user = unitOfWork.Users.GetItemList().Where(us => us.Email == email).First();
-                    user.Password = GetHash();
+                    user.Password = GetHash(user);
+                    ViewController view = ViewController.GetInstance;
+                    view.CloseMiniWindow();
                 }
                 else
                 {

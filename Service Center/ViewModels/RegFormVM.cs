@@ -1,6 +1,7 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.Repository;
 using Service_Center.Resources;
 using Service_Center.Views;
 using System;
@@ -25,6 +26,7 @@ namespace Service_Center.ViewModels
         {
             user = new User();
         }
+        public bool IsButtonEnabled { get; set; } = true;
         string patternLog = @"([A-Za-z1-9]{4,25})";
         [Required(ErrorMessage = "Login is required")]
         public string Login
@@ -33,11 +35,32 @@ namespace Service_Center.ViewModels
             set
             {
                 if (Regex.IsMatch(value, patternLog, RegexOptions.IgnoreCase))
+                {
                     user.Login = value;
+                    if (!CheckedLogin(value))
+                    {
+                        MessageBox.Show("Такой Login уже зарегестрирован!");
+                        IsButtonEnabled = false;                        
+                    }
+                    else
+                        IsButtonEnabled = true;
+                }
                 else
                     MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
+                OnPropertyChanged("IsButtonEnabled");
                 OnPropertyChanged("Password");
             }
+        }
+        bool CheckedLogin(string login)
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            IEnumerable<User> users = unitOfWork.Users.GetItemList();
+            foreach (User user in users)
+            {
+                if (user.Login == login)
+                    return false;
+            }
+            return true;
         }
         string patternPass = @"^[0-9a-zA-Zа-яА-Я]{8,20}$";
         [Required(ErrorMessage = "Password is required")]
@@ -70,13 +93,33 @@ namespace Service_Center.ViewModels
             set
             {
                 if (Regex.IsMatch(value, patternEmail, RegexOptions.IgnoreCase))
+                {
                     user.Email = value;
+                    if (!CheckedEmail(value))
+                    {
+                        MessageBox.Show("Такой email уже зарегестрирован!");
+                        IsButtonEnabled = false;
+                    }
+                    else
+                        IsButtonEnabled = true;
+                }                  
                 else
                     MessageBox.Show("Проверьте правильнность ввода email / Check the input format email");
                 OnPropertyChanged("Email");
+                OnPropertyChanged("IsButtonEnabled");
             }
         }
-
+        bool CheckedEmail(string email)
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            IEnumerable<User> users = unitOfWork.Users.GetItemList();
+            foreach (User user in users)
+            {
+                if (user.Email == email)
+                    return false;
+            }
+            return true;
+        }
         string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName
@@ -88,7 +131,6 @@ namespace Service_Center.ViewModels
                     user.FullName = value;
                 else
                     MessageBox.Show("Используйте русский или английский алфавит для ввода ФИО / Use the Russian or English alphabet to enter a Full name");
-
                 OnPropertyChanged("LastName");
             }
         }
@@ -119,6 +161,7 @@ namespace Service_Center.ViewModels
             {
                 if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null && RepeatPassword != null)
                 {
+                    
                     if (Regex.IsMatch(user.Password, patternPass, RegexOptions.IgnoreCase))
                     {
                         if(user.Password == repeatPassword)
