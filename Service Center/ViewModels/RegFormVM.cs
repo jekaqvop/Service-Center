@@ -124,7 +124,7 @@ namespace Service_Center.ViewModels
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName
         {
-            get { return user.FullName; }
+            get => user.FullName; 
             set
             {
                 if (Regex.IsMatch(value, patternName, RegexOptions.None))
@@ -139,7 +139,7 @@ namespace Service_Center.ViewModels
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
         {
-            get { return user.PhoneNumber; }
+            get => user.PhoneNumber; 
             set
             {
                 if (Regex.IsMatch(value, patternPhone, RegexOptions.IgnoreCase))

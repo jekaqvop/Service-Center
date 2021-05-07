@@ -133,12 +133,7 @@
                         FontSize="13"
                         Foreground="White"                        
                         Margin="110,0,0,0"
-                        Command="{Binding ShowForgotPassword}">
-                    
-                    
-                    <Button.CommandBindings>
-                        <!--<CommandBinding Command="New" Executed="RestorePass" />-->
-                    </Button.CommandBindings>
+                        Command="{Binding ShowForgotPassword}">  
                 </Button>
                 <TextBox x:Name="TextBadPassword" 
                          HorizontalAlignment="Center"

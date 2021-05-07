@@ -25,8 +25,7 @@ namespace Service_Center.ViewModels
             {
                 lock (syncRoot)
                 {
-                    if (instance == null)
-                        instance = new ViewController(window);
+                    instance = new ViewController(window);
                 }
             }
             return instance;

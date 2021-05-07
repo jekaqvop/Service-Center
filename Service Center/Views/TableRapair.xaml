@@ -57,7 +57,9 @@
                     <DataGridTextColumn Header="ID заказа" Binding="{Binding RapairID}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Устойство" Binding="{Binding Device}"/>
                     <DataGridTextColumn Header="Серийный номер" Binding="{Binding SerialNumber}"/>
-                    <DataGridTextColumn Header="Неисправность" Binding="{Binding Malfunction}"/>
+                    <DataGridTextColumn Header="Неисправность/Услуга" 
+                                        MinWidth="170"
+                                        Binding="{Binding Malfunction}"/>
                     <DataGridComboBoxColumn Header="Статус" 
                                             SelectedValueBinding="{Binding Status, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                             ItemsSource="{Binding Source={StaticResource myEnum}}" />
@@ -241,6 +243,17 @@
                                                     Width="60"/>
                     </Button.Content>
                 </Button>
+                <TextBox Margin="40,0,0,0"
+                             Width="150"                             
+                             VerticalAlignment="Center"
+                             materialDesign:HintAssist.Hint="Поиск"
+                             BorderBrush="White" 
+                             Foreground="White" 
+                             materialDesign:HintAssist.Foreground="White"
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             FontSize="20"
+                             Text="{Binding SearchId}" />
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">

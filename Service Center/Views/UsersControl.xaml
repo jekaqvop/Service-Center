@@ -64,11 +64,13 @@
                     Content="Сохранить изменения"
                     FontSize="20"
                     materialDesign:ButtonAssist.CornerRadius="7"
-                    Command="{Binding }"></Button>
+                    Command="{Binding }"/>
             </StackPanel>         
         </Grid>
         <Grid Grid.Row="1" Grid.Column="0">
-            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                          VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">               
                 <Button Width="90" Height="90"
                         Padding="0"
                         HorizontalAlignment="Left"
@@ -138,6 +140,7 @@
                     </Button.Content>
                 </Button>
             </StackPanel>
+            </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl>

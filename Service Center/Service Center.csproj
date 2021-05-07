@@ -145,6 +145,8 @@
     <Compile Include="ViewModels\RegNewUserVM.cs" />
     <Compile Include="ViewModels\ServicesControlVM.cs" />
     <Compile Include="ViewModels\TableRapairVM.cs" />
+    <Compile Include="ViewModels\UserVM\UserServiceVM.cs" />
+    <Compile Include="ViewModels\UserVM\UserFormVM.cs" />
     <Compile Include="ViewModels\UsersControl.cs" />
     <Compile Include="ViewModels\ViewController.cs" />
     <Compile Include="Views\AdminWindow.xaml.cs">
@@ -162,11 +164,17 @@
     <Compile Include="Views\ServicesControl.xaml.cs">
       <DependentUpon>ServicesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserWindow\ServiceUserControl.xaml.cs">
+      <DependentUpon>ServiceUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TableRapair.xaml.cs">
       <DependentUpon>TableRapair.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UsersControl.xaml.cs">
       <DependentUpon>UsersControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserWindow\UserWindow.xaml.cs">
+      <DependentUpon>UserWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Language\langEng.xaml">
       <SubType>Designer</SubType>
@@ -225,11 +233,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserWindow\ServiceUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TableRapair.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UsersControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserWindow\UserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

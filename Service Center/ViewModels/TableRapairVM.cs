@@ -73,6 +73,25 @@ namespace Service_Center.ViewModels
                 Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
             });        
         }
+        int searchId = 0;
+        public int SearchId
+        {
+            get => searchId;
+            set
+            {
+                searchId = value;
+                if (searchId != 0)
+                {                    
+                    Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList().Where(r => r.RapairID == searchId && r.UserID == searchId));
+                    SelectRapair = Rapairs.First();
+                }
+                else
+                {
+                    Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
+                    SelectRapair = unitOfWork.Repairs.GetFirstItem();
+                }
+            }
+        }
         public ICommand CreateNewElement
         {
             get => new DelegateCommand((obj) =>

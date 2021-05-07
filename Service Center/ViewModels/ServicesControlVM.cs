@@ -12,14 +12,14 @@ using System.Data.Entity;
 using Service_Center.Resources;
 using Service_Center.Repository;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Service_Center.ViewModels
 {
     class ServicesControlVM : PropertysChanged
     {
-       
         public ServicesControlVM()
-        {            
+        {  
             sortServicesList();            
         }
         UnitOfWork unitOfWork = new UnitOfWork();
@@ -38,10 +38,8 @@ namespace Service_Center.ViewModels
         public decimal Price0 
         {
             get
-            {
-                
-                    sortServicesList();
-                            
+            {                
+                sortServicesList();                            
                 return price0;
             }
             set => price0 = value;            
@@ -50,9 +48,7 @@ namespace Service_Center.ViewModels
         {
             get
             {
-               
-                    sortServicesList();
-               
+                sortServicesList();
                 return price1;
             }
             set => price1 = value;
@@ -64,13 +60,11 @@ namespace Service_Center.ViewModels
         Service selectService;
         public Service SelectService
         {
-            get
-            {
-                return selectService ?? unitOfWork.Services.GetFirstItem();
-            }
+            get => selectService ?? unitOfWork.Services.GetFirstItem();            
             set
             {
                 selectService = value;
+                OnPropertyChanged("SelectService");
                 OnPropertyChanged("Title");
                 OnPropertyChanged("Info");                
                 OnPropertyChanged("Price");
@@ -89,10 +83,7 @@ namespace Service_Center.ViewModels
         }
         public string Title
         {
-            get
-            {
-                return SelectService.Title;
-            }
+            get => SelectService.Title;            
             set
             {
                 SelectService.Title = value;
@@ -101,7 +92,7 @@ namespace Service_Center.ViewModels
         }
         public byte[] PathImage
         {
-            get { return SelectService.ImageSourse; }
+            get => SelectService.ImageSourse; 
             set
             {
                 SelectService.ImageSourse = value;
@@ -148,16 +139,17 @@ namespace Service_Center.ViewModels
                         Image image = Image.FromFile(pathImage);
                         MemoryStream ms = new MemoryStream();
                         image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-                        PathImage = ms.ToArray();                        
+                        PathImage = ms.ToArray();
                         OnPropertyChanged("SelectService");
                     }
                     catch
                     {
                         MessageBox.Show("Файл не выбран или произошла ошибка");
                     }
-                } 
+                }
             });
         }
+       
         #endregion
         #region SaveUpdate
         public ICommand SaveChanges
@@ -185,9 +177,11 @@ namespace Service_Center.ViewModels
                 MemoryStream ms = new MemoryStream();
                 image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
                 byte[] bytes = ms.ToArray();
-                unitOfWork.Services.AddElemet(new Service { ImageSourse = bytes ?? null, Title = "title", Info = "Info", Price = 0 });                
+                Service service = new Service { ImageSourse = bytes ?? null, Title = "title", Info = "Info", Price = 0 };
+                unitOfWork.Services.AddElemet(service);                
                 sortServicesList();
-                OnPropertyChanged("ServicesList");                
+                OnPropertyChanged("ServicesList");
+                SelectService = service;
             });
         }
         public ICommand DelElement
@@ -211,9 +205,9 @@ namespace Service_Center.ViewModels
         }
 
         #endregion
-            #region SortAndSearch
+        #region SortAndSearch
 
-            #region Properties
+        #region Properties
         string sortAsc;
         string sortDesc;
         string sortTitle;
@@ -279,7 +273,7 @@ namespace Service_Center.ViewModels
                 switch (getSortParam())
                 {
                     case "TASC":
-                    ServicesList  = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Title));                       
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Title));                       
                         break;
                     case "PASC":
                     ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Price));
@@ -294,9 +288,12 @@ namespace Service_Center.ViewModels
                     ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)));        
                         break;
                 }
-                OnPropertyChanged("ServicesList");                      
+                OnPropertyChanged("ServicesList");
+          
         }
-        #endregion        
+
+    
+        #endregion
     }
 
 }

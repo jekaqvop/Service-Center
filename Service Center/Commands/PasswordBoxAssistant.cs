@@ -75,7 +75,7 @@ namespace Service_Center.Commands
 
             // установить флаг, указывающий на то, что мы обновляем пароль
             SetUpdatingPassword(box, true);
-           // вставить новый пароль в свойство Bound Password
+            // вставить новый пароль в свойство Bound Password
             SetBoundPassword(box, box.Password);
             SetUpdatingPassword(box, false);
         }
@@ -109,5 +109,10 @@ namespace Service_Center.Commands
         {
             dp.SetValue(UpdatingPassword, value);
         }
+    }
+    public static class listViewAsistent
+    {
+
+
     }
 }

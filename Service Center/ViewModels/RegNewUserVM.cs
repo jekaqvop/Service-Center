@@ -31,7 +31,7 @@ namespace Service_Center.ViewModels
             user = new User();
         }
         public bool IsButtonEnabled { get; set; }
-        string patternLog = @"([A-Za-z1-9]{4,25})";
+        readonly string patternLog = @"([A-Za-z1-9]{4,25})";
         [Required(ErrorMessage = "Login is required")]
         public string Login
         {
@@ -66,7 +66,7 @@ namespace Service_Center.ViewModels
             }
             return true;
         }
-        string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+        readonly string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
        @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
@@ -103,8 +103,7 @@ namespace Service_Center.ViewModels
             }
             return true;
         }
-
-        string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
+        readonly string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName
         {
@@ -119,8 +118,7 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("LastName");
             }
         }
-
-        public string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
+        readonly string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
         {
@@ -151,13 +149,17 @@ namespace Service_Center.ViewModels
         {
             MailAddress from = new MailAddress("ServiceCenterLaptop0@gmail.com", "ServiceCenterLaptop0");
             MailAddress to = new MailAddress(email);
-            MailMessage m = new MailMessage(from, to);
-            m.Subject = "Service Center";
-            m.Body = body;
-            m.IsBodyHtml = true;
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 465);
-            smtp.Credentials = new NetworkCredential("ServiceCenterLaptop0", "Laptop123");
-            smtp.EnableSsl = true;
+            MailMessage m = new MailMessage(from, to)
+            {
+                Subject = "Service Center",
+                Body = body,
+                IsBodyHtml = true
+            };
+            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 465)
+            {
+                Credentials = new NetworkCredential("ServiceCenterLaptop0", "Laptop123"),
+                EnableSsl = true
+            };
             smtp.Send(m);
         }
         public ICommand Registration

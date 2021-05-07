@@ -1,5 +1,4 @@
-﻿using Service_Center.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,28 +13,25 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Service_Center.Views
+namespace Service_Center.Views.UserWindow
 {
     /// <summary>
-    /// Логика взаимодействия для ServicesControl.xaml
+    /// Логика взаимодействия для ServiceUserControl.xaml
     /// </summary>
-    public partial class ServicesControl : UserControl
+    public partial class ServiceUserControl : UserControl
     {
-        public ServicesControl()
+        public ServiceUserControl()
         {
             InitializeComponent();
-            
         }
-    
-
         private void TitleBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-           // SeviceList.Items.Refresh();
+            SeviceList.Items.Refresh();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
-        {            
-            SeviceList.Items.Refresh(); 
+        {
+            SeviceList.Items.Refresh();
         }
         bool checklanguage = false;
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -48,7 +44,7 @@ namespace Service_Center.Views
             else if (checklanguage == true)
             {
                 this.Resources.Source = new Uri("pack://application:,,,/Language/langEng.xaml");
-                checklanguage = false;              
+                checklanguage = false;
             }
         }
 
