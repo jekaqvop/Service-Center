@@ -1,54 +1,44 @@
-﻿<UserControl x:Class="Service_Center.Views.UserWindow.ServiceUserControl"
+﻿<UserControl x:Class="Service_Center.Views.UserWindow.UserRapairs"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Service_Center.Views" 
-             xmlns:convert="clr-namespace:Service_Center.Converters"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:mod="clr-namespace:Service_Center.Models" 
-             xmlns:vm="clr-namespace:Service_Center.ViewModels.UserVM"
+             xmlns:local="clr-namespace:Service_Center.Views.UserWindow"
+             xmlns:mod="clr-namespace:Service_Center.Models"
+             xmlns:convert="clr-namespace:Service_Center.Converters" xmlns:vm="clr-namespace:Rapair_Center.ViewModels.UserVM"
              mc:Ignorable="d" 
-             d:DesignHeight="850" d:DesignWidth="1250">
+             d:DesignHeight="800" d:DesignWidth="1250">
     <UserControl.DataContext>
-        <vm:UserServiceVM/>
+        <vm:UserRapairsVM/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <ResourceDictionary>
-           
+        <ResourceDictionary>            
             <convert:SortConvertor x:Key="SortConverterKey"/>
             <convert:BytesToImage x:Key="BytesToImageKey"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="330"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition Height="110"></RowDefinition>
+            <RowDefinition/>
+            <RowDefinition Height="110"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Column="0">
+        <Grid Grid.Row="0">
             <ListView x:Name="SeviceList"                      
                      ScrollViewer.CanContentScroll="False"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Top"                 
-                     ItemsSource="{Binding Path=ServicesList, Mode=TwoWay}"
-                     SelectedIndex="{Binding SelectIndex}" 
-                     SelectedItem="{Binding SelectService,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" >
+                     ItemsSource="{Binding RapairsList}"
+                      >
                 <ListView.ItemTemplate>
-                    <DataTemplate DataType="{x:Type mod:Service}">
+                    <DataTemplate DataType="{x:Type mod:Rapair}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition  Width="300"></ColumnDefinition>
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column ="0" Margin="30">
-                                <Image x:Name="Image" 
-                                       Source="{Binding ImageSourse, Converter={StaticResource BytesToImageKey}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                       />
+                                <TextBlock Text="{Binding m_}"/>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <StackPanel Margin="25" >
@@ -58,11 +48,10 @@
                                                HorizontalAlignment="Left"
                                                FontSize="23"
                                                Width="350"
-                                               Content="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
+                                               Content="{Binding Path=Malfunction, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     </StackPanel>
                                     <TextBlock Width="400"
-                                               Text="{Binding Path=Info, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"    
+                                               Text="{Binding Path=Status, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"    
                                                Margin="10,0" 
                                                Padding="5"
                                                FontSize="17"
@@ -71,10 +60,10 @@
                                                TextWrapping="Wrap"                                               
                                                />
                                     <Label  VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right"
-                        Margin="0,10,15,10"
-                        FontSize="21"
-                        Content="{Binding Path=Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            HorizontalAlignment="Left"
+                                            Margin="15,10,0,10"
+                                            FontSize="21"
+                                            Content="{Binding Path=SumMoney, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
 
                             </Grid>
@@ -82,68 +71,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Grid>
-        <Grid Grid.Column="2">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-                    <StackPanel Margin="20">
-                        <Image Height="230" 
-                               Margin="10"
-                           Source="{Binding SelectImage, Converter={StaticResource BytesToImageKey}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                           />
-                        <TextBlock Text="{Binding SelectTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"  
-                               Padding="5"
-                               FontSize="18"
-                               Foreground="White"
-                               Margin="10"/>
-                        <TextBlock 
-                               FontSize="18"
-                               Text="{Binding Path=SelectInfo, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"    
-                               Margin="10,0" 
-                               Padding="5"                        
-                               MinHeight="70"
-                               Foreground="White"
-                               TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding SelectPrice,  UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                               FontSize="20"
-                               Foreground="White"
-                               Margin="20"
-                               HorizontalAlignment="Right"
-                               MinWidth="60"/>
-                    </StackPanel>
-
-                    <TextBox HorizontalAlignment="Center" x:Name="TitleBox" Width="280"  FontSize="18" 
-                             materialDesign:HintAssist.Hint="{DynamicResource m_Device}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             Text="{Binding Device, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Margin="10" />
-                    <TextBox HorizontalAlignment="Center" x:Name="InfoBox" Width="280"  FontSize="18" 
-                             materialDesign:HintAssist.Hint="{DynamicResource m_SerialNumber}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             Text="{Binding SerialNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                             AcceptsReturn="True"
-                             HorizontalScrollBarVisibility="Disabled"
-                             TextWrapping="Wrap"
-                             Margin="10" />
-                    <!--<Button Content="Загрузить изображение устройства"
-                            Margin="30,30,30,0"
-                            Command="{Binding GetImage}">
-                        <Button.ToolTip>
-                            <ToolTip>
-                                Для предотвращени конфликтных ситуаций загрузите фото вашего устройства
-                            </ToolTip>
-                        </Button.ToolTip>
-                    </Button>-->
-                </StackPanel>
-            </ScrollViewer>
         </Grid>
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal"
@@ -164,7 +91,6 @@
                                  FontSize="18"
                                  IsChecked="True"
                                  />
-
                 </StackPanel>
                 <StackPanel Margin="10,10,0,0"
                             VerticalAlignment="Center">
@@ -191,7 +117,7 @@
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
                              FontSize="15"
-                             TextChanged="TitleBox_TextChanged"/>
+                            />
                     <TextBox Width="50"                             
                              VerticalAlignment="Center"
                              Text="{Binding Price1}"
@@ -202,7 +128,7 @@
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
                              FontSize="15"
-                             TextChanged="TitleBox_TextChanged"/>
+                             />
                 </StackPanel>
                 <TextBox Margin="40,0,0,0"
                              Width="150"                             
@@ -214,20 +140,8 @@
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
                              FontSize="20"
-                             Text="{Binding SearchTitle}" TextChanged="TitleBox_TextChanged"/>
+                             Text="{Binding SearchTitle}"/>
             </StackPanel>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Button Style="{StaticResource MaterialDesignRaisedButton}"
-                        Height="60" Width="300"
-                        BorderThickness="2"
-                        BorderBrush="#FF11379C"                            
-                        materialDesign:ButtonAssist.CornerRadius="7"                            
-                        Opacity="1"                                                        
-                        Content="{DynamicResource m_Order}" FontSize="25"                         
-                        HorizontalAlignment="Center"  
-                        Command="{Binding Order}"/>
-
         </Grid>
     </Grid>
 </UserControl>

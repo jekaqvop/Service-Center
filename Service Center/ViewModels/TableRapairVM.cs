@@ -38,7 +38,8 @@ namespace Service_Center.ViewModels
         public string Device { get; set; }
         public string Malfunction { get; set; }
         public string SerialNumber { get; set; }
-        public ObservableCollection<Rapair> Rapairs { get; set; } = new ObservableCollection<Rapair>();
+        public ObservableCollection<Rapair> rapairs;
+        public ObservableCollection<Rapair> Rapairs { get => rapairs; set => Set<ObservableCollection<Rapair>>(ref rapairs, value); } 
         #region Command
         public ICommand SaveChanges
         {
@@ -73,30 +74,38 @@ namespace Service_Center.ViewModels
                 Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
             });        
         }
-        int searchId = 0;
-        public int SearchId
+        string search = "";
+        public string Search
         {
-            get => searchId;
+            get => search;
             set
             {
-                searchId = value;
-                if (searchId != 0)
+                search = value;
+                if (search != "")
                 {                    
-                    Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList().Where(r => r.RapairID == searchId && r.UserID == searchId));
-                    SelectRapair = Rapairs.First();
+                    Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList().Where(r => 
+                    (r.RapairID.ToString() + 
+                     r.Device +
+                     r.Malfunction +
+                     r.SerialNumber + 
+                     r.Status + 
+                     r.SumMoney.ToString() + 
+                     r.DateOfRaceipt.ToString()).IndexOf(search) > -1));                  
+                    SelectRapair = Rapairs.Count > 0 ? Rapairs.First() : null;
                 }
                 else
                 {
                     Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
                     SelectRapair = unitOfWork.Repairs.GetFirstItem();
                 }
+                OnPropertyChanged("Rapairs");
             }
         }
         public ICommand CreateNewElement
         {
             get => new DelegateCommand((obj) =>
             {
-                if(checkNotNull(typeof(string), FullName, StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
+                if(!checkNotNull(typeof(string), FullName, StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
                 {
                     IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(p => p.PhoneNumber == PhoneNumber);
                     if (users.Count() == 0)
@@ -125,10 +134,12 @@ namespace Service_Center.ViewModels
                 else
                 {
                     MessageBox.Show("Заполните все поля!");
-                }
-               
+                }               
             });
         }
+        /// <summary>
+        /// Выводит частичную информацию о пользователе и ремонте
+        /// </summary>
         public ICommand ShowFullInfo
         {
             get => new DelegateCommand((obj) =>
@@ -142,24 +153,7 @@ namespace Service_Center.ViewModels
                                 $"Номер телефона: {user.PhoneNumber}");
             });
         }
-        bool checkNotNull(Type type, params object[] objects)
-        {
-            if(type == typeof(string))
-            {
-                foreach (string obj in objects)
-                {
-                    if (obj == null || obj == "")
-                        return false;
-                }
-            }
-            else
-                foreach(object obj in objects)
-                {
-                    if (obj == null)
-                        return false;
-                }
-            return true;
-        }
+       
         void addRapair(User user)
         {
             Rapair rapair = new Rapair

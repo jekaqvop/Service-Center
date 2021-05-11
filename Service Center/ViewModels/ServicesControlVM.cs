@@ -26,11 +26,8 @@ namespace Service_Center.ViewModels
         public ObservableCollection<Service> servicesList = new ObservableCollection<Service>();    
         public ObservableCollection<Service> ServicesList 
         { 
-            get => servicesList; 
-            set
-            { 
-                servicesList = value;
-            } 
+            get => servicesList;
+            set => Set<ObservableCollection<Service>>(ref servicesList, value);            
         }        
         #region selectingByPrice
         decimal price0 = 0;
@@ -63,8 +60,7 @@ namespace Service_Center.ViewModels
             get => selectService ?? unitOfWork.Services.GetFirstItem();            
             set
             {
-                selectService = value;
-                OnPropertyChanged("SelectService");
+                Set<Service>(ref selectService, value);
                 OnPropertyChanged("Title");
                 OnPropertyChanged("Info");                
                 OnPropertyChanged("Price");
@@ -79,7 +75,6 @@ namespace Service_Center.ViewModels
                 SelectService.Info = value;
                 OnPropertyChanged("SelectService");
             }
-
         }
         public string Title
         {
@@ -125,8 +120,7 @@ namespace Service_Center.ViewModels
                 return openFileDialog.FileName;               
             }
             return null;
-        }
-       
+        }       
         public ICommand OpenImage
         {
             get => new DelegateCommand((obj) =>
@@ -168,7 +162,6 @@ namespace Service_Center.ViewModels
         }
         #endregion
         #region AddDelUpdateElement
-        
         public ICommand CreateNewAlement
         {
             get => new DelegateCommand((obj) =>
@@ -180,7 +173,6 @@ namespace Service_Center.ViewModels
                 Service service = new Service { ImageSourse = bytes ?? null, Title = "title", Info = "Info", Price = 0 };
                 unitOfWork.Services.AddElemet(service);                
                 sortServicesList();
-                OnPropertyChanged("ServicesList");
                 SelectService = service;
             });
         }
@@ -206,7 +198,6 @@ namespace Service_Center.ViewModels
 
         #endregion
         #region SortAndSearch
-
         #region Properties
         string sortAsc;
         string sortDesc;
@@ -287,12 +278,8 @@ namespace Service_Center.ViewModels
                     default:
                     ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)));        
                         break;
-                }
-                OnPropertyChanged("ServicesList");
-          
-        }
-
-    
+                }         
+        }    
         #endregion
     }
 

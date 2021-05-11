@@ -95,12 +95,9 @@ namespace Service_Center.ViewModels
         bool CheckedEmail(string email)
         {
             UnitOfWork unitOfWork = new UnitOfWork();
-            IEnumerable<User> users = unitOfWork.Users.GetItemList();
-            foreach (User user in users)
-            {
-                if (user.Email == email)
-                    return false;
-            }
+            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(u => u.Email == email);
+            if (users.Count() > 0)
+                return false;
             return true;
         }
         readonly string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
@@ -182,25 +179,7 @@ namespace Service_Center.ViewModels
                     MessageBox.Show("Одно из полей не заполнено!");
                 }
             });
-        }
-        bool checkNotNull(Type type, params object[] objects)
-        {
-            if (type == typeof(string))
-            {
-                foreach (string obj in objects)
-                {
-                    if (obj == null || obj == "")
-                        return false;
-                }
-            }
-            else
-                foreach (object obj in objects)
-                {
-                    if (obj == null)
-                        return false;
-                }
-            return true;
-        }
+        }      
         public ICommand Close
         {
             get => new DelegateCommand((obj) =>

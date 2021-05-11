@@ -13,9 +13,7 @@ namespace Service_Center.Resources
     {
         //public event NotifyCollectionChangedEventHandler PropertyChanged;
         public event PropertyChangedEventHandler PropertyChanged;
-      
-
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }     
@@ -25,6 +23,30 @@ namespace Service_Center.Resources
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+        /// <summary>
+        /// Проверяет объект на null и строки на наличие текста
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        protected bool checkNotNull(Type type, params object[] objects)
+        {
+            if (type == typeof(string))
+            {
+                foreach (string obj in objects)
+                {
+                    if (obj == null || obj == "")
+                        return true;
+                }
+            }
+            else
+                foreach (object obj in objects)
+                {
+                    if (obj == null)
+                        return true;
+                }
+            return false;
         }
     }
 }

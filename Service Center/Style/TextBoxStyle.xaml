@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <Style x:Key="TextBoxSettingsLight" TargetType="{x:Type TextBox}">
+        <Setter Property="materialDesign:HintAssist.Foreground" Value="White"/>
+     
+        <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="White"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+
+
+    </Style>
+</ResourceDictionary>

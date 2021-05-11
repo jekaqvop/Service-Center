@@ -3,6 +3,7 @@ using Service_Center.Contexts;
 using Service_Center.Models;
 using Service_Center.Resources;
 using Service_Center.Views;
+using Service_Center.Views.UserWindow;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -126,17 +127,17 @@ namespace Service_Center.ViewModels
                                 string HashPassword = GetHash(Password);
                                 if (user.Password == HashPassword)
                                 {
+                                    ViewController view = ViewController.GetInstance;
                                     switch (user.Role)
                                     {
-                                        case true:                                                
-                                            ViewController view = ViewController.GetInstance;
+                                        case true:
                                             view.CloseAndShow(new AdminWindow());                                                                                         
                                             break;
                                         case false:
-
+                                            view.CloseAndShow(new UserWindow());
                                             break;
                                         default:
-
+                                            MessageBox.Show("Ошибка авторизации!\nПользователь не опознан!\nНеизвесно: администратор или пользователь!");
                                             break;
                                     }
                                 }

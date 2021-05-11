@@ -1,15 +1,11 @@
 ﻿using Service_Center.Commands;
-using Service_Center.Contexts;
 using Service_Center.Models;
 using Service_Center.Repository;
 using Service_Center.Resources;
-using Service_Center.Views;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,14 +13,43 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Service_Center.ViewModels
+namespace Service_Center.ViewModels.UserVM
 {
-    class RegFormVM : PropertysChanged
-    {       
+    class SettingsVM : PropertysChanged
+    {
         User user;
-        public RegFormVM() 
+        public SettingsVM()
         {
             user = new User();
+        }
+        public bool _IsTheme;
+        public bool IsTheme { get => _IsTheme; set => Set(ref _IsTheme, value); }
+        public ICommand ChangedTheme
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                ResourceDictionary windowStyle = new ResourceDictionary
+                {
+                    Source = new Uri(@"..\..\Language\langRu2.xaml", UriKind.Relative)
+                };
+                ResourceDictionary windowStyleLight = new ResourceDictionary
+                {
+                    Source = new Uri(@"..\..\Language\langEng.xaml", UriKind.Relative)
+                };
+                switch (IsTheme)
+                {
+                    case true:
+                        App.Current.Resources.Remove(windowStyle);
+                        App.Current.Resources.MergedDictionaries.Add(windowStyleLight);
+
+                        break;
+                    case false:
+                        App.Current.Resources.Remove(windowStyleLight);
+                        App.Current.Resources.MergedDictionaries.Add(windowStyle);
+
+                        break;
+                }
+            });
         }
         public bool IsButtonEnabled { get; set; } = true;
         string patternLog = @"([A-Za-z1-9]{4,25})";
@@ -39,8 +64,8 @@ namespace Service_Center.ViewModels
                     user.Login = value;
                     if (!CheckedLogin(value))
                     {
-                        MessageBox.Show("Такой Login уже зарегестрирован!");
-                        IsButtonEnabled = false;                        
+                        MessageBox.Show("Такой Login уже есть!\nПридумайте новый.");
+                        IsButtonEnabled = false;
                     }
                     else
                         IsButtonEnabled = true;
@@ -53,15 +78,16 @@ namespace Service_Center.ViewModels
         }
         bool CheckedLogin(string login)
         {
+            ViewController view = ViewController.GetInstance;
             UnitOfWork unitOfWork = new UnitOfWork();
-            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(u => u.Login == login);
+            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(u => u.UserId != view.User.UserId && u.Login == login);
             if (users.Count() > 0)
                 return false;
             return true;
         }
         string patternPass = @"^[0-9a-zA-Zа-яА-Я]{8,20}$";
         [Required(ErrorMessage = "Password is required")]
-        public string Password
+        public string NewPassword
         {
             get { return user.Password; }
             set
@@ -70,13 +96,13 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("Password");
             }
         }
-        string repeatPassword;
-        public string RepeatPassword
+        string oldPassword;
+        public string OldPassword
         {
-            get { return repeatPassword; }
+            get => oldPassword;
             set
-            {               
-                repeatPassword = GetHash(value);                
+            {
+                user.Password = GetHash(value);
                 OnPropertyChanged("RepeatPassword");
             }
         }
@@ -86,7 +112,7 @@ namespace Service_Center.ViewModels
         [EmailAddress]
         public string Email
         {
-            get { return user.Email; }
+            get => user.Email;
             set
             {
                 if (Regex.IsMatch(value, patternEmail, RegexOptions.IgnoreCase))
@@ -99,7 +125,7 @@ namespace Service_Center.ViewModels
                     }
                     else
                         IsButtonEnabled = true;
-                }                  
+                }
                 else
                     MessageBox.Show("Проверьте правильнность ввода email / Check the input format email");
                 OnPropertyChanged("Email");
@@ -109,19 +135,16 @@ namespace Service_Center.ViewModels
         bool CheckedEmail(string email)
         {
             UnitOfWork unitOfWork = new UnitOfWork();
-            IEnumerable<User> users = unitOfWork.Users.GetItemList();
-            foreach (User user in users)
-            {
-                if (user.Email == email)
-                    return false;
-            }
+            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(u => u.Email == email);
+            if (users.Count() > 0)
+                return false;
             return true;
         }
         string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName
         {
-            get => user.FullName; 
+            get => user.FullName;
             set
             {
                 if (Regex.IsMatch(value, patternName, RegexOptions.None))
@@ -136,7 +159,7 @@ namespace Service_Center.ViewModels
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
         {
-            get => user.PhoneNumber; 
+            get => user.PhoneNumber;
             set
             {
                 if (Regex.IsMatch(value, patternPhone, RegexOptions.IgnoreCase))
@@ -152,70 +175,11 @@ namespace Service_Center.ViewModels
             var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
             return Convert.ToBase64String(hash);
         }
-        public ICommand Registration
+        public ICommand SaveChanges
         {
             get => new DelegateCommand((obj) =>
             {
-                if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null && RepeatPassword != null)
-                {
-                    
-                    if (Regex.IsMatch(user.Password, patternPass, RegexOptions.IgnoreCase))
-                    {
-                        if(user.Password == repeatPassword)
-                        {
-                            using (Context context = new Context())
-                            {
-                                context.Users.Add(user);
-                                context.SaveChanges();
-                                switch (user.Role)
-                                {
-                                    case true:
-                                        ViewController view = ViewController.GetInstance;
-                                        view.CloseAndShow(new AdminWindow());
-                                        break;
-                                    case false:
-
-                                        break;
-                                    default:
-
-                                        break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Пароли не совпадают / Passwords don't match ");
-                        }
-                    }
-                    else
-                        MessageBox.Show("Пароль должен содержать минимум 8 символов, 1 верхний, 1 нижний, 1 цифру и максимум 20 / Must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and max 20");
-                }
-                else
-                {
-                    MessageBox.Show("Одно из полей не заполнено!");
-                }   
-            });
-        }
-        /// <summary>
-        /// Возвращение окна FАвторизации
-        /// </summary>
-        public ICommand ShowLoginWindow
-        {
-            get => new DelegateCommand((obj) =>
-            {
-                ViewController view = ViewController.GetInstance;
-                view.CloseAndShow(new LoginWindow());
-            });
-        }
-        /// <summary>
-        /// Сворачивание окна
-        /// </summary>
-        public ICommand MinForm
-        {
-            get => new DelegateCommand((obj) =>
-            {
-                ViewController view = ViewController.GetInstance;
-                view.MinWindow();
+                
             });
         }
     }

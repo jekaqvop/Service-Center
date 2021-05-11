@@ -9,5 +9,6 @@ namespace Service_Center.ViewModels.UserVM
 {
     class UserFormVM : PropertysChanged
     {
+        
     }
 }

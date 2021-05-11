@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Service_Center.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace Service_Center.ViewModels
     class ViewController
     {
         private static ViewController instance;
+        User user;
+        public User User { get => user ?? (user = new User()); set => user = value; }
         public static ViewController GetInstance { get => instance; }
         Window window { get; set; }
         Window miniWindow { get; set; }

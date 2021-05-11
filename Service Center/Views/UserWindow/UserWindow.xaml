@@ -58,7 +58,7 @@
                                    Margin="9 0"/>
                     </StackPanel>
                 </TabItem.Header>
-                
+                <local:UserRapairs/>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -92,13 +92,7 @@
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </TabItem.Header>
-
-                <Button Width="100"
-                        x:Name="Lang"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Left"
-                        Content="Lang/Язык"
-                        Command="{Binding ChangeLang}"/>
+                <local:Settings/>
             </TabItem>
         </TabControl>
     </Grid>

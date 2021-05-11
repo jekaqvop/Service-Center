@@ -27,6 +27,27 @@ namespace Service_Center.ViewModels
             unitOfWork = new UnitOfWork();
             ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList());
         }
+        string search = "";
+        public string Search
+        {
+            get => search;
+            set
+            {
+                search = value;
+                if (search != "")
+                {
+                    ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList().Where(u =>
+                    (u.UserId.ToString() +
+                     u.Login +
+                     u.FullName +
+                     u.PhoneNumber +
+                     u.Email).IndexOf(search) > -1));                   
+                }
+                else
+                    ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList());
+                OnPropertyChanged("ListUsers");
+            }
+        }
         public User User { get; set; }
         /// <summary>
         /// Сохранение изменений в бд
@@ -38,6 +59,7 @@ namespace Service_Center.ViewModels
                 unitOfWork.Save();
             });
         }
+
         /// <summary>
         /// Удаление выбранных пользователей
         /// </summary>

@@ -16,4 +16,7 @@
     <v:String x:Key="m_NoSort">No sort</v:String>
     <v:String x:Key="m_Update">Update</v:String>
     <v:String x:Key="m_Save">Save changes</v:String>
+    <v:String x:Key="m_Device">Device</v:String>
+    <v:String x:Key="m_SerialNumber">Serial Number</v:String>
+    <v:String x:Key="m_Order">To Order</v:String>
 </ResourceDictionary>

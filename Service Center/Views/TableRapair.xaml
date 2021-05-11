@@ -253,7 +253,7 @@
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
                              FontSize="20"
-                             Text="{Binding SearchId}" />
+                             Text="{Binding Search}" />
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1">

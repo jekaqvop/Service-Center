@@ -1,4 +1,5 @@
 ﻿using Service_Center.Commands;
+using Service_Center.Converters;
 using Service_Center.Models;
 using Service_Center.Repository;
 using Service_Center.Resources;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using System.Windows.Input;
 
 namespace Service_Center.ViewModels.UserVM
@@ -26,10 +28,7 @@ namespace Service_Center.ViewModels.UserVM
         public ObservableCollection<Service> ServicesList
         {
             get => servicesList;
-            set
-            {
-                servicesList = value;
-            }
+            set => Set(ref servicesList, value);
         }
         #region selectingByPrice
         decimal price0 = 0;
@@ -52,7 +51,7 @@ namespace Service_Center.ViewModels.UserVM
 
                 return price1;
             }
-            set => price1 = value;
+            set => Set(ref price1, value);
         }
 
         #endregion
@@ -67,7 +66,7 @@ namespace Service_Center.ViewModels.UserVM
             }
             set
             {
-                selectService = value;
+                Set<Service>(ref selectService, value);
                 OnPropertyChanged("SelectTitle");
                 OnPropertyChanged("SelectInfo");
                 OnPropertyChanged("SelectPrice");
@@ -114,9 +113,7 @@ namespace Service_Center.ViewModels.UserVM
                 OnPropertyChanged("SelectService");
             }
         }
-
-        #endregion  
-  
+        #endregion    
         #region SortAndSearch
         #region Properties
         string sortAsc;
@@ -184,24 +181,92 @@ namespace Service_Center.ViewModels.UserVM
             switch (getSortParam())
             {
                 case "TASC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Title));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderBy(p => p.Title));
                     break;
                 case "PASC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderBy(p => p.Price));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderBy(p => p.Price));
                     break;
                 case "TDESC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderByDescending(p => p.Title));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderByDescending(p => p.Title));
                     break;
                 case "PDESC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)).OrderByDescending(p => p.Price));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderByDescending(p => p.Price));
                     break;
                 default:
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && p.Title.Contains(searchTitle)));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)));
                     break;
-            }
-            OnPropertyChanged("ServicesList");
+            }           
         }
 
         #endregion
+        public string Device { get; set; }
+        public string SerialNumber { get; set; }
+        public byte[] PathImage { get; set; }
+        public ICommand Order
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                if(!checkNotNull(typeof(string), Device, SerialNumber, SelectService))
+                {
+                    ViewController veiw = ViewController.GetInstance;
+                    Rapair rapair = new Rapair
+                    {
+                        UserID = veiw.User.UserId,
+                        SerialNumber = this.SerialNumber,
+                        Device = this.Device,
+                        SumMoney = SelectService.Price,
+                        Malfunction = SelectService.Title,
+                        DateOfRaceipt = DateTime.Now,
+                        Status = StatusEnum.WaitingDiagnosis.ToString()
+                    };
+                    unitOfWork.Repairs.AddElemet(rapair);
+                }
+                else
+                {
+                    MessageBox.Show("Заполните все поля");
+                }
+            });
+        }
+        public string OpenFileDialog()
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter =
+                "JPEG File(*.jpg)|*.jpg|" +
+                "GIF File(*.gif)|*.gif|" +
+                "Bitmap File(*.bmp)|*.bmp|" +
+                "TIF File(*.tif)|*.tif|" +
+                "PNG File(*.png)|*.png|All files (*.*)|*.*"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                return openFileDialog.FileName;
+            }
+            return null;
+        }
+        
+        public ICommand OpenImage
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                string pathImage = OpenFileDialog();
+                if (pathImage != null)
+                {
+                    try
+                    {
+                        Image image = Image.FromFile(pathImage);
+                        MemoryStream ms = new MemoryStream();
+                        image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
+                        PathImage = ms.ToArray();
+                        OnPropertyChanged("SelectService");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Файл не выбран или произошла ошибка");
+                    }
+                }
+            });
+        }
+
     }
 }

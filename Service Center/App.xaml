@@ -6,7 +6,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Language\langRu2.xaml"/>
+                <ResourceDictionary Source="Style\LightColors.xaml"/>
                 <ResourceDictionary Source="Style\ButtonStyle.xaml"/>
+                <ResourceDictionary Source="Style\TextBoxStyle.xaml"/>
                 <ResourceDictionary Source="Style\WindowStyle.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />

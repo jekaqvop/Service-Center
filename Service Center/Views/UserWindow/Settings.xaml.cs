@@ -1,5 +1,4 @@
-﻿using Service_Center.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,18 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Service_Center.Views.UserWindow
 {
     /// <summary>
-    /// Логика взаимодействия для UserWindow.xaml
+    /// Логика взаимодействия для Settings.xaml
     /// </summary>
-    public partial class UserWindow : Window
+    public partial class Settings : UserControl
     {
-        public UserWindow()
+        public Settings()
         {
-            ViewController view = ViewController.InitializeComponent(this);
             InitializeComponent();
         }
     }

@@ -43,16 +43,20 @@ namespace Service_Center.ViewModels
             {
                 MailAddress from = new MailAddress("ServiceCenterLaptop0@mail.ru", "ServiceCenterLaptop0");
                 MailAddress to = new MailAddress(email);
-                MailMessage m = new MailMessage(from, to);
-                m.Subject = "Service Center";
-                m.Body = body;
-                m.IsBodyHtml = true;
-                SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587);
-                smtp.UseDefaultCredentials = false;
+                MailMessage m = new MailMessage(from, to)
+                {
+                    Subject = "Service Center",
+                    Body = body,
+                    IsBodyHtml = true
+                };
+                SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587)
+                {
+                    UseDefaultCredentials = false,
 
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.EnableSsl = true;
-                smtp.Credentials = new NetworkCredential("ServiceCenterLaptop0@mail.ru", "Laptop123");
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential("ServiceCenterLaptop0@mail.ru", "Laptop123")
+                };
                 await smtp.SendMailAsync(m);
                 MessageBox.Show("Новый пароль отправлен вам на email.\nДля безопасности рекомендуется сменить " +
                     "этот пароль на новый!");
