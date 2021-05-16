@@ -21,8 +21,7 @@ namespace Service_Center.Views.UserWindow
     public partial class UserWindow : Window
     {
         public UserWindow()
-        {
-            ViewController view = ViewController.InitializeComponent(this);
+        {           
             InitializeComponent();
         }
     }

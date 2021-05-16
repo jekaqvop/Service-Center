@@ -30,7 +30,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="110"></RowDefinition>
+            <RowDefinition Height="120"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Column="0">
            <ListView x:Name="SeviceList"
@@ -62,23 +62,9 @@
                                                HorizontalAlignment="Left"
                                                FontSize="23"
                                                Width="350"
+                                               Foreground="{DynamicResource WhiteBlackColor}"
                                                Content="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                        <!--<Button HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Background="Transparent"
-                                            BorderBrush="Transparent"
-                                            Padding="0"
-                                            Margin="25,-45"                                            
-                                            >
-                                            <Button.Content>
-                                                <iconPacks:PackIconMaterial Kind="Pencil" 
-                                                                            Foreground="White"
-                                                                            VerticalAlignment="Bottom"
-                                                                            HorizontalAlignment="Center"  
-                                                                            Height="30"
-                                                                            Width="30"/>
-                                            </Button.Content>
-                                        </Button>-->
+                                      
                                     </StackPanel>
 
                                     <TextBlock Width="400"
@@ -87,16 +73,16 @@
                                                Padding="5"
                                                FontSize="17"
                                                Height="70"
-                                               Foreground="White"
+                                               Foreground="{DynamicResource WhiteBlackColor}"
                                                TextWrapping="Wrap"                                               
                                                />
                                     <Label  VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right"
-                        Margin="0,10,15,10"
-                        FontSize="21"
-                        Content="{Binding Path=Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            HorizontalAlignment="Right"
+                                            Margin="0,10,15,10"
+                                            FontSize="21"
+                                            Foreground="{DynamicResource WhiteBlackColor}"
+                                            Content="{Binding Path=Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
-
                             </Grid>
                         </Grid>
                     </DataTemplate>
@@ -121,20 +107,20 @@
                 </Button>
                 <TextBox HorizontalAlignment="Center" x:Name="TitleBox" Width="210"  FontSize="18" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="{DynamicResource m_Title}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              TextChanged="TitleBox_TextChanged" />
                 <TextBox HorizontalAlignment="Center" x:Name="InfoBox" Width="210"  FontSize="18" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="{DynamicResource m_from}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              Text="{Binding Path=Info, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                              AcceptsReturn="True"
                              HorizontalScrollBarVisibility="Disabled"
@@ -142,11 +128,11 @@
                              TextChanged="TitleBox_TextChanged" />
                 <TextBox HorizontalAlignment="Center" x:Name="PriceBox" Width="210"  FontSize="18" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="{DynamicResource m_Price}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              Text="{Binding Path=Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
                              TextChanged="TitleBox_TextChanged"/>    
             </StackPanel>            
@@ -158,15 +144,15 @@
                     <Label Content="Сортировка"
                            FontSize="15"/>
                     <RadioButton Content="{DynamicResource m_Title}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortTitle, Converter={StaticResource SortConverterKey}, ConverterParameter=T}"/>
                     <RadioButton Content="{DynamicResource m_Price}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortPrice, Converter={StaticResource SortConverterKey}, ConverterParameter=P}"/>
                     <RadioButton Content="{DynamicResource m_NoSort}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="True"
                                  />
@@ -174,11 +160,11 @@
                 <StackPanel Margin="10,10,0,0"
                             VerticalAlignment="Center">
                     <RadioButton Content="{DynamicResource m_Ascending}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortAsc, Converter={StaticResource SortConverterKey}, ConverterParameter=ASC}"/>
                     <RadioButton Content="{DynamicResource m_Descending}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortDesc, Converter={StaticResource SortConverterKey}, ConverterParameter=DESC}"/>
                 </StackPanel>
@@ -190,22 +176,22 @@
                              VerticalAlignment="Center"
                              Text="{Binding Price0}"
                              materialDesign:HintAssist.Hint="{DynamicResource m_from}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="15"
                              TextChanged="TitleBox_TextChanged"/>
                     <TextBox Width="50"                             
                              VerticalAlignment="Center"
                              Text="{Binding Price1}"
                              materialDesign:HintAssist.Hint="{DynamicResource m_until}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="15"
                              TextChanged="TitleBox_TextChanged"/>
                 </StackPanel>
@@ -213,11 +199,11 @@
                              Width="150"                             
                              VerticalAlignment="Center"
                              materialDesign:HintAssist.Hint="{DynamicResource m_Search}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="20"
                              Text="{Binding SearchTitle}" TextChanged="TitleBox_TextChanged"/>                
             </StackPanel>    
@@ -232,15 +218,16 @@
                     <Button.Content>
                         <StackPanel>
                             <iconPacks:PackIconMaterial Kind="File" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"  
                                                 Height="40"
                                                 Width="40"
                                                 Margin="0"/>
                             <TextBlock Text="{DynamicResource m_Save}" 
-                                   TextWrapping="Wrap"
-                                   HorizontalAlignment="Center"/>
+                                       TextWrapping="Wrap"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{DynamicResource WhiteBlackColor}"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>
@@ -252,7 +239,7 @@
                     <Button.Content>
                         <StackPanel>
                             <iconPacks:PackIconMaterial Kind="Update" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"  
                                                 Height="40"
@@ -260,7 +247,8 @@
                                                 Margin="0"/>
                             <TextBlock Text="{DynamicResource m_Update}" 
                                    TextWrapping="Wrap"
-                                   HorizontalAlignment="Center"/>
+                                   HorizontalAlignment="Center"
+                                   Foreground="{DynamicResource WhiteBlackColor}"/>
                         </StackPanel>
                     </Button.Content>
                 </Button>

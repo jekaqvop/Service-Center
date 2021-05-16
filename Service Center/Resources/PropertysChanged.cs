@@ -26,17 +26,18 @@ namespace Service_Center.Resources
         }
         /// <summary>
         /// Проверяет объект на null и строки на наличие текста
+        /// if null return true
         /// </summary>
         /// <param name="type"></param>
         /// <param name="objects"></param>
         /// <returns></returns>
-        protected bool checkNotNull(Type type, params object[] objects)
+        protected bool CheckNotNull(Type type, params object[] objects)
         {
             if (type == typeof(string))
             {
-                foreach (string obj in objects)
+                foreach (object obj in objects)
                 {
-                    if (obj == null || obj == "")
+                    if (obj == null || obj.ToString() == "")
                         return true;
                 }
             }

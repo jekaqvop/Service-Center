@@ -30,27 +30,13 @@ namespace Service_Center.Views
 
         private void TitleBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-           // SeviceList.Items.Refresh();
+            SeviceList.Items.Refresh();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {            
             SeviceList.Items.Refresh(); 
         }
-        bool checklanguage = false;
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (checklanguage == false)
-            {
-                this.Resources.Source = new Uri("pack://application:,,,/Language/langRu2.xaml");
-                checklanguage = true;
-            }
-            else if (checklanguage == true)
-            {
-                this.Resources.Source = new Uri("pack://application:,,,/Language/langEng.xaml");
-                checklanguage = false;              
-            }
-        }
-
+   
     }
 }

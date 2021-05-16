@@ -15,18 +15,14 @@
         <Grid.RowDefinitions>
             <RowDefinition ></RowDefinition>
             <RowDefinition Height="100"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="360"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+        </Grid.RowDefinitions>     
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="341*"/>
                 <ColumnDefinition Width="109*"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Grid Grid.Column="0">
+        <Grid Grid.Row="0">
             <DataGrid x:Name="UsersGrid" 
                       SelectedItem="{Binding User}" 
                       AutoGenerateColumns="False"                   
@@ -44,30 +40,8 @@
                     <DataGridTextColumn Header="Роль" Binding="{Binding Role}"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
-
-        <Grid Grid.Column="1" Grid.Row="1">
-            <StackPanel Orientation="Horizontal" Margin="10">
-                <Button VerticalAlignment="Center"
-                    Height="50"
-                    Width="150"
-                    Content="Сохранить изменения"
-                    FontSize="20"
-                    Margin="10"
-                    materialDesign:ButtonAssist.CornerRadius="7"
-                    Command="{Binding }"/>
-                <Button VerticalAlignment="Center" 
-                    HorizontalAlignment="Center"
-                    Margin="10"
-                    Height="50"
-                    Width="150"
-                    Content="Сохранить изменения"
-                    FontSize="20"
-                    materialDesign:ButtonAssist.CornerRadius="7"
-                    Command="{Binding }"/>
-            </StackPanel>         
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="0">
+        </Grid>  
+        <Grid Grid.Row="1">
             <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                           VerticalScrollBarVisibility="Disabled">
                 <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">               
@@ -77,10 +51,11 @@
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Margin="0,4,0,4"
+                        ToolTip="Сохранить изменения"
                         Command="{Binding SaveChanges}">
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="ContentSave" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"  
                                                 Height="90"
@@ -94,10 +69,11 @@
                     HorizontalAlignment="Left"
                     Background="Transparent"
                     BorderBrush="Transparent"
+                    ToolTip="Обновить"
                     Command="{Binding UpdateDataGrid}" >
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Update" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"  
                                                 Height="90"
@@ -112,10 +88,11 @@
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Command="{Binding DeleteRows}" 
+                        ToolTip="Удалить выбранных клиентов"
                         CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Delete" 
-                                                    Foreground="White"
+                                                    Foreground="{DynamicResource WhiteBlackColor}"
                                                     VerticalAlignment="Bottom"
                                                     HorizontalAlignment="Center"  
                                                     Height="90"
@@ -128,26 +105,45 @@
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
+                        ToolTip="Показать заказы клиента"
                         Command="{Binding ShowFullInfo}" 
                         >
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Information" 
-                                                    Foreground="White"
+                                                    Foreground="{DynamicResource WhiteBlackColor}"
                                                     VerticalAlignment="Bottom"
                                                     HorizontalAlignment="Center"  
                                                     Height="90"
                                                     Width="60"/>
                     </Button.Content>
                 </Button>
+                    <Button Width="90" Height="90" 
+                        Padding="0"
+                        Margin="90,0,0,0"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Command="{Binding ShowFullInfo}" 
+                        >
+                        <Button.Content>
+                            <iconPacks:PackIconMaterial Kind="PlusBox" 
+                                                        Foreground="{DynamicResource WhiteBlackColor}"
+                                                        VerticalAlignment="Bottom"
+                                                        HorizontalAlignment="Center"  
+                                                        Height="90"
+                                                        ToolTip="Дабввить нового пользователя"
+                                                        Width="60"/>
+                        </Button.Content>
+                    </Button>
                     <TextBox Margin="40,0,0,0"
                              Width="150"                             
                              VerticalAlignment="Center"
                              materialDesign:HintAssist.Hint="Поиск"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="20"
                              Text="{Binding Search}" />
                 </StackPanel>

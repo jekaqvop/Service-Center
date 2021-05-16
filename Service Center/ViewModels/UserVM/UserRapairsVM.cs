@@ -18,7 +18,7 @@ namespace Rapair_Center.ViewModels.UserVM
         public UserRapairsVM()
         {
             sortRapairsList();
-        }
+        }      
         UnitOfWork unitOfWork = new UnitOfWork();
         public ObservableCollection<Rapair> RapairsList { get; set; }
         #region selectingByPrice
@@ -119,11 +119,10 @@ namespace Rapair_Center.ViewModels.UserVM
         }
         void sortRapairsList()
         {
-            ViewController view = ViewController.GetInstance;
-            unitOfWork.Save();
+            ViewManager view = ViewManager.GetInstance;            
             switch (getSortParam())
             {
-                case "TASC":
+                   case "TASC":
                     RapairsList = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList()
                         .Where(p => p.SumMoney >= price0 && p.SumMoney <= price1 
                         && (p.Malfunction + p.SerialNumber + p.Device).Contains(searchTitle)
@@ -151,9 +150,10 @@ namespace Rapair_Center.ViewModels.UserVM
                     RapairsList = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList().Where(p => p.SumMoney >= price0 
                     && p.SumMoney <= price1 
                     && (p.Malfunction + p.SerialNumber + p.Device).Contains(searchTitle)
-                    && view.User.UserId == p.UserID));
+                    && p.UserID == view.User.UserId));
                     break;
             }
+            OnPropertyChanged("RapairsList");
         }
         #endregion
     }

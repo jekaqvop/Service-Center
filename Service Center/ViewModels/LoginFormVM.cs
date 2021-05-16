@@ -1,6 +1,7 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.Repository;
 using Service_Center.Resources;
 using Service_Center.Views;
 using Service_Center.Views.UserWindow;
@@ -47,7 +48,7 @@ namespace Service_Center.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {                   
-                    ViewController view = ViewController.GetInstance;
+                    ViewManager view = ViewManager.GetInstance;
                     view.CloseAndShow(new RegistrationWindow());
                 });
             }
@@ -72,7 +73,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                ViewController view = ViewController.GetInstance;
+                ViewManager view = ViewManager.GetInstance;
                 view.MinWindow();
             });
         }
@@ -80,7 +81,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                ViewController view = ViewController.GetInstance;
+                ViewManager view = ViewManager.GetInstance;
                 view.OpenMiniWindow(new ForgetPasswordWind());
             });
         }
@@ -109,12 +110,13 @@ namespace Service_Center.ViewModels
                     try
                     {
                         OpasityProgressBar = 1;
-                        using (Context context = new Context())
-                        {
+                        
+                            UnitOfWork unit = new UnitOfWork();
+                            
                             User user = null;
 
-                            IQueryable<User> users = from User in context.Users
-                                                     where User.Login == login
+                            IEnumerable<User> users = from User in unit.Users.GetItemList()
+                                                     where User.Login.ToUpper() == login.ToUpper()
                                                      select User;
                             int io = users.Count();
                             if (io == 1)
@@ -127,19 +129,21 @@ namespace Service_Center.ViewModels
                                 string HashPassword = GetHash(Password);
                                 if (user.Password == HashPassword)
                                 {
-                                    ViewController view = ViewController.GetInstance;
+                                    ViewManager view = ViewManager.GetInstance;
+                                    view.User = user;
                                     switch (user.Role)
                                     {
-                                        case true:
-                                            view.CloseAndShow(new AdminWindow());                                                                                         
+                                        case true:                                            
+                                            view.CloseAndShow(new AdminWindow());                                            
                                             break;
                                         case false:
-                                            view.CloseAndShow(new UserWindow());
+                                            view.CloseAndShow(new UserWindow());                                           
                                             break;
                                         default:
                                             MessageBox.Show("Ошибка авторизации!\nПользователь не опознан!\nНеизвесно: администратор или пользователь!");
                                             break;
                                     }
+                                    
                                 }
                                 else
                                 {
@@ -156,7 +160,7 @@ namespace Service_Center.ViewModels
                                 OnPropertyChanged("OpasityProgressBar");
                                 OnPropertyChanged("OpacityBadPassword");
                             }
-                        }
+                        
                     }
                     catch
                     {

@@ -52,7 +52,7 @@ namespace Service_Center.ViewModels
                 else
                     MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
                 OnPropertyChanged("IsButtonEnabled");
-                OnPropertyChanged("Password");
+                OnPropertyChanged("Login");
             }
         }
         bool CheckedLogin(string login)
@@ -111,7 +111,6 @@ namespace Service_Center.ViewModels
                     user.FullName = value;
                 else
                     MessageBox.Show("Используйте русский или английский алфавит для ввода ФИО / Use the Russian or English alphabet to enter a Full name");
-
                 OnPropertyChanged("LastName");
             }
         }
@@ -165,7 +164,7 @@ namespace Service_Center.ViewModels
             {
                 //тут должен автоматом генерироваться пароль
                 user.Password = GetHash();
-                if (checkNotNull(typeof(string), user.Login, user.FullName, user.PhoneNumber, user.Email, user.Password))
+                if (CheckNotNull(typeof(string), user.Login, user.FullName, user.PhoneNumber, user.Email, user.Password))
                 {                    
                     using (UnitOfWork unitOfWork = new UnitOfWork())
                     {
@@ -184,7 +183,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                ViewController view = ViewController.GetInstance;
+                ViewManager view = ViewManager.GetInstance;
                 view.CloseMiniWindow();
             });
         }
@@ -195,7 +194,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                ViewController view = ViewController.GetInstance;
+                ViewManager view = ViewManager.GetInstance;
                 view.MinWindow();
             });
         }

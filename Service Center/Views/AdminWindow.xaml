@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:Service_Center.ViewModels" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:Service_Center.Views"
+        xmlns:Sett="clr-namespace:Service_Center.Views.UserWindow"
         Title="AdminWindow" Height="900" Width="1500" WindowStartupLocation="CenterScreen"
         Style="{DynamicResource WindowStyle}">
     <Window.DataContext>
@@ -18,7 +19,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="Gainsboro" CornerRadius="4,4,4,4" Margin="10,0,10,20">
+                                <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="{DynamicResource WhiteBlackColor}" CornerRadius="4,4,4,4" Margin="10,0,10,20">
                                     <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
@@ -93,7 +94,7 @@
                 </TabItem.Header>
                 <local:UsersControl/>
             </TabItem>
-            <TabItem>
+            <!--<TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="BarChart" 
@@ -124,7 +125,7 @@
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
                 </TabItem.Header>
-            </TabItem>
+            </TabItem>-->
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -139,8 +140,8 @@
                                    Margin="0 0"
                                    HorizontalAlignment="Center"/>
                     </StackPanel>
-                </TabItem.Header>   
-               
+                </TabItem.Header>
+                <Sett:Settings/>
             </TabItem>           
         </TabControl>  
     </Grid>

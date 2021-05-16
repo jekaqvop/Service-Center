@@ -22,7 +22,6 @@ namespace Service_Center.Views
     {
         public AdminWindow()
         {
-            ViewController view = ViewController.InitializeComponent(this);
             InitializeComponent();            
         }       
        

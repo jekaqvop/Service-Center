@@ -6,7 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Service_Center.Views.UserWindow"
              xmlns:mod="clr-namespace:Service_Center.Models"
-             xmlns:convert="clr-namespace:Service_Center.Converters" xmlns:vm="clr-namespace:Rapair_Center.ViewModels.UserVM"
+             xmlns:convert="clr-namespace:Service_Center.Converters"
+             xmlns:vm="clr-namespace:Rapair_Center.ViewModels.UserVM" 
+             xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1250">
     <UserControl.DataContext>
@@ -21,7 +23,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="110"/>
+            <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <ListView x:Name="SeviceList"                      
@@ -38,7 +40,31 @@
                                 <ColumnDefinition></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid Grid.Column ="0" Margin="30">
-                                <TextBlock Text="{Binding m_}"/>
+                                <StackPanel VerticalAlignment="Top"
+                                            HorizontalAlignment="Right">
+                                    <TextBlock Margin="10,10" 
+                                               Height="35"
+                                               HorizontalAlignment="Left"
+                                               FontSize="23"
+                                               Width="350"
+                                               Foreground="{DynamicResource WhiteBlackColor}"
+                                               Text="Неисправность:"/>
+                                </StackPanel>
+                                <TextBlock Width="400"
+                                               Text="Статус:"    
+                                               Margin="10,0" 
+                                               Padding="5"
+                                               FontSize="17"
+                                               Height="70"
+                                               Foreground="{DynamicResource WhiteBlackColor}"
+                                               TextWrapping="Wrap"                                               
+                                               />
+                                <TextBlock  VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Left"
+                                            Margin="15,10,0,10"
+                                            FontSize="21"
+                                            Foreground="{DynamicResource WhiteBlackColor}"
+                                            Text="Цена:"/>
                             </Grid>
                             <Grid Grid.Column="1">
                                 <StackPanel Margin="25" >
@@ -48,21 +74,23 @@
                                                HorizontalAlignment="Left"
                                                FontSize="23"
                                                Width="350"
-                                               Content="{Binding Path=Malfunction, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                               Foreground="{DynamicResource WhiteBlackColor}"
+                                               Content="{Binding Malfunction, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                     </StackPanel>
                                     <TextBlock Width="400"
-                                               Text="{Binding Path=Status, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"    
+                                               Text="{Binding Status, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"    
                                                Margin="10,0" 
                                                Padding="5"
                                                FontSize="17"
                                                Height="70"
-                                               Foreground="White"
+                                               Foreground="{DynamicResource WhiteBlackColor}"
                                                TextWrapping="Wrap"                                               
                                                />
                                     <Label  VerticalAlignment="Bottom"
                                             HorizontalAlignment="Left"
                                             Margin="15,10,0,10"
                                             FontSize="21"
+                                            Foreground="{DynamicResource WhiteBlackColor}"
                                             Content="{Binding Path=SumMoney, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                                 </StackPanel>
 
@@ -75,19 +103,41 @@
         <Grid Grid.Row="1">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center">
+                <Button Width="70"
+                        Margin="0,0,20,0"
+                        Height="80" Background="Transparent"
+                        Padding="0"
+                        Command="{Binding Update}">
+                    <Button.Content>
+                        <StackPanel>
+                            <iconPacks:PackIconMaterial Kind="Update" 
+                                                Foreground="{DynamicResource WhiteBlackColor}"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"  
+                                                Height="40"
+                                                Width="40"
+                                                Margin="0"/>
+                            <TextBlock Text="{DynamicResource m_Update}" 
+                                       TextWrapping="Wrap"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{DynamicResource WhiteBlackColor}"/>
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
                 <StackPanel>
                     <Label Content="Сортировка"
-                           FontSize="15"/>
+                           FontSize="15"
+                           Foreground="{DynamicResource WhiteBlackColor}"/>
                     <RadioButton Content="{DynamicResource m_Title}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortTitle, Converter={StaticResource SortConverterKey}, ConverterParameter=T}"/>
                     <RadioButton Content="{DynamicResource m_Price}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortPrice, Converter={StaticResource SortConverterKey}, ConverterParameter=P}"/>
                     <RadioButton Content="{DynamicResource m_NoSort}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="True"
                                  />
@@ -95,11 +145,11 @@
                 <StackPanel Margin="10,10,0,0"
                             VerticalAlignment="Center">
                     <RadioButton Content="{DynamicResource m_Ascending}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortAsc, Converter={StaticResource SortConverterKey}, ConverterParameter=ASC}"/>
                     <RadioButton Content="{DynamicResource m_Descending}"
-                                 Foreground="White"
+                                 Foreground="{DynamicResource WhiteBlackColor}"
                                  FontSize="18"
                                  IsChecked="{Binding SortDesc, Converter={StaticResource SortConverterKey}, ConverterParameter=DESC}"/>
                 </StackPanel>
@@ -111,22 +161,22 @@
                              VerticalAlignment="Center"
                              Text="{Binding Price0}"
                              materialDesign:HintAssist.Hint="{DynamicResource m_from}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="15"
                             />
                     <TextBox Width="50"                             
                              VerticalAlignment="Center"
                              Text="{Binding Price1}"
                              materialDesign:HintAssist.Hint="{DynamicResource m_until}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="15"
                              />
                 </StackPanel>
@@ -134,11 +184,11 @@
                              Width="150"                             
                              VerticalAlignment="Center"
                              materialDesign:HintAssist.Hint="{DynamicResource m_Search}"
-                             BorderBrush="White" 
-                             Foreground="White" 
-                             materialDesign:HintAssist.Foreground="White"
+                             BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             Foreground="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              FontSize="20"
                              Text="{Binding SearchTitle}"/>
             </StackPanel>

@@ -19,7 +19,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
-                                <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="Gainsboro" CornerRadius="4,4,4,4" Margin="10,0,10,20">
+                                <Border Name="Border" BorderThickness="1,1,1,1" BorderBrush="{DynamicResource WhiteBlackColor}" CornerRadius="4,4,4,4" Margin="10,0,10,20">
                                     <ContentPresenter x:Name="ContentSite"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Center"
@@ -56,9 +56,10 @@
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    Margin="9 0"/>
+                        
                     </StackPanel>
                 </TabItem.Header>
-                <local:UserRapairs/>
+                <local:UserRapairs />
             </TabItem>
             <TabItem>
                 <TabItem.Header>

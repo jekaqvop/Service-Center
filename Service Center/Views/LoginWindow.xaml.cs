@@ -21,11 +21,11 @@ namespace Service_Center
     /// </summary>
     public partial class LoginWindow : Window
     {
-        ViewController view;
+        ViewManager view;
         public LoginWindow()
         {
             InitializeComponent();
-            view = ViewController.InitializeComponent(this);            
+            view = ViewManager.InitializeComponent(this);            
         }
         /// <summary>
         /// Перемещение окна
@@ -36,13 +36,6 @@ namespace Service_Center
         {
             if(e.ChangedButton == MouseButton.Left)
                 this.DragMove();
-        }
-        /// <summary>
-        /// Сворачивание окна LoginWindow
-        /// </summary>
-        private void Min_Buton(object sender, MouseButtonEventArgs e)
-        {
-            this.WindowState = WindowState.Minimized;
         }
     }
 }

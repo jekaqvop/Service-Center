@@ -259,8 +259,7 @@ namespace Service_Center.ViewModels
             return getNotNull(sortTitle) + getNotNull(sortPrice) + getNotNull(sortAsc) + getNotNull(sortDesc);
         }        
         void sortServicesList()
-        {
-            unitOfWork.Save();
+        {          
                 switch (getSortParam())
                 {
                     case "TASC":

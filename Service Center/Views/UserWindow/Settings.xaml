@@ -19,9 +19,14 @@
         </Grid.ColumnDefinitions>     
         <Grid Grid.Column="0">
             <StackPanel Orientation="Vertical">
-                <Image Source="D:\Курсач\Service Center\Service Center\Sourse\Images\png-clipart-computer-icons-symbol-user-profile-logo-symbol-miscellaneous-white.png"
-                   Width="400"
-                   Height="300"/>
+
+                <iconPacks:PackIconMaterial Kind="AccountBox" 
+                                                    Height="250"
+                                                    Width="250"
+                                                    Foreground="{DynamicResource WhiteBlackColor}"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"                                               
+                                                    />              
                 <StackPanel Orientation="Vertical">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -37,12 +42,14 @@
                                            Height="35"
                                            VerticalAlignment="Top"
                                            FontSize="24"
-                                           Foreground="White" Margin="10"/>
+                                           Foreground="{DynamicResource WhiteBlackColor}" 
+                                           Margin="10"/>
                                 <TextBlock Text="Русский язык"
                                            Height="35"
                                            VerticalAlignment="Top"
                                            FontSize="24"
-                                           Foreground="White" Margin="10"/>
+                                           Foreground="{DynamicResource WhiteBlackColor}"
+                                           Margin="10"/>
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -53,16 +60,16 @@
                                               VerticalAlignment="Top"
                                               Margin="10"
                                               Style="{StaticResource OffOnButton}"
-                                              IsChecked="{Binding IsTheme}"
-                                              Command="{Binding ChangedTheme}"/>
+                                              IsChecked="{Binding IsTheme}"                                              
+                                              />
                                 <ToggleButton Width="70"
-                                              Background="White"
+                                              Background="{DynamicResource WhiteBlackColor}"
                                               Height="35"
                                               HorizontalAlignment="Left"
                                               VerticalAlignment="Top"
                                               Margin="10"
                                               Style="{StaticResource OffOnButton}"
-                                              Foreground="White"/>
+                                              Foreground="{DynamicResource WhiteBlackColor}"/>
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="3">
@@ -71,13 +78,13 @@
                                 <TextBlock Text="Тёмная тема"
                                            Height="35"
                                            VerticalAlignment="Top"
-                                           Foreground="White"
+                                           Foreground="{DynamicResource WhiteBlackColor}"
                                            FontSize="24"
                                            Margin="10"/>
                                 <TextBlock Text="English laguage"
                                            Height="35"
                                            VerticalAlignment="Top"
-                                           Foreground="White"
+                                           Foreground="{DynamicResource WhiteBlackColor}"
                                            FontSize="24"
                                            Margin="10"/>
                             </StackPanel>
@@ -101,12 +108,12 @@
                                                     HorizontalAlignment="Center"                                               
                                                     Margin="23,0,5,8"/>
                     <TextBox materialDesign:HintAssist.Hint="Логин"
-                             Width="400" Foreground="White" 
-                             FontSize="30" BorderBrush="White"
+                             Width="400" Foreground="{DynamicResource WhiteBlackColor}" 
+                             FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                              Margin="0,20,0,3"
                              materialDesign:HintAssist.Foreground="White"                             
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              Text="{Binding Login}"/>
                     </StackPanel>
                 <StackPanel Orientation="Horizontal" 
@@ -120,12 +127,12 @@
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
                         <TextBox materialDesign:HintAssist.Hint="ФИО"
-                                 Width="400" Foreground="White" 
-                                 FontSize="30" BorderBrush="White"
+                                 Width="400" Foreground="{DynamicResource WhiteBlackColor}" 
+                                 FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                                  Margin="0,20,0,3"
-                                 materialDesign:HintAssist.Foreground="White"                             
+                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                  Text="{Binding FullName}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" 
@@ -139,12 +146,12 @@
                                                     HorizontalAlignment="Center"                                               
                                                     Margin="23,0,5,8"/>
                         <TextBox materialDesign:HintAssist.Hint="Номер телефона"
-                                 Width="400" Foreground="White" 
-                                 FontSize="30" BorderBrush="White"
+                                 Width="400" Foreground="{DynamicResource WhiteBlackColor}" 
+                                 FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                                  Margin="0,20,0,3"
-                                 materialDesign:HintAssist.Foreground="White"                             
+                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                  Text="{Binding Phone}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" 
@@ -158,12 +165,12 @@
                                                     HorizontalAlignment="Center"                                               
                                                     Margin="23,0,5,8"/>
                         <TextBox materialDesign:HintAssist.Hint="Электронная почта"
-                                 Width="400" Foreground="White" 
-                                 FontSize="30" BorderBrush="White"
+                                 Width="400" Foreground="{DynamicResource WhiteBlackColor}" 
+                                 FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                                  Margin="0,20,0,3"
-                                 materialDesign:HintAssist.Foreground="White"                             
+                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                  Text="{Binding Email}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"    
@@ -178,12 +185,12 @@
                                                     Margin="23,0,5,8"/>
                         <PasswordBox materialDesign:HintAssist.Hint="Старый Пароль"
                                      Width="400"
-                                     Foreground="White" 
-                                     FontSize="30" BorderBrush="White"
+                                     Foreground="{DynamicResource WhiteBlackColor}" 
+                                     FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                                      Margin="0,20,0,3"
-                                     materialDesign:HintAssist.Foreground="White"                             
+                                     materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
                                      materialDesign:HintAssist.IsFloating="True"
-                                     materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                     materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                      Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                      ff:PasswordBoxAssistant.BindPassword="True"  
                                      ff:PasswordBoxAssistant.BoundPassword="{Binding OldPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -199,13 +206,13 @@
                                                     HorizontalAlignment="Center"                                               
                                                     Margin="23,0,5,8"/>
                         <PasswordBox materialDesign:HintAssist.Hint="Новый пароль"
-                                     Foreground="White" 
+                                     Foreground="{DynamicResource WhiteBlackColor}" 
                                      Width="400"
-                                     FontSize="30" BorderBrush="White"
+                                     FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                                      Margin="0,20,0,3"
-                                     materialDesign:HintAssist.Foreground="White"                             
+                                     materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
                                      materialDesign:HintAssist.IsFloating="True"
-                                     materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                     materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                      Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                      ff:PasswordBoxAssistant.BindPassword="True"  
                                      ff:PasswordBoxAssistant.BoundPassword="{Binding NewPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

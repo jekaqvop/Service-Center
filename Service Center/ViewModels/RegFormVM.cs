@@ -4,6 +4,7 @@ using Service_Center.Models;
 using Service_Center.Repository;
 using Service_Center.Resources;
 using Service_Center.Views;
+using Service_Center.Views.UserWindow;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,34 +37,37 @@ namespace Service_Center.ViewModels
             {
                 if (Regex.IsMatch(value, patternLog, RegexOptions.IgnoreCase))
                 {
-                    user.Login = value;
+                   
                     if (!CheckedLogin(value))
                     {
                         MessageBox.Show("Такой Login уже зарегестрирован!");
                         IsButtonEnabled = false;                        
                     }
                     else
+                    {
+                        user.Login = value;
                         IsButtonEnabled = true;
+                    }
                 }
                 else
                     MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
                 OnPropertyChanged("IsButtonEnabled");
-                OnPropertyChanged("Password");
+                OnPropertyChanged("Login");
             }
         }
         bool CheckedLogin(string login)
         {
             UnitOfWork unitOfWork = new UnitOfWork();
-            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(u => u.Login == login);
+            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(u => u.Login.ToUpper() == login.ToUpper());
             if (users.Count() > 0)
                 return false;
             return true;
         }
-        string patternPass = @"^[0-9a-zA-Zа-яА-Я]{8,20}$";
+        string patternPass = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{8,16}$";
         [Required(ErrorMessage = "Password is required")]
         public string Password
         {
-            get { return user.Password; }
+            get => user.Password; 
             set
             {
                 user.Password = GetHash(value);
@@ -86,19 +90,22 @@ namespace Service_Center.ViewModels
         [EmailAddress]
         public string Email
         {
-            get { return user.Email; }
+            get => user.Email; 
             set
             {
                 if (Regex.IsMatch(value, patternEmail, RegexOptions.IgnoreCase))
-                {
-                    user.Email = value;
+                {                    
                     if (!CheckedEmail(value))
                     {
                         MessageBox.Show("Такой email уже зарегестрирован!");
                         IsButtonEnabled = false;
                     }
                     else
+                    {
+                        user.Email = value;
                         IsButtonEnabled = true;
+                    }
+                       
                 }                  
                 else
                     MessageBox.Show("Проверьте правильнность ввода email / Check the input format email");
@@ -109,12 +116,9 @@ namespace Service_Center.ViewModels
         bool CheckedEmail(string email)
         {
             UnitOfWork unitOfWork = new UnitOfWork();
-            IEnumerable<User> users = unitOfWork.Users.GetItemList();
-            foreach (User user in users)
-            {
-                if (user.Email == email)
-                    return false;
-            }
+            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(e => e.Email.ToUpper() == email.ToUpper());
+            if (users.Count() > 0)
+                return false;
             return true;
         }
         string patternName = @"^(([A-ZА-ЯЁ]{1}[a-zа-яё]{1,}[\s]){2}[A-ZА-ЯЁ][a-zа-яё]{1,})$";
@@ -131,7 +135,14 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("LastName");
             }
         }
-
+        bool CheckedPhone(string phone)
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(e => e.PhoneNumber == phone);
+            if (users.Count() > 0)
+                return false;
+            return true;
+        }
         public string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
@@ -140,7 +151,18 @@ namespace Service_Center.ViewModels
             set
             {
                 if (Regex.IsMatch(value, patternPhone, RegexOptions.IgnoreCase))
-                    user.PhoneNumber = value;
+                {
+                    if (!CheckedPhone(value))
+                    {
+                        MessageBox.Show("Такой номер телефона уже зарегестрирован!");
+                        IsButtonEnabled = false;
+                    }
+                    else
+                    {
+                        IsButtonEnabled = true;
+                        user.PhoneNumber = value;   
+                    }    
+                }                   
                 else
                     MessageBox.Show("Введен неверный формат телефона / The number must be in the format +xxx-xx-xxx-xx-xx");
                 OnPropertyChanged("Phone");
@@ -156,31 +178,30 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
+                ViewManager view = ViewManager.GetInstance;
                 if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null && RepeatPassword != null)
                 {
                     
-                    if (Regex.IsMatch(user.Password, patternPass, RegexOptions.IgnoreCase))
+                    if (Regex.IsMatch(Password, patternPass, RegexOptions.None))
                     {
                         if(user.Password == repeatPassword)
                         {
-                            using (Context context = new Context())
-                            {
-                                context.Users.Add(user);
-                                context.SaveChanges();
+                            UnitOfWork unitOfWork = new UnitOfWork();
+                            unitOfWork.Users.AddElemet(user);
+                            unitOfWork.Save();
+                            view.User = this.user;
                                 switch (user.Role)
                                 {
-                                    case true:
-                                        ViewController view = ViewController.GetInstance;
+                                    case true:                                      
                                         view.CloseAndShow(new AdminWindow());
                                         break;
                                     case false:
-
+                                            view.CloseAndShow(new UserWindow());
                                         break;
                                     default:
-
+                                    MessageBox.Show("Не удалось определить профиль пользователя!");
                                         break;
-                                }
-                            }
+                                }                            
                         }
                         else
                         {
@@ -188,7 +209,7 @@ namespace Service_Center.ViewModels
                         }
                     }
                     else
-                        MessageBox.Show("Пароль должен содержать минимум 8 символов, 1 верхний, 1 нижний, 1 цифру и максимум 20 / Must contain at least 8 characters, 1 uppercase, 1 lowercase, 1 number and max 20");
+                        MessageBox.Show("В пароле должна быть минимум одна цифра, одна буква, большая буква и любой знак, который не цифра и не буква, максимальная длина пароля 16 символов.");
                 }
                 else
                 {
@@ -197,13 +218,13 @@ namespace Service_Center.ViewModels
             });
         }
         /// <summary>
-        /// Возвращение окна FАвторизации
+        /// Возвращение окна Авторизации
         /// </summary>
         public ICommand ShowLoginWindow
         {
             get => new DelegateCommand((obj) =>
             {
-                ViewController view = ViewController.GetInstance;
+                ViewManager view = ViewManager.GetInstance;
                 view.CloseAndShow(new LoginWindow());
             });
         }
@@ -214,7 +235,7 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                ViewController view = ViewController.GetInstance;
+                ViewManager view = ViewManager.GetInstance;
                 view.MinWindow();
             });
         }

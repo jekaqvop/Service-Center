@@ -9,24 +9,21 @@
         Height="505" Width="365" 
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:iconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material" 
-        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
-    <Window.Background >
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FF22385D" Offset="0"/>
-            <GradientStop Color="#FF223A6A" Offset="0.509"/>
-            <GradientStop Color="#FF1C315B" Offset="1"/>
-        </LinearGradientBrush>
-    </Window.Background>
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" 
+        Style="{DynamicResource WindowStyle}">
+  
     <Window.DataContext>
         <viewmodels:RegNewUserVM/>
     </Window.DataContext>
-    <Grid>
+    <Border BorderBrush="Black" BorderThickness="1">
+        <Grid>
+      
         <Grid.RowDefinitions>
             <RowDefinition Height="25" ></RowDefinition>
             <RowDefinition Height="480" ></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent" MouseDown="ToolBar_MouseDown">
-            <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
+            <Polygon Fill="{DynamicResource WhiteBlackColor}" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
             <StackPanel Margin="5,1,1,0">
                 <Button HorizontalAlignment="Right"
                         Height="20"
@@ -72,7 +69,7 @@
                         >
                     <Button.Template>
                         <ControlTemplate>
-                            <Polygon Name="MinButton" Style="{DynamicResource MinButton}"></Polygon>
+                            <Polygon Name="MinButton" Style="{DynamicResource MinButton}"/>
                         </ControlTemplate>
                     </Button.Template>
 
@@ -81,58 +78,58 @@
         </Grid>
         <Grid Grid.Row="1">
             <StackPanel Margin="40,30,30,40">
-                <Label Content="Регистрация" FontSize="25" Foreground="White"  HorizontalAlignment="Center"/>
+                <Label Content="Регистрация" FontSize="25" Foreground="{DynamicResource WhiteBlackColor}"  HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconMaterial Kind="Account" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                    <TextBox x:Name="RUsername" Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
+                    <TextBox x:Name="RUsername" Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
                              materialDesign:HintAssist.Hint="Логин"
-                             materialDesign:HintAssist.Foreground="White"                             
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
                              materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="White"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                              Text="{Binding Login}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Face" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                             
                                                 Margin="23,0,5,8"/>
-                    <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
+                    <TextBox  Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
                                  materialDesign:HintAssist.Hint="ФИО"
-                                 materialDesign:HintAssist.Foreground="White"                                 
+                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                                 
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                  Text="{Binding FullName}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Phone" 
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                             
                                                 Margin="23,0,5,8"/>
-                    <TextBox  Width="210" Foreground="White" FontSize="18" BorderBrush="White" 
+                    <TextBox  Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
                                  materialDesign:HintAssist.Hint="Номер телефона"
                                  materialDesign:HintAssist.Foreground="White"                                 
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                  Text="{Binding Phone}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Email"
-                                                Foreground="White"
+                                                Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                    <TextBox x:Name="Email" Width="210" Foreground="White" FontSize="18" BorderBrush="White" Margin="0,0,0,0"
+                    <TextBox x:Name="Email" Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" Margin="0,0,0,0"
                                  
                                  materialDesign:HintAssist.Hint="Электронная почта"
-                                 materialDesign:HintAssist.Foreground="White"
+                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                                  materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="White"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
                                  Text="{Binding Email}"/>
                 </StackPanel>               
                 <Button Style="{StaticResource MaterialDesignRaisedButton}"
@@ -157,7 +154,8 @@
                     <TextBlock Margin="0,5,0,0" TextWrapping="Wrap" Text="Логин или адрес электронной почты занят" FontSize="16" Foreground="Red" Width="172"/>
                 </StackPanel>
             </StackPanel>
-        </Grid>
+        </Grid>            
     </Grid>
+    </Border>
 </Window>
 

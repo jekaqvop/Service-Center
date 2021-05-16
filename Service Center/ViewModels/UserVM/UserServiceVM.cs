@@ -202,13 +202,28 @@ namespace Service_Center.ViewModels.UserVM
         public string Device { get; set; }
         public string SerialNumber { get; set; }
         public byte[] PathImage { get; set; }
+
+        //void addRapair(User user)
+        //{
+        //    Rapair rapair = new Rapair
+        //    {
+        //        Status = this.StatusNewRapair,
+        //        Device = this.Device,
+        //        Malfunction = this.Malfunction,
+        //        SerialNumber = this.SerialNumber,
+        //        DateOfRaceipt = DateTime.Now,
+        //        SumMoney = 0,
+        //        UserID = user.UserId
+        //    };
+        //    unitOfWork.Repairs.AddElemet(rapair);            
+        //}
         public ICommand Order
         {
             get => new DelegateCommand((obj) =>
             {
-                if(!checkNotNull(typeof(string), Device, SerialNumber, SelectService))
+                if(!CheckNotNull(typeof(string), Device, SerialNumber, SelectService))
                 {
-                    ViewController veiw = ViewController.GetInstance;
+                    ViewManager veiw = ViewManager.GetInstance;
                     Rapair rapair = new Rapair
                     {
                         UserID = veiw.User.UserId,
@@ -220,6 +235,7 @@ namespace Service_Center.ViewModels.UserVM
                         Status = StatusEnum.WaitingDiagnosis.ToString()
                     };
                     unitOfWork.Repairs.AddElemet(rapair);
+                    unitOfWork.Save();
                 }
                 else
                 {
@@ -267,6 +283,6 @@ namespace Service_Center.ViewModels.UserVM
                 }
             });
         }
-
+      
     }
 }

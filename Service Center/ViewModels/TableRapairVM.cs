@@ -1,5 +1,6 @@
 ﻿using Service_Center.Commands;
 using Service_Center.Contexts;
+using Service_Center.Converters;
 using Service_Center.Models;
 using Service_Center.Repository;
 using Service_Center.Resources;
@@ -10,6 +11,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -21,7 +24,7 @@ namespace Service_Center.ViewModels
     
     class TableRapairVM : PropertysChanged
     {
-        public List<string> StatusEnum { get; set; }
+
         UnitOfWork unitOfWork = new UnitOfWork();
         //Rapair selectRapair;
         public Rapair SelectRapair { get; set; }
@@ -38,6 +41,7 @@ namespace Service_Center.ViewModels
         public string Device { get; set; }
         public string Malfunction { get; set; }
         public string SerialNumber { get; set; }
+        public bool OnOffSendNotification { get; set; }
         public ObservableCollection<Rapair> rapairs;
         public ObservableCollection<Rapair> Rapairs { get => rapairs; set => Set<ObservableCollection<Rapair>>(ref rapairs, value); } 
         #region Command
@@ -101,11 +105,12 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("Rapairs");
             }
         }
+        
         public ICommand CreateNewElement
         {
             get => new DelegateCommand((obj) =>
             {
-                if(!checkNotNull(typeof(string), FullName, StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
+                if(!CheckNotNull(typeof(string), StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
                 {
                     IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(p => p.PhoneNumber == PhoneNumber);
                     if (users.Count() == 0)
@@ -115,9 +120,8 @@ namespace Service_Center.ViewModels
                                         "Нужный пользователь отсутствует",
                                         MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
-                        {
-                            User user = new User { PhoneNumber = this.PhoneNumber };
-                            ViewController view = ViewController.GetInstance;
+                        {                            
+                            ViewManager view = ViewManager.GetInstance;
                             view.OpenMiniWindow(new RegNewUserWind());
                         }
                         else
@@ -129,6 +133,7 @@ namespace Service_Center.ViewModels
                     else if (users.Count() == 1)
                     {
                         addRapair(users.First());
+
                     }
                 }
                 else
@@ -153,7 +158,61 @@ namespace Service_Center.ViewModels
                                 $"Номер телефона: {user.PhoneNumber}");
             });
         }
-       
+        public ICommand Notify
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                if (((Collection<object>)obj).Count > 0)
+                {
+                    Collection<object> objects = (Collection<object>)obj;
+                    List<Rapair> list = objects.Cast<Rapair>().ToList();
+                    List<User> users = new List<User>();
+                    list.ForEach(rapair =>
+                    {
+                        if (rapair.Status == StatusEnum.RepairsPaidFor.ToString())
+                            users.Add(unitOfWork.Users.GetItemList().Where(u => u.UserId == rapair.UserID).First());
+                        else
+                            MessageBox.Show($"Заказ c Id {rapair.RapairID} не готов");
+                    });
+                    foreach(User us in users)
+                    {
+                        SendEmail("Ваше устпройство починено. Пожалуйста, оплатите услуги и заберите своё устройство.", us.Email);
+                    }
+                    MessageBox.Show("Оповещения успешно отправлены");
+                }
+                else
+                    MessageBox.Show("Не выбраны заказы, для уведомления клиентов");
+            });
+        }
+        async void SendEmail(string body, string email)
+        {
+            try
+            {
+                MailAddress from = new MailAddress("ServiceCenterLaptop0@mail.ru", "ServiceCenterLaptop0");
+                MailAddress to = new MailAddress(email);
+                MailMessage m = new MailMessage(from, to)
+                {
+                    Subject = "Service Center",
+                    Body = body,
+                    IsBodyHtml = true
+                };
+                SmtpClient smtp = new SmtpClient("smtp.mail.ru", 587)
+                {
+                    UseDefaultCredentials = false,
+
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential("ServiceCenterLaptop0@mail.ru", "Laptop123")
+                };
+                await smtp.SendMailAsync(m);
+              
+            }
+            catch
+            {
+                MessageBox.Show("Возникла ошибка при отправке сообщения!");
+            }
+        }
+        Rapair rapair = new Rapair();
         void addRapair(User user)
         {
             Rapair rapair = new Rapair
@@ -167,7 +226,15 @@ namespace Service_Center.ViewModels
                 UserID = user.UserId
             };
             unitOfWork.Repairs.AddElemet(rapair);
-            Rapairs.Add(rapair);
+            if (rapair.Status == this.rapair.Status &&
+                rapair.Device == this.rapair.Device &&
+                rapair.Malfunction == this.rapair.Malfunction &&
+                rapair.SerialNumber == this.rapair.SerialNumber &&
+                rapair.SumMoney == this.rapair.SumMoney &&
+                rapair.UserID == this.rapair.UserID)
+                MessageBox.Show("Вы уже добавили такой заказ!");
+            else
+                Rapairs.Add(rapair);
         }
     }
 }

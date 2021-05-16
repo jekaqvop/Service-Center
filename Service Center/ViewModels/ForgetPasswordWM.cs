@@ -88,7 +88,7 @@ namespace Service_Center.ViewModels
                     UnitOfWork unitOfWork = new UnitOfWork();
                     User user = unitOfWork.Users.GetItemList().Where(us => us.Email == email).First();
                     user.Password = GetHash(user);
-                    ViewController view = ViewController.GetInstance;
+                    ViewManager view = ViewManager.GetInstance;
                     view.CloseMiniWindow();
                 }
                 else

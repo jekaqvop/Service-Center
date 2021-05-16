@@ -1,5 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="Helvetica"/>
             <Setter Property="FontWeight" Value="Light"/>
@@ -24,7 +24,7 @@
             </Style.Triggers>        
     </Style>
     <Style x:Key="MinButton"  TargetType="{x:Type Polygon}">
-        <Setter Property="Fill" Value="White"/>
+        <Setter Property="Fill" Value="{DynamicResource WhiteBlackColor}"/>
         <Setter Property="Height" Value="13"/>
         <Setter Property="Width" Value="13"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -78,6 +78,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border BorderBrush="Black" BorderThickness="1" CornerRadius="18">
                     <Grid x:Name="MainRow">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -155,6 +156,7 @@
                             </StackPanel>
                         </Grid>
                     </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="BackgroundBorder" Property="Background"
@@ -167,5 +169,48 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    <Style x:Key="DefaultButton" TargetType="Button" >
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="Foreground" Value="{DynamicResource Button.Foreground}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        Margin="0"
+                        x:Name="Border" 
+                        CornerRadius="0"
+                        BorderThickness="0"
+                        BorderBrush="Black"
+                        Background="{DynamicResource Button.Background}">
+                        <ContentPresenter
+                            Margin="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RecognizesAccessKey="True"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Button.MouseOver.Background}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{DynamicResource Button.Pressed.Background}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Play_Pause" TargetType="Button" >
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding TableRapairVM.OnOffSendNotification}" Value="True">
+                <Setter Property="Content" Value="{materialDesign:PackIcon Kind=Bell}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding TableRapairVM.OnOffSendNotification}" Value="False">
+                <Setter Property="Content" Value="{materialDesign:PackIcon Kind=BellRing}"/>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
