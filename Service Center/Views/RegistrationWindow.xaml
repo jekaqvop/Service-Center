@@ -24,8 +24,8 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" ></RowDefinition>            
-            <RowDefinition Height="480" ></RowDefinition>            
+            <RowDefinition Height="25" />           
+            <RowDefinition Height="480"/>            
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="Transparent" MouseDown="ToolBar_MouseDown">
             <Polygon Fill="White" Opacity="0.2" Points="107,0,115,7,249,7,257,0"/>
@@ -95,7 +95,15 @@
                              materialDesign:HintAssist.Foreground="White"                             
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="White"
-                             Text="{Binding Login}"/>
+                             >
+                        <TextBox.Text>
+                            <Binding Path="Login" >
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Face" 
@@ -108,7 +116,15 @@
                                  materialDesign:HintAssist.Foreground="White"                                 
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                 Text="{Binding FullName}"/>
+                                 >
+                        <TextBox.Text>
+                            <Binding Path="FullName">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Phone" 
@@ -121,7 +137,15 @@
                                  materialDesign:HintAssist.Foreground="White"                                 
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                 Text="{Binding Phone}"/>
+                                   >
+                        <TextBox.Text>
+                            <Binding Path="Phone">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Email"
@@ -135,7 +159,15 @@
                                  materialDesign:HintAssist.Foreground="White"
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
-                                 Text="{Binding Email}"/>
+                                   >
+                        <TextBox.Text>
+                            <Binding Path="Email">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="Lock"                                                  
@@ -149,7 +181,7 @@
                                  materialDesign:TextFieldAssist.UnderlineBrush="White"
                                  Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                  ff:PasswordBoxAssistant.BindPassword="true"  
-                                 ff:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                 ff:PasswordBoxAssistant.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0">
                     <iconPacks:PackIconMaterial Kind="LockCheck"                                                 
@@ -163,7 +195,7 @@
                                      materialDesign:TextFieldAssist.UnderlineBrush="White"
                                      Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                      ff:PasswordBoxAssistant.BindPassword="true"  
-                                     ff:PasswordBoxAssistant.BoundPassword="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                     ff:PasswordBoxAssistant.BoundPassword="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
                 </StackPanel>
                 <Button Style="{StaticResource MaterialDesignRaisedButton}"
                         IsEnabled="{Binding IsButtonEnabled}"
@@ -176,7 +208,7 @@
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center"
                         Margin="0,20,0,0"
-                        Command="{Binding Registration}">                   
+                        Command="{Binding Registration}">
                 </Button>
                 <StackPanel Margin="10,0,0,0" Orientation="Horizontal" x:Name="regErr"  Visibility="Hidden">
                     <iconPacks:PackIconMaterial Kind="Alert"

@@ -77,62 +77,97 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
-            <StackPanel Margin="40,30,30,40">
-                <Label Content="Регистрация" FontSize="25" Foreground="{DynamicResource WhiteBlackColor}"  HorizontalAlignment="Center"/>
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconMaterial Kind="Account" 
+                <StackPanel Margin="40,30,30,40">
+                    <Label Content="Регистрация" FontSize="25" Foreground="{DynamicResource WhiteBlackColor}"  HorizontalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterial Kind="Account" 
                                                 Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                    <TextBox x:Name="RUsername" Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
-                             materialDesign:HintAssist.Hint="Логин"
-                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
-                             materialDesign:HintAssist.IsFloating="True"
-                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
-                             Text="{Binding Login}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0">
-                    <iconPacks:PackIconMaterial Kind="Face" 
-                                                Foreground="{DynamicResource WhiteBlackColor}"
-                                                VerticalAlignment="Bottom"
-                                                HorizontalAlignment="Center"                                             
-                                                Margin="23,0,5,8"/>
-                    <TextBox  Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
+                        <TextBox x:Name="RUsername" Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" 
+                                 BorderBrush="{DynamicResource WhiteBlackColor}" 
+                                 materialDesign:HintAssist.Hint="Логин"
+                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
+                                 materialDesign:HintAssist.IsFloating="True"
+                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
+                                 >
+                            <TextBox.Text>
+                                <Binding Path="Login" >
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <iconPacks:PackIconMaterial Kind="Face" 
+                                                    Foreground="{DynamicResource WhiteBlackColor}"
+                                                    VerticalAlignment="Bottom"
+                                                    HorizontalAlignment="Center"                                             
+                                                    Margin="23,0,5,8"/>
+                        <TextBox  Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
                                  materialDesign:HintAssist.Hint="ФИО"
                                  materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                                 
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
-                                 Text="{Binding FullName}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0">
-                    <iconPacks:PackIconMaterial Kind="Phone" 
+                                 >
+                            <TextBox.Text>
+                                <Binding Path="FullName">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <iconPacks:PackIconMaterial Kind="Phone" 
                                                 Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                             
                                                 Margin="23,0,5,8"/>
-                    <TextBox  Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
-                                 materialDesign:HintAssist.Hint="Номер телефона"
-                                 materialDesign:HintAssist.Foreground="White"                                 
-                                 materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
-                                 Text="{Binding Phone}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0">
-                    <iconPacks:PackIconMaterial Kind="Email"
+                        <TextBox  Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18"
+                                  BorderBrush="{DynamicResource WhiteBlackColor}" 
+                                  materialDesign:HintAssist.Hint="Номер телефона"
+                                  materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                                 
+                                  materialDesign:HintAssist.IsFloating="True"
+                                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
+                                   >
+                            <TextBox.Text>
+                                <Binding Path="Phone">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <iconPacks:PackIconMaterial Kind="Email"
                                                 Foreground="{DynamicResource WhiteBlackColor}"
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                    <TextBox x:Name="Email" Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" Margin="0,0,0,0"
-                                 
+                        <TextBox x:Name="Email" Width="210" Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" 
+                                 BorderBrush="{DynamicResource WhiteBlackColor}" Margin="0,0,0,0"
                                  materialDesign:HintAssist.Hint="Электронная почта"
                                  materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                                  materialDesign:HintAssist.IsFloating="True"
                                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
-                                 Text="{Binding Email}"/>
-                </StackPanel>               
-                <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                   >
+                            <TextBox.Text>
+                                <Binding Path="Email">
+                                    <Binding.ValidationRules>
+                                        <DataErrorValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                    </StackPanel>
+                    <Button Style="{StaticResource MaterialDesignRaisedButton}"
                         Height="40" Width="220"
                         BorderThickness="2"
                         BorderBrush="#FF11379C"                            
@@ -144,17 +179,9 @@
                         Margin="0,20,0,0"
                         IsEnabled="{Binding IsButtonEnabled}"
                         Command="{Binding Registration}">
-                </Button>
-                <StackPanel Margin="10,0,0,0" Orientation="Horizontal" x:Name="regErr"  Visibility="Hidden">
-                    <iconPacks:PackIconMaterial Kind="Alert"
-                                                   VerticalAlignment="Center"
-                                                   HorizontalAlignment="Center"
-                                                   Foreground="Red"
-                                                   Margin="20,0,10,0"/>
-                    <TextBlock Margin="0,5,0,0" TextWrapping="Wrap" Text="Логин или адрес электронной почты занят" FontSize="16" Foreground="Red" Width="172"/>
+                    </Button>                  
                 </StackPanel>
-            </StackPanel>
-        </Grid>            
+            </Grid>            
     </Grid>
     </Border>
 </Window>

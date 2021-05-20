@@ -49,5 +49,11 @@ namespace Service_Center.Resources
                 }
             return false;
         }
+        #region IDataErrorInfo
+        protected Dictionary<string, string> ValidationErrors = new Dictionary<string, string>();
+        public string Error => throw new NotImplementedException();
+        public string this[string columnName] => ValidationErrors.ContainsKey(columnName) ? ValidationErrors[columnName] : null;
+        protected bool IsValid(object obj) => ValidationErrors.Values.All(x => x == null);
+        #endregion
     }
 }

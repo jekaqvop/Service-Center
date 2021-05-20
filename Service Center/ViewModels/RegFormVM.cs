@@ -37,21 +37,19 @@ namespace Service_Center.ViewModels
             {
                 if (Regex.IsMatch(value, patternLog, RegexOptions.IgnoreCase))
                 {
-                   
+
                     if (!CheckedLogin(value))
-                    {
-                        MessageBox.Show("Такой Login уже зарегестрирован!");
-                        IsButtonEnabled = false;                        
-                    }
+                        ValidationErrors["Login"] = "Такой Login уже зарегестрирован";
                     else
                     {
                         user.Login = value;
-                        IsButtonEnabled = true;
+                        ValidationErrors["Login"] = null;
                     }
                 }
                 else
-                    MessageBox.Show("Логин может содержать только буквы и цифры латинского алфавита / The login can only include letters and numbers of the Latin alphabet");
-                OnPropertyChanged("IsButtonEnabled");
+                {
+                    ValidationErrors["Login"] = "Логин может содержать только буквы и цифры латинского алфавита";
+                }
                 OnPropertyChanged("Login");
             }
         }
@@ -67,21 +65,30 @@ namespace Service_Center.ViewModels
         [Required(ErrorMessage = "Password is required")]
         public string Password
         {
-            get => user.Password; 
+            get => user.Password;
             set
             {
+                if (Regex.IsMatch(value, patternPass, RegexOptions.None))
+                    ValidationErrors["Password"] = null;
+                else
+                    ValidationErrors["Password"] = "В пароле должна быть минимум одна цифра, одна буква, большая буква и любой знак, который не цифра и не буква, максимальная длина пароля 16 символов, минимальная 8.";
                 user.Password = value;
                 OnPropertyChanged("Password");
             }
         }
-        string repeatPassword;
+        string _repeatPassword = "";
         public string RepeatPassword
         {
-            get => repeatPassword; 
+            get => _repeatPassword;
             set
-            {               
-                repeatPassword = value;                
-                OnPropertyChanged("RepeatPassword");
+            {
+                if (user.Password != value)
+                {
+                    ValidationErrors["RepeatPassword"] = "Пароли не совпадают!";
+                }
+                else
+                    ValidationErrors["RepeatPassword"] = null;
+                _repeatPassword = value;
             }
         }
         string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
@@ -90,27 +97,20 @@ namespace Service_Center.ViewModels
         [EmailAddress]
         public string Email
         {
-            get => user.Email; 
+            get => user.Email;
             set
             {
                 if (Regex.IsMatch(value, patternEmail, RegexOptions.IgnoreCase))
-                {                    
+                {
                     if (!CheckedEmail(value))
-                    {
-                        MessageBox.Show("Такой email уже зарегестрирован!");
-                        IsButtonEnabled = false;
-                    }
+                        ValidationErrors["Email"] = "Такой email уже используется!";
                     else
-                    {
-                        user.Email = value;
-                        IsButtonEnabled = true;
-                    }
-                       
-                }                  
+                        ValidationErrors["Email"] = null;
+                }
                 else
-                    MessageBox.Show("Проверьте правильнность ввода email / Check the input format email");
+                    ValidationErrors["Email"] = "Проверьте правильнность ввода email / Check the input format email";
+                user.Email = value;
                 OnPropertyChanged("Email");
-                OnPropertyChanged("IsButtonEnabled");
             }
         }
         bool CheckedEmail(string email)
@@ -125,13 +125,17 @@ namespace Service_Center.ViewModels
         [Required(ErrorMessage = "Full Name is required")]
         public string FullName
         {
-            get => user.FullName; 
+            get => user.FullName;
             set
             {
                 if (Regex.IsMatch(value, patternName, RegexOptions.None))
+                {
                     user.FullName = value;
+                    ValidationErrors["FullName"] = null;
+                }
+
                 else
-                    MessageBox.Show("Используйте русский или английский алфавит для ввода ФИО / Use the Russian or English alphabet to enter a Full name");
+                    ValidationErrors["FullName"] = "Все первые буквы должны быть заглавными. Строка не должна содержать цифр. В конце не должно быть пробела.";
                 OnPropertyChanged("LastName");
             }
         }
@@ -147,24 +151,23 @@ namespace Service_Center.ViewModels
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
         {
-            get => user.PhoneNumber; 
+            get => user.PhoneNumber;
             set
             {
                 if (Regex.IsMatch(value, patternPhone, RegexOptions.IgnoreCase))
                 {
                     if (!CheckedPhone(value))
                     {
-                        MessageBox.Show("Такой номер телефона уже зарегестрирован!");
-                        IsButtonEnabled = false;
+                        ValidationErrors["Phone"] = "Такой номер уже используется!";
                     }
                     else
                     {
-                        IsButtonEnabled = true;
-                        user.PhoneNumber = value;   
-                    }    
-                }                   
+                        ValidationErrors["Phone"] = null;
+                        user.PhoneNumber = value;
+                    }
+                }
                 else
-                    MessageBox.Show("Введен неверный формат телефона / The number must be in the format +xxx-xx-xxx-xx-xx");
+                    ValidationErrors["Phone"] = "Введен неверный формат телефона / The number must be in the format +xxx-xx-xxx-xx-xx";
                 OnPropertyChanged("Phone");
             }
         }
@@ -176,47 +179,35 @@ namespace Service_Center.ViewModels
         }
         public ICommand Registration
         {
-            get => new DelegateCommand((obj) =>
+            get => new DelegateCommand(_addNewUser, IsValid);
+        }
+        void _addNewUser(object obj)
+        {
+            ViewManager view = ViewManager.GetInstance;
+            if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null)
             {
-                ViewManager view = ViewManager.GetInstance;
-                if (user.Login != null && user.FullName != null && user.PhoneNumber != null && user.Email != null && user.Password != null && RepeatPassword != null)
+                user.Password = GetHash(user.Password);
+                UnitOfWork unitOfWork = new UnitOfWork();
+                unitOfWork.Users.AddElemet(user);
+                unitOfWork.Save();
+                view.User = this.user;
+                switch (user.Role)
                 {
-                    
-                    if (Regex.IsMatch(Password, patternPass, RegexOptions.None))
-                    {
-                        if(user.Password == repeatPassword)
-                        {
-                            user.Password = GetHash(user.Password);
-                            UnitOfWork unitOfWork = new UnitOfWork();
-                            unitOfWork.Users.AddElemet(user);
-                            unitOfWork.Save();
-                            view.User = this.user;
-                                switch (user.Role)
-                                {
-                                    case true:                                      
-                                        view.CloseAndShow(new AdminWindow());
-                                        break;
-                                    case false:
-                                        view.CloseAndShow(new UserWindow());
-                                        break;
-                                    default:
-                                    MessageBox.Show("Не удалось определить профиль пользователя!");
-                                        break;
-                                }                            
-                        }
-                        else
-                        {
-                            MessageBox.Show("Пароли не совпадают / Passwords don't match ");
-                        }
-                    }
-                    else
-                        MessageBox.Show("В пароле должна быть минимум одна цифра, одна буква, большая буква и любой знак, который не цифра и не буква, максимальная длина пароля 16 символов, минимальная 8.");
+                    case true:
+                        view.CloseAndShow(new AdminWindow());
+                        break;
+                    case false:
+                        view.CloseAndShow(new UserWindow());
+                        break;
+                    default:
+                        MessageBox.Show("Не удалось определить профиль пользователя!");
+                        break;
                 }
-                else
-                {
-                    MessageBox.Show("Заполните все поля!");
-                }   
-            });
+            }
+            else
+            {
+                MessageBox.Show("Заполните все поля!");
+            }
         }
         /// <summary>
         /// Возвращение окна Авторизации

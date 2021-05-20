@@ -26,13 +26,20 @@ namespace Service_Center.ViewModels
 
     class TableRapairVM : PropertysChanged
     {
-
         UnitOfWork unitOfWork;
         //Rapair selectRapair;
+        public ObservableCollection<string> StatusRepairs { get; set; } = new ObservableCollection<string>();
         public Rapair SelectRapair { get; set; }
         public ObservableCollection<string> ServiceTitleList { get; set; }
         public TableRapairVM()
         {
+            StatusRepairs.Add("Ожидание диагностики");
+            StatusRepairs.Add("Ремонт завершён");
+            StatusRepairs.Add("Ожидание оплаты");
+            StatusRepairs.Add("Производится ремонт");
+            StatusRepairs.Add("Заказ оплачен");
+            StatusRepairs.Add("Согласование с клиентом");
+            OnPropertyChanged("StatusRepairs");
             unitOfWork = new UnitOfWork();
             Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
             ServiceTitleList = new ObservableCollection<string>();
@@ -45,7 +52,11 @@ namespace Service_Center.ViewModels
             OnPropertyChanged("CompletedWorks");
         }
         public User Rapair { get; set; }
-        public string StatusNewRapair { get; set; } = "WaitingDiagnosis";
+        public string StatusNewRapair
+        {
+            get;
+            set;
+        } = "Ожидание диагностики";
         string phoneNumber;
         string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
         [Required(ErrorMessage = "Phone is required")]
@@ -113,7 +124,7 @@ namespace Service_Center.ViewModels
             }
         }
         public ObservableCollection<Rapair> rapairs;
-        public ObservableCollection<Rapair> Rapairs { get => rapairs; set => Set<ObservableCollection<Rapair>>(ref rapairs, value); } 
+        public ObservableCollection<Rapair> Rapairs { get => rapairs; set => Set<ObservableCollection<Rapair>>(ref rapairs, value); }
         #region Command
         public ICommand SaveChanges
         {
@@ -154,7 +165,7 @@ namespace Service_Center.ViewModels
                 OnPropertyChanged("ServiceTitleList");
                 CompletedWorks = unitOfWork.Services.GetItemList().Where(p => p.Title == "Нет").First().ServiceId;
                 OnPropertyChanged("CompletedWorks");
-            });        
+            });
         }
         string search = "";
         public string Search
@@ -188,12 +199,12 @@ namespace Service_Center.ViewModels
                     MessageBox.Show("Поисковая строка не должна быть пустой и не превышать длину 25 символов!");
             }
         }
-        
+
         public ICommand CreateNewElement
         {
             get => new DelegateCommand((obj) =>
             {
-                if(!CheckNotNull(typeof(string), StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
+                if (!CheckNotNull(typeof(string), StatusNewRapair, PhoneNumber, Device, Malfunction, SerialNumber))
                 {
                     IEnumerable<User> users = unitOfWork.Users.GetItemList().Where(p => p.PhoneNumber == PhoneNumber);
                     if (users.Count() == 0)
@@ -203,7 +214,7 @@ namespace Service_Center.ViewModels
                                         "Нужный пользователь отсутствует",
                                         MessageBoxButtons.YesNo);
                         if (result == DialogResult.Yes)
-                        {                            
+                        {
                             ViewManager view = ViewManager.GetInstance;
                             view.OpenMiniWindow(new RegNewUserWind());
                         }
@@ -221,7 +232,7 @@ namespace Service_Center.ViewModels
                 else
                 {
                     MessageBox.Show("Заполните все поля!");
-                }               
+                }
             });
         }
         /// <summary>
@@ -262,12 +273,12 @@ namespace Service_Center.ViewModels
                     List<User> users = new List<User>();
                     list.ForEach(rapair =>
                     {
-                        if (rapair.Status == StatusEnum.RepairsPaidFor.ToString())
+                        if (rapair.Status == "Ожидание оплаты")
                             users.Add(unitOfWork.Users.GetItemList().Where(u => u.UserId == rapair.UserID).First());
                         else
                             MessageBox.Show($"Заказ c Id {rapair.RapairID} не готов");
                     });
-                    if(users.Count() > 0)
+                    if (users.Count() > 0)
                     {
                         foreach (User us in users)
                         {
@@ -275,7 +286,7 @@ namespace Service_Center.ViewModels
                         }
                         MessageBox.Show("Оповещения успешно отправлены");
                     }
-                   
+
                 }
                 else
                     MessageBox.Show("Не выбраны заказы, для уведомления клиентов");
@@ -302,7 +313,7 @@ namespace Service_Center.ViewModels
                     Credentials = new NetworkCredential("ServiceCenterLaptop0@mail.ru", "Laptop123")
                 };
                 await smtp.SendMailAsync(m);
-              
+
             }
             catch
             {

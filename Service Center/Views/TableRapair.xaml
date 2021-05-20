@@ -13,15 +13,15 @@
     <UserControl.DataContext >
         <vm:TableRapairVM/>
     </UserControl.DataContext>
-    
+
     <UserControl.Resources>
-     
+
         <ResourceDictionary>
             <ObjectDataProvider x:Key="myEnum" MethodName="GetValues" ObjectType="{x:Type convertors:StatusEnum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type Type="convertors:StatusEnum"/>
                 </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>            
+            </ObjectDataProvider>
             <convertors:StatusRapair x:Key="StatusRapair"/>
             <convertors:IdConvertToTitle x:Key="IdToTitle"/>
             <convertors:DecimalToString x:Key="DecimalToString"/>
@@ -40,7 +40,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="341*"/>
                 <ColumnDefinition Width="109*"/>
-            </Grid.ColumnDefinitions>           
+            </Grid.ColumnDefinitions>
         </Grid>
         <Grid Grid.Column="0" Grid.Row="0" Width="auto" Height="auto">
             <Grid.ColumnDefinitions>
@@ -60,7 +60,7 @@
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Foreground" Value="{DynamicResource WhiteBlackColor}" />
-                        
+
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
@@ -75,15 +75,20 @@
                             <DataTemplate>
 
                                 <ComboBox ItemsSource="{Binding Path=DataContext.ServiceTitleList, RelativeSource={RelativeSource AncestorType={x:Type local:TableRapair}}}" 
-                                          SelectedItem="{Binding CompletedWorks, Converter={StaticResource IdToTitle}}" 
-                                          
+                                          SelectedItem="{Binding CompletedWorks, Converter={StaticResource IdToTitle}}"                                           
                                           />
                             </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>          
+                        </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridComboBoxColumn Header="Статус" 
-                                            SelectedValueBinding="{Binding Status, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                            ItemsSource="{Binding Source={StaticResource myEnum}}" />
+                    <DataGridTemplateColumn Header="Статус">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding Path=DataContext.StatusRepairs, RelativeSource={RelativeSource AncestorType={x:Type local:TableRapair}}}" 
+                                          SelectedItem="{Binding Status, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"                                           
+                                          />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="Сумма" Binding="{Binding SumMoney, Converter={StaticResource DecimalToString}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Header="Дата приёма" Binding="{Binding DateOfRaceipt}" IsReadOnly="True"/>
                 </DataGrid.Columns>
@@ -97,7 +102,7 @@
                            FontSize="30"
                            HorizontalAlignment="Center">
                     </TextBlock>
-               
+
 
                     <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
                             Height="50"
@@ -188,7 +193,7 @@
                                   SelectedItem="{Binding CompletedWorks, Converter={StaticResource IdToTitle}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   ItemsSource="{Binding ServiceTitleList}"
                                   VerticalAlignment="Bottom"/>
-                       
+
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
@@ -206,16 +211,16 @@
                                   materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                                   materialDesign:HintAssist.IsFloating="True"
                                   materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"                                  
-                                  SelectedItem="{Binding StatusNewRapair, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  SelectedItem="{Binding StatusNewRapair, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   
-                                  ItemsSource="{Binding Source={StaticResource myEnum}}"
+                                  ItemsSource="{Binding StatusRepairs}"
                                   VerticalAlignment="Bottom"/>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
-        </Grid>      
+        </Grid>
         <Grid Grid.Row="1" Grid.Column="0">
-            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">               
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center">
                 <Button Width="90" Height="90"
                         Padding="0"
                     HorizontalAlignment="Left"
@@ -296,7 +301,7 @@
                         BorderBrush="Transparent"
                         ToolTip="Уведомить выбранных клиентов о завершении заказа."
                         Command="{Binding Notify}"
-                        CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">                    
+                        CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Bell" 
                                                     Foreground="{DynamicResource WhiteBlackColor}"

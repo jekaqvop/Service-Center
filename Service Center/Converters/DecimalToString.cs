@@ -16,20 +16,23 @@ namespace Service_Center.Converters
         {
             return value.ToString();
         }
-        string patternDecimal = @"^(1-9\.]{1,50})$";
+        string patternDecimal = @"^([0-9\.]{1,50})$";
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
 
-            if (Regex.IsMatch(value.ToString(), patternDecimal, RegexOptions.None))
-                if ((decimal)value > 999999 && (decimal)value < 0)
+            if (Regex.IsMatch(value.ToString(), patternDecimal, RegexOptions.IgnoreCase))
+            {
+                decimal obj = System.Convert.ToDecimal(value);
+                if (obj < 999999 && obj >= 0)
                 {
-                    return (decimal)value;
+                    return obj;
                 }
                 else
-                    MessageBox.Show("Цена не должна быть меньше нуля и больше 99999");
+                    MessageBox.Show("Цена не должна быть меньше 99999 и больше нуля");
+            }              
              else
                 MessageBox.Show("В цене должны быть только цифры!");
-            return -1;
+            return 0;
         }
     }
 }
