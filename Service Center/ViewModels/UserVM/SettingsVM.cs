@@ -18,14 +18,14 @@ namespace Service_Center.ViewModels.UserVM
     class SettingsVM : PropertysChanged
     {
         User user;
-        ThemeAndLang themeAndLang = ThemeAndLang.GetInstance;
+        Themes Themes = Themes.GetInstance;
         UnitOfWork unitOfWork = new UnitOfWork();
         public SettingsVM()
         {
             ViewManager view = ViewManager.GetInstance;
             user = unitOfWork.Users.GetItem(view.User.UserId);           
         }        
-        public bool IsTheme { get => themeAndLang.LightTheme; set { themeAndLang.LightTheme = value; OnPropertyChanged("IsTheme"); } }
+        public bool IsTheme { get => Themes.Theme; set { Themes.Theme = value; OnPropertyChanged("IsTheme"); } }
        
         public bool IsButtonEnabled { get; set; } = true;
         string patternLog = @"([A-Za-z1-9]{4,25})";
@@ -77,8 +77,7 @@ namespace Service_Center.ViewModels.UserVM
             get => oldPassword;
             set => Set(ref oldPassword, GetHash(value));
         }
-        string patternEmail = @"^(?("")(""[^""]+?""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-               @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9]{2,17}))$";
+        string patternEmail = @"^[^@\s]{1,25}@[^@\s]{1,10}\.[^@\s]{1,10}$";
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
         public string Email
@@ -86,7 +85,7 @@ namespace Service_Center.ViewModels.UserVM
             get => user.Email;
             set
             {
-                if (Regex.IsMatch(value, patternEmail, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(value, patternEmail, RegexOptions.None))
                 {
                     
                     if (!CheckedEmail(value))
@@ -125,7 +124,7 @@ namespace Service_Center.ViewModels.UserVM
                 if (Regex.IsMatch(value, patternName, RegexOptions.None))                   
                         user.FullName = value;
                 else
-                    MessageBox.Show("Используйте русский или английский алфавит для ввода ФИО / Use the Russian or English alphabet to enter a Full name");
+                    MessageBox.Show("Используйте русский или английский алфавит для ввода ФИО,\nкотопрое должно содержать 2 пробела и каждое слово должно быть с большой буквы.");
                 OnPropertyChanged("LastName");
             }
         }

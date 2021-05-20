@@ -1,5 +1,6 @@
 ﻿using Service_Center.Contexts;
 using Service_Center.Models;
+using Service_Center.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,23 +9,20 @@ using System.Threading.Tasks;
 
 namespace Service_Center.Repository
 {
-    class UserRepository : IRepository<User>
+    class ThemesRepository : IRepository<Themes>
     {
         readonly Context context;
-        public UserRepository(Context context) => this.context = context;
-        public UserRepository() => this.context = new Context();
+        public ThemesRepository(Context context) => this.context = context;
+        public ThemesRepository() => this.context = new Context();
         /// <summary>
         /// Добавляет элемент в context
         /// Используйте метод Save для сохранения в бд
         /// </summary>
         /// <param name="item"></param>
-        public void AddElemet(User item)
+        public void AddElemet(Themes item)
         {
             if (item != null)
-            {
-                context.Users.Add(item);
-                //context.Themes.Add(new ViewModels.Themes { LightTheme = false });
-            }                
+                context.Themes.Add(item);
         }
         /// <summary>
         /// Удаление элемента по первичному ключу
@@ -32,42 +30,42 @@ namespace Service_Center.Repository
         /// <param name="id"></param> 
         public void Delete(int id)
         {
-            User User = context.Users.Find(id);
-            if (User != null)
-                context.Users.Remove(User);
+            Themes Theme = context.Themes.Find(id);
+            if (Theme != null)
+                context.Themes.Remove(Theme);
         }
         /// <summary>
         /// Получает элемент по первичному ключу
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public User GetItem(int id)
+        public Themes GetItem(int id)
         {
-            return context.Users.Find(id);
+            return context.Themes.Find(id);
         }
         /// <summary>
-        /// Получить весь список элементов
+        /// Получить весь список
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<User> GetItemList()
+        public IEnumerable<Themes> GetItemList()
         {
-            return context.Users.ToArray();
+            return context.Themes.ToArray();
         }
         /// <summary>
         /// Обновляет состояние объекта Entity
         /// </summary>
         /// <param name="item"></param>
-        public void Update(User item)
+        public void Update(Themes item)
         {
             context.Entry(item).State = System.Data.Entity.EntityState.Modified;
         }
         /// <summary>
-        /// Возвращает первый элемент коллекции
+        /// Получение первого элемента
         /// </summary>
         /// <returns></returns>
-        public User GetFirstItem()
+        public Themes GetFirstItem()
         {
-            return context.Users.First();
+            return context.Themes.First();
         }
     }
 }

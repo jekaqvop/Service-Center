@@ -36,8 +36,14 @@
                     <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
                     <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}"/>
                     <DataGridTextColumn Header="Электронная почта" Binding="{Binding Email}"/>
-                    <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}"/>
-                    <DataGridTextColumn Header="Роль" Binding="{Binding Role}"/>
+                    <DataGridTextColumn Header="Номер телефона" Binding="{Binding PhoneNumber}"/>                    
+                    <DataGridTemplateColumn Header="Админ">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Role}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>  
@@ -89,7 +95,7 @@
                         BorderBrush="Transparent"
                         Command="{Binding DeleteRows}" 
                         ToolTip="Удалить выбранных клиентов"
-                        CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">
+                        CommandParameter="{Binding SelectedItems, ElementName=UsersGrid}">
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Delete" 
                                                     Foreground="{DynamicResource WhiteBlackColor}"
@@ -99,7 +105,7 @@
                                                     Width="60"/>
                     </Button.Content>
                 </Button>
-                <Button Width="90" Height="90" 
+                    <Button Width="90" Height="90" 
                         Padding="0"
                         Margin="90,0,0,0"
                         HorizontalAlignment="Left"
@@ -107,8 +113,8 @@
                         BorderBrush="Transparent"
                         ToolTip="Показать заказы клиента"
                         Command="{Binding ShowFullInfo}" 
-                        >
-                    <Button.Content>
+                        CommandParameter="{Binding SelectedItems, ElementName=UsersGrid}">
+                        <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Information" 
                                                     Foreground="{DynamicResource WhiteBlackColor}"
                                                     VerticalAlignment="Bottom"
@@ -123,7 +129,7 @@
                         HorizontalAlignment="Left"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Command="{Binding ShowFullInfo}" 
+                        Command="{Binding CreateNewUser}" 
                         >
                         <Button.Content>
                             <iconPacks:PackIconMaterial Kind="PlusBox" 

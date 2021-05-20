@@ -112,7 +112,7 @@
                              materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
                              materialDesign:HintAssist.IsFloating="True"
                              materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
-                             Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             Text="{Binding Path=Title}"
                              TextChanged="TitleBox_TextChanged" />
                 <TextBox HorizontalAlignment="Center" x:Name="InfoBox" Width="210"  FontSize="18" Margin="0,0,0,0"
                              materialDesign:HintAssist.Hint="{DynamicResource m_from}"

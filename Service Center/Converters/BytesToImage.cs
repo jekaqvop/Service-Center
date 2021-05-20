@@ -22,8 +22,7 @@ namespace Service_Center.Converters
         {
             Image image = (Image)value;
             MemoryStream ms = new MemoryStream();
-            image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-            byte[] bytes = ms.ToArray();
+            image.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);           
             return ms.ToArray();
         }
         private BitmapImage LoadImage(byte[] imageData)

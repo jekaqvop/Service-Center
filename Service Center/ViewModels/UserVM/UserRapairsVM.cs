@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Rapair_Center.ViewModels.UserVM
@@ -88,7 +89,15 @@ namespace Rapair_Center.ViewModels.UserVM
                 sortRapairsList();
                 return sortTitle;
             }
-            set => sortTitle = value;
+            set
+            {
+                if (value != null && value.Length < 25)
+                {
+                    sortTitle = value;
+                }
+                else
+                    MessageBox.Show("Поисковая строка не должна быть пустой и не превышать длину 25 символов!");
+            }
         }
         public string SortPrice
         {

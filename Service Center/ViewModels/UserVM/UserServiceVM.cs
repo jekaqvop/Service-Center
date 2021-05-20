@@ -164,7 +164,15 @@ namespace Service_Center.ViewModels.UserVM
                 sortServicesList();
                 return searchTitle;
             }
-            set => searchTitle = value;
+            set
+            {
+                if (value != null && value.Length < 25)
+                {
+                    searchTitle = value;
+                }
+                else
+                    MessageBox.Show("Поисковая строка не должна быть пустой и не превышать длину 25 символов!");
+            }
         }
         #endregion
         string getSortParam()
@@ -181,19 +189,19 @@ namespace Service_Center.ViewModels.UserVM
             switch (getSortParam())
             {
                 case "TASC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderBy(p => p.Title));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle) && p.Title != "Нет").OrderBy(p => p.Title));
                     break;
                 case "PASC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderBy(p => p.Price));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle) && p.Title != "Нет").OrderBy(p => p.Price));
                     break;
                 case "TDESC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderByDescending(p => p.Title));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle) && p.Title != "Нет").OrderByDescending(p => p.Title));
                     break;
                 case "PDESC":
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)).OrderByDescending(p => p.Price));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle) && p.Title != "Нет").OrderByDescending(p => p.Price));
                     break;
                 default:
-                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle)));
+                    ServicesList = new ObservableCollection<Service>(unitOfWork.Services.GetItemList().Where(p => p.Price >= price0 && p.Price <= price1 && (p.Title + p.Info + p.Price).Contains(searchTitle) && p.Title != "Нет"));
                     break;
             }           
         }
@@ -230,7 +238,7 @@ namespace Service_Center.ViewModels.UserVM
                         SerialNumber = this.SerialNumber,
                         Device = this.Device,
                         SumMoney = SelectService.Price,
-                        Malfunction = SelectService.Title,
+                        CompletedWorks = SelectService.ServiceId,
                         DateOfRaceipt = DateTime.Now,
                         Status = StatusEnum.WaitingDiagnosis.ToString()
                     };

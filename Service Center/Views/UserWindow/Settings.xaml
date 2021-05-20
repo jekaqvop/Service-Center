@@ -126,7 +126,7 @@
                                                 VerticalAlignment="Bottom"
                                                 HorizontalAlignment="Center"                                               
                                                 Margin="23,0,5,8"/>
-                        <TextBox materialDesign:HintAssist.Hint="ФИО"
+                        <TextBox materialDesign:HintAssist.Hint="Фамилия Имя Отчество"
                                  Width="400" Foreground="{DynamicResource WhiteBlackColor}" 
                                  FontSize="30" BorderBrush="{DynamicResource WhiteBlackColor}"
                                  Margin="0,20,0,3"

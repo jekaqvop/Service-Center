@@ -107,17 +107,19 @@ namespace Service_Center.ViewModels
             {
                 return new DelegateCommand((obj) =>
                 {
-                    try
-                    {
-                        OpasityProgressBar = 1;
-                        
+                    //try
+                    //{
+                        if (!CheckNotNull(typeof(string), Login, Password))
+                        {
+                            OpasityProgressBar = 1;
+
                             UnitOfWork unit = new UnitOfWork();
-                            
+
                             User user = null;
 
                             IEnumerable<User> users = from User in unit.Users.GetItemList()
-                                                     where User.Login.ToUpper() == login.ToUpper()
-                                                     select User;
+                                                      where User.Login.ToUpper() == login.ToUpper()
+                                                      select User;
                             int io = users.Count();
                             if (io == 1)
                             {
@@ -133,17 +135,17 @@ namespace Service_Center.ViewModels
                                     view.User = user;
                                     switch (user.Role)
                                     {
-                                        case true:                                            
-                                            view.CloseAndShow(new AdminWindow());                                            
+                                        case true:
+                                            view.CloseAndShow(new AdminWindow());
                                             break;
                                         case false:
-                                            view.CloseAndShow(new UserWindow());                                           
+                                            view.CloseAndShow(new UserWindow());
                                             break;
                                         default:
                                             MessageBox.Show("Ошибка авторизации!\nПользователь не опознан!\nНеизвесно: администратор или пользователь!");
                                             break;
                                     }
-                                    
+
                                 }
                                 else
                                 {
@@ -160,12 +162,14 @@ namespace Service_Center.ViewModels
                                 OnPropertyChanged("OpasityProgressBar");
                                 OnPropertyChanged("OpacityBadPassword");
                             }
-                        
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Ошибка подключения или неполадки сервера");
-                    }                       
+                        }
+                        else
+                            MessageBox.Show("Заполните все поля!");
+                    //}
+                    //catch
+                    //{
+                    //    MessageBox.Show("Ошибка подключения или неполадки сервера");
+                    //}                       
                 });
             }
         }

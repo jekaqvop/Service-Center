@@ -6,6 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:Service_Center.ViewModels" 
+             xmlns:local="clr-namespace:Service_Center.Views"
              xmlns:convertors="clr-namespace:Service_Center.Converters" 
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1250">
@@ -22,6 +23,8 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>            
             <convertors:StatusRapair x:Key="StatusRapair"/>
+            <convertors:IdConvertToTitle x:Key="IdToTitle"/>
+            <convertors:DecimalToString x:Key="DecimalToString"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -61,28 +64,33 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID заказа"   Binding="{Binding RapairID}" IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style>
-                                
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Header="Устойство" Binding="{Binding Device}"/>
+                    <DataGridTextColumn Header="ID заказа"   Binding="{Binding RapairID}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Модель" Binding="{Binding Device}"/>
                     <DataGridTextColumn Header="Серийный номер" Binding="{Binding SerialNumber}"/>
-                    <DataGridTextColumn Header="Неисправность/Услуга" 
+                    <DataGridTextColumn Header="Неисправность" 
                                         MinWidth="170"
                                         Binding="{Binding Malfunction}"/>
+                    <DataGridTemplateColumn Header="Оказанная услуга">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                                <ComboBox ItemsSource="{Binding Path=DataContext.ServiceTitleList, RelativeSource={RelativeSource AncestorType={x:Type local:TableRapair}}}" 
+                                          SelectedItem="{Binding CompletedWorks, Converter={StaticResource IdToTitle}}" 
+                                          
+                                          />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>          
+                    </DataGridTemplateColumn>
                     <DataGridComboBoxColumn Header="Статус" 
                                             SelectedValueBinding="{Binding Status, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                             ItemsSource="{Binding Source={StaticResource myEnum}}" />
-                    <DataGridTextColumn Header="Сумма" Binding="{Binding SumMoney}"/>
+                    <DataGridTextColumn Header="Сумма" Binding="{Binding SumMoney, Converter={StaticResource DecimalToString}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <DataGridTextColumn Header="Дата приёма" Binding="{Binding DateOfRaceipt}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0" Background="Transparent">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="-30,0,30,0">
                 <StackPanel Margin="30">
                     <TextBlock Text="Добавление заказа"
                            Foreground="{DynamicResource WhiteBlackColor}"
@@ -100,14 +108,13 @@
                                                 HorizontalAlignment="Center"     
                                                 VerticalAlignment="Bottom"
                                                 Margin="23,10,5,0"/>
-                        <TextBox  HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                                 materialDesign:HintAssist.Hint="Номер телефона"
-                                 BorderBrush="{DynamicResource WhiteBlackColor}" 
-                                 Foreground="{DynamicResource WhiteBlackColor}" 
-                                 materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
-                                 materialDesign:HintAssist.IsFloating="True"
-                                 materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
-                                 Text="{Binding Path=PhoneNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        <TextBox  HorizontalAlignment="Center" Width="210"  Margin="0,0,0,0"
+                               Foreground="{DynamicResource WhiteBlackColor}" FontSize="18" BorderBrush="{DynamicResource WhiteBlackColor}" 
+                             materialDesign:HintAssist.Hint="Номер телефона"
+                             materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"                             
+                             materialDesign:HintAssist.IsFloating="True"
+                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"
+                             Text="{Binding PhoneNumber}"
                               />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
@@ -120,7 +127,7 @@
                                                     VerticalAlignment="Bottom"
                                                 Margin="23,10,5,0"/>
                         <TextBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
-                                 materialDesign:HintAssist.Hint="Устройство"
+                                 materialDesign:HintAssist.Hint="Модель"
                                  BorderBrush="{DynamicResource WhiteBlackColor}" 
                                  Foreground="{DynamicResource WhiteBlackColor}" 
                                  materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
@@ -163,6 +170,26 @@
                                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"                             
                                  Text="{Binding Malfunction}"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
+                            Height="50">
+                        <materialDesign:PackIcon Kind="Build" Width="30"
+                                                    Height="30"
+                                                    VerticalAlignment="Bottom"
+                                                    Foreground="{DynamicResource WhiteBlackColor}"                                            
+                                                    HorizontalAlignment="Center"                                             
+                                                    Margin="23,10,5,0"/>
+                        <ComboBox HorizontalAlignment="Center" Width="210"  FontSize="18" Margin="0,0,0,0"
+                                  materialDesign:HintAssist.Hint="Услуга"
+                                  BorderBrush="{DynamicResource WhiteBlackColor}" 
+                                  Foreground="{DynamicResource WhiteBlackColor}" 
+                                  materialDesign:HintAssist.Foreground="{DynamicResource WhiteBlackColor}"
+                                  materialDesign:HintAssist.IsFloating="True"
+                                  materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"                                  
+                                  SelectedItem="{Binding CompletedWorks, Converter={StaticResource IdToTitle}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  ItemsSource="{Binding ServiceTitleList}"
+                                  VerticalAlignment="Bottom"/>
+                       
+                    </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,30,0,0" Width="300"
                             Height="50">
@@ -180,6 +207,7 @@
                                   materialDesign:HintAssist.IsFloating="True"
                                   materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource WhiteBlackColor}"                                  
                                   SelectedItem="{Binding StatusNewRapair, Converter={StaticResource StatusRapair}, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  
                                   ItemsSource="{Binding Source={StaticResource myEnum}}"
                                   VerticalAlignment="Bottom"/>
                     </StackPanel>
@@ -249,7 +277,8 @@
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Command="{Binding ShowFullInfo}" 
-                        ToolTip="Показать информацию о клиенте">
+                        ToolTip="Показать информацию о клиенте"
+                        CommandParameter="{Binding SelectedItems, ElementName=RapairGrid}">
                     <Button.Content>
                         <iconPacks:PackIconMaterial Kind="Information" 
                                                     Foreground="{DynamicResource WhiteBlackColor}"

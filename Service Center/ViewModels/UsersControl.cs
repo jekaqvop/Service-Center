@@ -33,19 +33,24 @@ namespace Service_Center.ViewModels
             get => search;
             set
             {
-                search = value;
-                if (search != "")
+                if (value != null && value.Length < 25)
                 {
-                    ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList().Where(u =>
-                    (u.UserId.ToString() +
-                     u.Login +
-                     u.FullName +
-                     u.PhoneNumber +
-                     u.Email).IndexOf(search) > -1));                   
+                    search = value;
+                    if (search != "")
+                    {
+                        ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList().Where(u =>
+                        (u.UserId.ToString() +
+                         u.Login +
+                         u.FullName +
+                         u.PhoneNumber +
+                         u.Email).IndexOf(search) > -1));
+                    }
+                    else
+                        ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList());
+                    OnPropertyChanged("ListUsers");
                 }
                 else
-                    ListUsers = new ObservableCollection<User>(unitOfWork.Users.GetItemList());
-                OnPropertyChanged("ListUsers");
+                    System.Windows.MessageBox.Show("Поисковая строка не должна быть пустой и не превышать длину 25 символов!");               
             }
         }
         public User User { get; set; }
@@ -109,6 +114,27 @@ namespace Service_Center.ViewModels
             get => new DelegateCommand((obj) =>
             {
                 
+                if (obj != null && ((Collection<object>)obj).Count > 0)
+                {
+                    Collection<object> objects = (Collection<object>)obj;
+                    List<User> list = objects.Cast<User>().ToList();
+                    list.ForEach(user =>
+                    {
+                        IEnumerable<Rapair> rapairs = unitOfWork.Repairs.GetItemList().Where(r => r.UserID == user.UserId);
+                        System.Windows.Forms.MessageBox.Show($"ФИО: {user.FullName}\nId пользователя: {user.UserId}\nКоличество заказов: {rapairs.Count()}");
+                    });
+                }  
+                else
+                    System.Windows.Forms.MessageBox.Show("Не выбраны пользователи элементы!");
+            });
+        }
+        public ICommand CreateNewUser
+        {
+            get => new DelegateCommand((obj) =>
+            {
+                ViewManager viewManager = ViewManager.GetInstance;
+                viewManager.OpenMiniWindow(new RegNewUserWind());
+
             });
         }
     }

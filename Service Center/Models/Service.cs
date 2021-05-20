@@ -15,9 +15,11 @@ namespace Service_Center.Models
     {      
         [Key]
         public int ServiceId { get; set; }
-        public byte[] ImageSourse { get; set; }  
-        public string Title { get; set; }       
-        public string Info { get; set; }        
+        public byte[] ImageSourse { get; set; }              
+        
+        public string Title {  get; set; }
+       
+        public string Info { get; set; }       
         public decimal Price { get; set; }        
     }
 }

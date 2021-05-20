@@ -1,9 +1,11 @@
 ﻿using Service_Center.Contexts;
+using Service_Center.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Service_Center.Repository
 {
@@ -14,6 +16,7 @@ namespace Service_Center.Repository
         ServiceRepository serviceRepository;
         RapairRepository rapairRepository;
         UserRepository userRepository;
+        ThemesRepository ThemesRepository;
         public ServiceRepository Services
         {
             get
@@ -22,7 +25,7 @@ namespace Service_Center.Repository
                     serviceRepository = new ServiceRepository(context);
                 return serviceRepository;
             }
-        }
+        }    
         public UserRepository Users
         {
             get
@@ -41,9 +44,25 @@ namespace Service_Center.Repository
                 return rapairRepository;
             }
         }
+        public ThemesRepository Themes
+        {
+            get
+            {
+                if (ThemesRepository == null)
+                    ThemesRepository = new ThemesRepository(context);
+                return ThemesRepository;
+            }
+        }
         public void Save()
         {
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();
+            }
+            catch
+            {
+                MessageBox.Show("Сохранение не удалось!");
+            }
         }
 
         public virtual void Dispose(bool disposing)

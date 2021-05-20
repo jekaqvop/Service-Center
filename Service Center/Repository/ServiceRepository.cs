@@ -29,9 +29,9 @@ namespace Service_Center.Repository
         /// <param name="id"></param> 
         public void Delete(int id)
         {
-            Service service = context.Services.Find(id);
-            if(service != null)
-                context.Services.Remove(service);
+            //Service service = context.Services.Find(id);
+            //if(service != null)
+            //    context.Services.Remove(service);
         }
         /// <summary>
         /// Получает элемент по первичному ключу
@@ -40,7 +40,8 @@ namespace Service_Center.Repository
         /// <returns></returns>
         public Service GetItem(int id)
         {
-            return context.Services.Find(id);
+            //return context.Services.Find(id);
+            return null;
         }
         /// <summary>
         /// Получить весь список
@@ -48,6 +49,11 @@ namespace Service_Center.Repository
         /// <returns></returns>
         public IEnumerable<Service> GetItemList()
         {
+            if (context.Services.Where(p => p.Title == "Нет").Count() <= 0)
+            {
+                context.Services.Add(new Service { Title = "Нет", Info = "" });
+                context.SaveChanges();
+            }                
             return context.Services.ToArray();
         }
         /// <summary>

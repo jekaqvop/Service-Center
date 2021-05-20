@@ -70,17 +70,17 @@ namespace Service_Center.ViewModels
             get => user.Password; 
             set
             {
-                user.Password = GetHash(value);
+                user.Password = value;
                 OnPropertyChanged("Password");
             }
         }
         string repeatPassword;
         public string RepeatPassword
         {
-            get { return repeatPassword; }
+            get => repeatPassword; 
             set
             {               
-                repeatPassword = GetHash(value);                
+                repeatPassword = value;                
                 OnPropertyChanged("RepeatPassword");
             }
         }
@@ -143,7 +143,7 @@ namespace Service_Center.ViewModels
                 return false;
             return true;
         }
-        public string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
+        string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
         [Required(ErrorMessage = "Phone is required")]
         public string Phone
         {
@@ -186,6 +186,7 @@ namespace Service_Center.ViewModels
                     {
                         if(user.Password == repeatPassword)
                         {
+                            user.Password = GetHash(user.Password);
                             UnitOfWork unitOfWork = new UnitOfWork();
                             unitOfWork.Users.AddElemet(user);
                             unitOfWork.Save();
@@ -196,7 +197,7 @@ namespace Service_Center.ViewModels
                                         view.CloseAndShow(new AdminWindow());
                                         break;
                                     case false:
-                                            view.CloseAndShow(new UserWindow());
+                                        view.CloseAndShow(new UserWindow());
                                         break;
                                     default:
                                     MessageBox.Show("Не удалось определить профиль пользователя!");
@@ -209,11 +210,11 @@ namespace Service_Center.ViewModels
                         }
                     }
                     else
-                        MessageBox.Show("В пароле должна быть минимум одна цифра, одна буква, большая буква и любой знак, который не цифра и не буква, максимальная длина пароля 16 символов.");
+                        MessageBox.Show("В пароле должна быть минимум одна цифра, одна буква, большая буква и любой знак, который не цифра и не буква, максимальная длина пароля 16 символов, минимальная 8.");
                 }
                 else
                 {
-                    MessageBox.Show("Одно из полей не заполнено!");
+                    MessageBox.Show("Заполните все поля!");
                 }   
             });
         }

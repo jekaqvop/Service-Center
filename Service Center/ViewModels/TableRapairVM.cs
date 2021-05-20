@@ -9,11 +9,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -21,27 +23,95 @@ using System.Windows.Input;
 
 namespace Service_Center.ViewModels
 {
-    
+
     class TableRapairVM : PropertysChanged
     {
 
-        UnitOfWork unitOfWork = new UnitOfWork();
+        UnitOfWork unitOfWork;
         //Rapair selectRapair;
         public Rapair SelectRapair { get; set; }
-
+        public ObservableCollection<string> ServiceTitleList { get; set; }
         public TableRapairVM()
         {
-            Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());    
-            SelectRapair = unitOfWork.Repairs.GetFirstItem();
-        }        
+            unitOfWork = new UnitOfWork();
+            Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
+            ServiceTitleList = new ObservableCollection<string>();
+            foreach (Service service in unitOfWork.Services.GetItemList())
+            {
+                ServiceTitleList.Add(service.Title);
+            }
+            OnPropertyChanged("ServiceTitleList");
+            CompletedWorks = unitOfWork.Services.GetItemList().Where(p => p.Title == "Нет").First().ServiceId;
+            OnPropertyChanged("CompletedWorks");
+        }
         public User Rapair { get; set; }
         public string StatusNewRapair { get; set; } = "WaitingDiagnosis";
-        public string FullName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Device { get; set; }
-        public string Malfunction { get; set; }
-        public string SerialNumber { get; set; }
-        public bool OnOffSendNotification { get; set; }
+        string phoneNumber;
+        string patternPhone = @"(?:\+375|80)\s?\(?\d\d\)?\s?\d\d(?:\d[\-\s]\d\d[\-\s]\d\d|[\-\s]\d\d[\-\s]\d\d\d|\d{5})";
+        [Required(ErrorMessage = "Phone is required")]
+        public string PhoneNumber
+        {
+            get => phoneNumber;
+            set
+            {
+                if (Regex.IsMatch(value, patternPhone, RegexOptions.IgnoreCase))
+                {
+                    phoneNumber = value;
+                }
+                else
+                    MessageBox.Show("Введен неверный формат телефона / The number must be in the format +xxx-xx-xxx-xx-xx");
+                OnPropertyChanged("Phone");
+            }
+        }
+        string patternDevice = @"^([A-Za-zА-Яа-я1-9\s-]{1,25})$";
+        string dervice;
+        public string Device
+        {
+            get => dervice;
+            set
+            {
+                if (Regex.IsMatch(value, patternDevice, RegexOptions.None))
+                {
+                    dervice = value;
+                }
+                else
+                    MessageBox.Show("В марке устройства могут содержаться только буквы.\nКоличество симовлов от 1 до 25.");
+                OnPropertyChanged("Device");
+            }
+        }
+        string patternMalfunction = @"^([A-Za-zА-Яа-я1-9\s-]{1,50})$";
+        string malfunction;
+        public string Malfunction
+        {
+            get => malfunction;
+            set
+            {
+                if (Regex.IsMatch(value, patternMalfunction, RegexOptions.IgnoreCase))
+                {
+                    malfunction = value;
+                }
+                else
+                    MessageBox.Show("В строке неисправность могут содержаться только буквы. Длина строки от 1 до 50 символов.");
+                OnPropertyChanged("Malfunction");
+            }
+        }
+        public int CompletedWorks { get; set; }
+        string patternSerialNumber = @"^([A-Za-zА-Я1-9]{4,25})$";
+        string serialNumber;
+        public string SerialNumber
+        {
+            get => serialNumber;
+            set
+            {
+                if (Regex.IsMatch(value, patternSerialNumber, RegexOptions.IgnoreCase))
+                {
+                    serialNumber = value;
+                }
+                else
+                    MessageBox.Show("В серийном номре устройства могут содержаться только буквы и цифры.\nКоличество символов от 4 до 25.");
+                OnPropertyChanged("Device");
+            }
+        }
         public ObservableCollection<Rapair> rapairs;
         public ObservableCollection<Rapair> Rapairs { get => rapairs; set => Set<ObservableCollection<Rapair>>(ref rapairs, value); } 
         #region Command
@@ -76,6 +146,14 @@ namespace Service_Center.ViewModels
             get => new DelegateCommand((obj) =>
             {
                 Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
+                ServiceTitleList = new ObservableCollection<string>();
+                foreach (Service service in unitOfWork.Services.GetItemList())
+                {
+                    ServiceTitleList.Add(service.Title);
+                }
+                OnPropertyChanged("ServiceTitleList");
+                CompletedWorks = unitOfWork.Services.GetItemList().Where(p => p.Title == "Нет").First().ServiceId;
+                OnPropertyChanged("CompletedWorks");
             });        
         }
         string search = "";
@@ -84,25 +162,30 @@ namespace Service_Center.ViewModels
             get => search;
             set
             {
-                search = value;
-                if (search != "")
-                {                    
-                    Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList().Where(r => 
-                    (r.RapairID.ToString() + 
-                     r.Device +
-                     r.Malfunction +
-                     r.SerialNumber + 
-                     r.Status + 
-                     r.SumMoney.ToString() + 
-                     r.DateOfRaceipt.ToString()).IndexOf(search) > -1));                  
-                    SelectRapair = Rapairs.Count > 0 ? Rapairs.First() : null;
+                if (value != null && value.Length < 25)
+                {
+                    search = value;
+                    if (search != "")
+                    {
+                        Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList().Where(r =>
+                        (r.RapairID.ToString() +
+                         r.Device +
+                         r.Malfunction +
+                         r.SerialNumber +
+                         r.Status +
+                         r.SumMoney.ToString() +
+                         r.DateOfRaceipt.ToString()).IndexOf(search) > -1));
+                        SelectRapair = Rapairs.Count > 0 ? Rapairs.First() : null;
+                    }
+                    else
+                    {
+                        Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
+                        SelectRapair = unitOfWork.Repairs.GetFirstItem();
+                    }
+                    OnPropertyChanged("Rapairs");
                 }
                 else
-                {
-                    Rapairs = new ObservableCollection<Rapair>(unitOfWork.Repairs.GetItemList());
-                    SelectRapair = unitOfWork.Repairs.GetFirstItem();
-                }
-                OnPropertyChanged("Rapairs");
+                    MessageBox.Show("Поисковая строка не должна быть пустой и не превышать длину 25 символов!");
             }
         }
         
@@ -133,7 +216,6 @@ namespace Service_Center.ViewModels
                     else if (users.Count() == 1)
                     {
                         addRapair(users.First());
-
                     }
                 }
                 else
@@ -149,20 +231,31 @@ namespace Service_Center.ViewModels
         {
             get => new DelegateCommand((obj) =>
             {
-                User user = unitOfWork.Users.GetItem(SelectRapair.UserID);
-                MessageBox.Show($"Номер заказа: {SelectRapair.RapairID}\n" +
-                                $"Устройство: {SelectRapair.Device}\n" +
-                                $"Несправность: {SelectRapair.Malfunction}\n" +
-                                $"ФИО клиента: {user.FullName}\n" +
-                                $"Email: {user.Email}\n" +
-                                $"Номер телефона: {user.PhoneNumber}");
+                if (obj != null && ((Collection<object>)obj).Count > 0)
+                {
+                    Collection<object> objects = (Collection<object>)obj;
+                    List<Rapair> list = objects.Cast<Rapair>().ToList();
+                    List<User> users = new List<User>();
+                    list.ForEach(rapair =>
+                    {
+                        User user = unitOfWork.Users.GetItem(rapair.UserID);
+                        MessageBox.Show($"Номер заказа: {rapair.RapairID}\n" +
+                                    $"Устройство: {rapair.Device}\n" +
+                                    $"Несправность: {rapair.Malfunction}\n" +
+                                    $"ФИО клиента: {user.FullName}\n" +
+                                    $"Email: {user.Email}\n" +
+                                    $"Номер телефона: {user.PhoneNumber}");
+                    });
+                }
+                else
+                    MessageBox.Show("Не выбран Заказ для просмотра информации");
             });
         }
         public ICommand Notify
         {
             get => new DelegateCommand((obj) =>
             {
-                if (((Collection<object>)obj).Count > 0)
+                if (obj != null && ((Collection<object>)obj).Count > 0)
                 {
                     Collection<object> objects = (Collection<object>)obj;
                     List<Rapair> list = objects.Cast<Rapair>().ToList();
@@ -174,11 +267,15 @@ namespace Service_Center.ViewModels
                         else
                             MessageBox.Show($"Заказ c Id {rapair.RapairID} не готов");
                     });
-                    foreach(User us in users)
+                    if(users.Count() > 0)
                     {
-                        SendEmail("Ваше устпройство починено. Пожалуйста, оплатите услуги и заберите своё устройство.", us.Email);
+                        foreach (User us in users)
+                        {
+                            SendEmail("Ваше устпройство починено. Пожалуйста, оплатите услуги и заберите своё устройство.", us.Email);
+                        }
+                        MessageBox.Show("Оповещения успешно отправлены");
                     }
-                    MessageBox.Show("Оповещения успешно отправлены");
+                   
                 }
                 else
                     MessageBox.Show("Не выбраны заказы, для уведомления клиентов");
@@ -220,6 +317,7 @@ namespace Service_Center.ViewModels
                 Status = this.StatusNewRapair,
                 Device = this.Device,
                 Malfunction = this.Malfunction,
+                CompletedWorks = this.CompletedWorks,
                 SerialNumber = this.SerialNumber,
                 DateOfRaceipt = DateTime.Now,
                 SumMoney = 0,
@@ -229,6 +327,7 @@ namespace Service_Center.ViewModels
             if (rapair.Status == this.rapair.Status &&
                 rapair.Device == this.rapair.Device &&
                 rapair.Malfunction == this.rapair.Malfunction &&
+                rapair.CompletedWorks == this.CompletedWorks &&
                 rapair.SerialNumber == this.rapair.SerialNumber &&
                 rapair.SumMoney == this.rapair.SumMoney &&
                 rapair.UserID == this.rapair.UserID)
